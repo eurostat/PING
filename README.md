@@ -20,7 +20,7 @@ Library of macro/function utilities developped in R/SAS for the implementation o
 
 **Usage**
 
-Check the usage page.
+Check the [usage page](https://gjacopo.github.io/PING/dd/dcb/mainpage_usage.html).
 
 **<a name="References"></a>References**
 
