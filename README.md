@@ -1,8 +1,7 @@
 PING
 ====
 
-Library of macro/function utilities developped in R/SAS for the *implementation of statistical 
-processes in production environments*.
+Library of macro/function utilities developped in R/SAS for the *implementation of statistical processes in production environments*.
 ---
 
 **About**
