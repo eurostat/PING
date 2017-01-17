@@ -9,17 +9,12 @@ Library of macro/function utilities developped in R/SAS for the implementation o
 `PING` Is Not GSAST! 
 
 <table align="center">
-    <tr> <td align="left">*documentation*</td> <td align="left">see https://gjacopo.github.io/PING/</td> </tr> 
-    <tr> <td align="left">*version*</td> <td align="left">0.9</td> </tr> 
-    <tr> <td align="left">*since*</td> <td align="left">2016</td> </tr> 
-    <tr> <td align="left">*contributors*</td> <td align="left">see [here](https://gjacopo.github.io/PING/d3/df9/mainpage_about.html)</td> </tr> 
-    <tr> <td align="left">*license*</td> <td align="left">[EUPL](https://joinup.ec.europa.eu/sites/default/files/eupl1.1.-licence-en_0.pdf)</td> </tr> 
+    <tr> <td align="left"><i>documentation</i></td> <td align="left">see https://gjacopo.github.io/PING/</td> </tr> 
+    <tr> <td align="left"><i>version</i></td> <td align="left">0.9</td> </tr> 
+    <tr> <td align="left"><i>since</i></td> <td align="left">2016</td> </tr> 
+    <tr> <td align="left"><i>contributors</i></td> <td align="left">see [here](https://gjacopo.github.io/PING/d3/df9/mainpage_about.html)</td> </tr> 
+    <tr> <td align="left"><i>license</i></td> <td align="left">[EUPL](https://joinup.ec.europa.eu/sites/default/files/eupl1.1.-licence-en_0.pdf)</td> </tr> 
 </table>
-
-*version*       | 0.9 
-*since*         | 2016 
-*contributors*  | _see [here](https://gjacopo.github.io/PING/d3/df9/mainpage_about.html)_ 
-*license*       | [EUPL](https://joinup.ec.europa.eu/sites/default/files/eupl1.1.-licence-en_0.pdf) 
 
 **Usage**
 
