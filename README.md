@@ -8,15 +8,15 @@ Library of macro/function utilities developped in R/SAS for the implementation o
 
 `PING` Is Not GSAST! 
 
-*documentation*:    &nbsp;&nbsp;&nbsp;see https://gjacopo.github.io/PING/
+*documentation*:    <pre>see https://gjacopo.github.io/PING/</pre>
 
-*version*:          &nbsp;&nbsp;&nbsp;0.9
+*version*:          &emsp;0.9
 
-*since*:            &nbsp;&nbsp;&nbsp;2016
+*since*:            &emsp;2016
 
-*contributors*:     &nbsp;&nbsp;&nbsp;_see [here](https://gjacopo.github.io/PING/d3/df9/mainpage_about.html)_
+*contributors*:     &emsp;_see [here](https://gjacopo.github.io/PING/d3/df9/mainpage_about.html)_
 
-*license*:          &nbsp;&nbsp;&nbsp;[EUPL](https://joinup.ec.europa.eu/sites/default/files/eupl1.1.-licence-en_0.pdf)
+*license*:          <pre>[EUPL](https://joinup.ec.europa.eu/sites/default/files/eupl1.1.-licence-en_0.pdf)</pre>
 
 **Usage**
 
