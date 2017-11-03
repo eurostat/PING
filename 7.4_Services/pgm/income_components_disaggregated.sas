@@ -49,7 +49,7 @@ the condition(s) expressed in `COND`. It does not use any `PROC FREQ` for instan
 EU-SILC survey reference document [doc65](https://circabc.europa.eu/sd/a/2aa6257f-0e3c-4f1c-947f-76ae7b275cfe/DOCSILC065%20operation%202014%20VERSION%20reconciliated%20and%20early%20transmission%20October%202014.pdf).
 
 ### See also
-[income_components_gini](@ref sas_income_components_gini), [silc_db_locate](@ref sas_silc_db_locate).
+[%income_components_gini](@ref sas_income_components_gini), [%silc_db_locate](@ref sas_silc_db_locate).
 */ /** \cond */
 
 /* credits: bernabr, grazzja */
