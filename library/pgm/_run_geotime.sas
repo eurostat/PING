@@ -55,10 +55,10 @@ then the generic running of this function shall be written as:
 ~~~
 
 ### See also
-[%macro_execute](@ref sas_macro_execute), [%_process_geotime](@ref sas__process_geotime), 
-[%str_to_keyvalue](@ref sas_str_to_keyvalue).
+[%macro_execute](@ref sas_macro_execute), [%str_to_keyvalue](@ref sas_str_to_keyvalue).
 */ /** \cond */
 
+/* credits: grazzja */
 
 %macro _run_geotime/parmbuff;
 	%local _mac;
