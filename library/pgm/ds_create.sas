@@ -64,12 +64,12 @@ where the variables `W, X, Y, Z` types and lengths are taken from the `TEMP` tab
 Run macro `%%_example_ds_create` for examples.
 
 ### Note
-The dataset generated using the macro [%_indicator_contents](@ref cfg_indicator_contents) provides
+The dataset generated using the macro [%meta_indicator_contents](@ref meta_indicator_contents) provides
 a typical example of configuration table dataset.
 
 ### See also
-[%ds_check](@ref sas_ds_check), [%silcx_ind_create](@ref sas_silcx_ind_create),
-[%_indicator_contents](@ref cfg_indicator_contents).
+[%ds_check](@ref sas_ds_check), [%silc_ind_create](@ref sas_silc_ind_create),
+[%meta_indicator_contents](@ref meta_indicator_contents).
 */ /** \cond */
 
 /* credits: grazzja */
