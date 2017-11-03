@@ -2,8 +2,10 @@
 ## silc_ind_create {#sas_silc_ind_create}
 Create an indicator table from a common variable template and a list of additional labels.
 
+~~~sas
 	%silc_ind_create(dsn, dim=, var=, type=, len=, ignore_var_dim=NO,
 			cds_ind_con=META_INDICATOR_CONTENTS, cds_var_dim=META_VARIABLE_DIMENSION, lib=WORK);
+~~~
   
 ### Arguments
 * `dsn` : name of the output (created) dataset;
@@ -46,8 +48,10 @@ template.
 ### Examples
 Running for instance
 
+~~~sas
 	%let dims=AGE 	RB090 	HT1;
 	%silc_ind_create(dsn, dim=&dims);
+~~~
 
 creates the table `dsn` in the `WORK`ing library as:
 | geo | time | unit | ivalue | iflag | unrel | AGE | SEX | HHTYP | n | nwgh | ntot | ntotwgh | lastup | lastuser |
