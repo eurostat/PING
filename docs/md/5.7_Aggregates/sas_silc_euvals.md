@@ -30,19 +30,26 @@ in the "old-fashioned" way.
 	this option is not foreseen in the original `EUvals` implementation.
 
 ### Notes
-1. The macro defines automatically which type of indicators is calculated, _i.e._ whether
-the indicator is in RDB or RDB2 database. For that purpose, it will check whether:
-	+ the (global) variable `not60` is defined and a table `WORK.&tab` exists
+1. In addition to the macro defined above, this file provides additional macros/scripts so 
+as to be compatible with the current different uses of the so-called "EUvals" programs in 
+EU-SILC production. Actually, the aggregate estimation is run at the "inclusion" of this file,
+that is whenever the following command is used inside a SAS program:
+~~~sas
+		%include "<path_to_this_file>/silc_euvals.sas" 
+~~~
+The operation performed after the inclusion depends however on the type of indicator to be 
+calculated, _i.e._ on whether:
+	+ indicators in the so-called RDB2 database are processed: an `%%_EUVALS` macro is launched 
+	so that aggregates are actually calculated,
+	+ indicators in the so-called RDB database are processed: NOTHING happens (exit the program),
+	+ the program is used together with the `PING` library: NOTHING happens either (exit the 
+	program).
 
-In the case of positive answer, the indicator is regarded as a RDB2 indicator, and the 
-output indicator will be stored in `WORK` library. In the case of negative answer, the 
-indicator is considered as a RDB indicator, and the original indicator will be modified. 
-Note also that in that latter case, the library `rdb` must be defined prior.
+    In the two latter cases, the inclusion shall therfore be understood as a strict inclusion, with no 
+actual operation running.
 2. The macro `%%silc_EUvals` does not require the use of `PING` library.
-3. None of the keyword arguments (_e.g._, `_yyyy`, `_tab`, etc...) is optional, _i.e._
-they all need to be set.
-4. The "weird" naming of this macro's parameters derives from the global parameters used in 
-legacy _EUvals_ program. 
+3. The "weird" naming of this macro's parameters derives from the global parameters used in 
+legacy `%%EUvals` program. 
 
 ### See also
 [%silc_agg_compute](@ref sas_silc_agg_compute).
