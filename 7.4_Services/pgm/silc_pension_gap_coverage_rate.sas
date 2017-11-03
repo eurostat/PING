@@ -1,10 +1,10 @@
 /** 
-## pension_gap_coverage_rate {#sas_pension_gap_coverage_rate}
+## silc_pension_gap_coverage_rate {#sas_silc_pension_gap_coverage_rate}
 Compute indicators on gender pension gap, _i.e._ gender differences in pension 
 outcomes/benefits across EU-28.
 
 ~~~sas
-	%pension_gap_coverage_rate(year, geo=, odsn=, weight=, ext=, olib=, odir=);
+	%silc_pension_gap_coverage_rate(year, geo=, odsn=, weight=, ext=, olib=, odir=);
 ~~~
 
 ### Arguments
@@ -34,7 +34,7 @@ In order to (re)generate two csv files `GAP_2016_in_pension` and  `COVERAGE_RATE
 for geo=EU28, stored in &odir, you can simply launch:
 
 ~~~sas
-	%pension_gap_coverage_rate(2016, geo=EU28, odsn=GAP COVERAGE, weight=PB040, ext=_in_pension, 
+	%silc_pension_gap_coverage_rate(2016, geo=EU28, odsn=GAP COVERAGE, weight=PB040, ext=_in_pension, 
 		odir=&odir, olib=WORK);
 ~~~
 
@@ -60,12 +60,12 @@ and [II](https://webgate.ec.europa.eu/emplcms/social/BlobServlet?docId=14545&lan
 2. ["Report on equality between women and men in the EU"](http://ec.europa.eu/newsroom/document.cfm?doc_id=43416), 2017.
 
 ### See also
-[pension_population_count](@ref pension_population_count).
+[%silc_pension_population_count](@ref sas_silc_pension_population_count).
 */ /** \cond */
 
 /* credits: grillo, grazzja */
 
-%macro pension_gap_coverage_rate(year	    /* Area of interest 						  (REQ) */
+%macro silc_pension_gap_coverage_rate(year	    /* Area of interest 						  (REQ) */
 								, dsn_name  /* Type of calculation (GAP/COVERAGE RATE)   (REQ) */                                   
 								, weight    /* Weight variable    					      (REQ) */ 
 								, geo=	    /* Country/Zone   						      (OPT) */
@@ -635,6 +635,6 @@ and [II](https://webgate.ec.europa.eu/emplcms/social/BlobServlet?docId=14545&lan
 		%next:
 	%end; /* end loop over number of request: gap and coverage */ 
 
-%mend pension_gap_coverage_rate;
+%mend silc_pension_gap_coverage_rate;
 
 
