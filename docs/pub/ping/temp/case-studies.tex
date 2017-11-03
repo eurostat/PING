@@ -1,0 +1,101 @@
+\section{Case studies}
+
+\subsection{Quantile computation}
+
+\subsubsection{The unweighted case}
+
+When one is interested in describing the distribution of some variable of interest (that will be denoted $X$), quantiles are most of the times the first indicators that come to mind. Quantiles are defined according to $p$, a variable between 0 and 1 (or alternatively between 0 and 100), as following:
+\begin{eqnarray}
+Q(p) = F^{-1}(p) = inf\{x/ F(x) \geq p\}, 0<p<1
+\end{eqnarray}
+Since $F$ is referring to the cumulative distribution function (CDF), such a definition entails the uniqueness of the solution: there is one and only one $x$ associated to a given $p$. However, in computational terms, as we can only compute an \textbf{estimation} of the quantiles, there are many ways for computing quantiles: \cite{hyndman1996sample} list 9 different methods that are not meant to provide with the same result. We leave aside other methods, such as the estimation of L-moments or quantile mixture \cite{hosking1990moments} \cite{sheather1990kernel}\footnote{For an implementation of such methods in \R, the interested reader may refer to \cite{karvanen2011lmoments}.}, as they rely on strong assumptions over the parametric shape of the distribution. \cite{hyndman1996sample} summarizes the 9 possible methods as follows, for $(X_{(1)},...,X_{(n)})$ the $n$ sorted observations of the variable $X$, $i \in \{1,...,9\}$, $0 \leq \gamma \leq 1$ and $m \in \mathbb{R}$  :
+\begin{eqnarray}
+\hat{Q}_i(p) = (1-\gamma) X_{(j)} + \gamma X_{(j+1)} \\
+\frac{j-m}{n} \leq p < \frac{j-m+1}{n}
+\end{eqnarray}
+The values taken by $\gamma$ is function of $i$, $j = \left\lfloor pn + m \right\rfloor$ and $g = pn + m -j$. The different possibilities in \SAS are mapped with their counterpart in \R in Table \ref{mapping_q_R_SAS}. As shown by \cite{hyndman1996sample}, the different definitions may be classified into two main categories, reflecting assumptions on the shape of the inverse CDF:
+\begin{itemize}
+\item discountinuous functions (definitions 1, 2 and 3)
+\item piecewise linear continuous functions (definitions 4 and higher)
+\end{itemize}
+Each quantile definition presents advantages and drawbacks, especially in terms of assumptions and desirable properties. From this respect, according to Table \ref{mapping_q_R_SAS}, \SAS is giving more prominence to discontinuous functions (thereby relying on less demanding assumptions), whereas \R offers the possibility to the users to compute any type of estimation. \cite{hyndman1996sample} show that definition 5 is the more appropriate definition of the estimation for quantiles with respect to a list of desirable properties for quantiles; however they rather advocate for using the definition 8, following several papers that all conclude to the superiority of this definition when looking for a median-unbiased estimator. As a matter of fact, such definitions (both 5 and 8) are not implemented in \SAS, leaving the user willing to use these definitions with no alternative than implementing himself the computation (or switching to \R).
+
+\noindent As a consequence, the usual statistical software \R or \SAS provide users with procedures enabling various methods for computing quantiles. As a matter of fact, in \R the command to compute an estimation of the median
+
+\lstset{language=R}
+\begin{lstlisting}
+> quantile(x, probs = 0.5, type = 1)
+\end{lstlisting}
+
+\noindent refers to the method 1 described in \cite{hyndman1996sample}, according to \cite{r2016r}. The counterpart in \SAS may be obtained thanks to the following command:
+
+\lstset{language=SAS}
+\begin{lstlisting}
+PROC UNIVARIATE DATA = mydata PCTLDEF = 3 ;
+VAR x ;
+RUN ;
+\end{lstlisting}
+
+\noindent In this implementation, as explained in the \SAS documentation\footnote{https://support.sas.com/documentation/cdl/en/procstat/63104/HTML/default/viewer.htm}, there are 5 possible estimations (versus 9 in \R). It is therefore not possible to fully map all possible methods from \R into \SAS.
+
+\begin{table}[h]
+\begin{tabular}{l|l|cc}
+Definition & Values taken by $m, \gamma$ & \SAS \texttt{PCTLDEF} & \R \texttt{type} \\
+\hline
+\hline
+Definition 1 & $m = 0 \text{ and }\gamma = \begin{cases} 1\text{ if }g > 0\\ 0\text{ if }g = 0 \end{cases}$ & 3 & 1 \\
+\hline
+Definition 2 & $m = 0 \text{ and }\gamma = \begin{cases} 1\text{ if }g > 0\\ 1/2\text{ if }g = 0 \end{cases}$ & 5 & 2 \\
+\hline
+Definition 3 & $m = -\frac{1}{2} \text{ and }\gamma = \begin{cases} 0\text{ if }g = 0 \text{ and }j\text{ is even}\\ 1\text{ otherwise} \end{cases}$ & 2 & 3 \\
+\hline
+Definition 4 & $m = 0, \gamma = g$ & 1 & 4 \\
+\hline
+Definition 5 & $m = \frac{1}{2}, \gamma = g$ & n.a. & 5 \\
+\hline
+Definition 6 & $m = p, \gamma = g$ & 4 & 6 \\
+\hline
+Definition 7 & $m = 1-p, \gamma = g$ & n.a. & 7 \\
+\hline
+Definition 8 & $m = \frac{1+p}{3}, \gamma = g$ & n.a. & 8 \\
+\hline
+Definition 9 & $m = \frac{2p+3}{8}, \gamma = g$ & n.a. & 9 \\
+\hline
+\hline
+\end{tabular}
+\caption{Mapping between \SAS and \R unweighted quantile methods, according to definitions as in \cite{hyndman1996sample}}
+\label{mapping_q_R_SAS}
+\end{table}
+
+\subsubsection{The weighted case}
+
+When facing weighted data (such as survey data), one has to account for the sampling design in order to properly compute the estimation of the quantiles. In the weighted case, an Horvitz-Thompson estimator \cite{maiti2011horvitz} of the CDF $F$ would be:
+
+\begin{eqnarray}
+\hat{F}(x) = \frac{1}{\sum_{i \in s}\omega_i}\sum_{i \in s}\omega_i \mathds{1}_{\{X_i \leq x\}}
+\end{eqnarray}
+This being said, all the difficulty is to define estimators of the inverse CDF. Following the framework in the unweighted casis, such estimators may be defined through a generic form, considering again $(X_{(1)},...,X_{(n)})$ the $n$ sorted observations of $X$, but this time coming along with the set of weights $(\omega_{(1)},...,\omega_{(n)})$, $\hat{N} = \sum_{i \in s}\omega_i$:
+
+\begin{eqnarray}
+\hat{Q}_i(p) = (1-\gamma) X_{(j)} + \gamma X_{(j+1)} \\
+\frac{\sum_{i=1}^{j}\omega_{(i)}-m\omega_j}{\hat{N}} \leq p < \frac{\sum_{i=1}^{j+1}\omega_{(i)}-m\omega_j}{\hat{N}}
+\end{eqnarray}
+Similarly, $j$ and $g$ may also be defined as $j = Argmax_{k \in \{1,...,n\}} \{k/ \sum_{i=1}^{k} \omega_{(i)} \leq p\hat{N} + m\omega_k\}$ and $g = p\hat{N} + m\omega_j - j$.
+
+\noindent Hence, things get more complicated when facing survey data, or any source of data which entails the use of weighted statistics. Indeed, if the latter still applies for \SAS, the described command \texttt{quantile} in \R does not embed an option for specifying a weighting variable, thereby shrinking dramatically the utility of such a command, as in practice it can be only applied to simple random sample (\textit{i.e.} with equal probability of selection). One of the alternatives is to use the package \texttt{Hmisc} \cite{hmisc2016h}. The quantile (in this case the median, in order to pursue the example above) may then be computed as follows, provided that the vector giving the weights is called \texttt{w}:
+\lstset{language=R}
+\begin{lstlisting}
+> library(Hmisc)
+> wtd.quantile(x, weights = w, probs = 0.5, type = 'quantile')
+\end{lstlisting}
+There is another way for computing quantiles on survey data in \R, using the \texttt{survey} package \cite{lumley2016survey}. However, using such a package entails also to describe the sampling design of the survey, since the point estimate comes along with an estimation of the variance. The call of this estimation is done as follows:
+\lstset{language=R}
+\begin{lstlisting}
+> library(survey)
+> svyquantile(x, design=designSurvey, quantile = 0.5, method = 'linear', ties = 'discrete')
+\end{lstlisting}
+It turns out, when comparing the \R command \texttt{wtd.quantile} with the \SAS procedure \texttt{UNIVARIATE}, that the software go into opposite directions
+
+\noindent One of the main drawbacks of \R comes from its own strengths: as the packages downloadable on the \texttt{CRAN} website are developped in a decentralized manner, there is very few moves toward some significant harmonization/rationalization efforts for the implemented functions. Therefore, in the package \texttt{Hmisc}, if the option \texttt{type} remains the same across packages \texttt{base} and \texttt{Hmisc}, the naming of the various methods called through this option varies. 
+
+\subsection{Sampling process}

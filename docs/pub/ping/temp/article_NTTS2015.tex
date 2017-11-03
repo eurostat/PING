@@ -1,0 +1,105 @@
+\documentclass[11pt, a4paper]{article}%
+
+\usepackage[latin1]{inputenc} % LaTeX, comprends les accents !
+\usepackage[T1]{fontenc}      % Police contenant les caractères français
+\usepackage{geometry}         % Définir les marges
+\usepackage[english]{babel}
+\selectlanguage{english} % Sélection du langage
+
+% packages de l'AMS(American Mathematical Society)
+% documentation: ftp://ftp.ams.org/pub/tex/doc/amsmath/short-math-guide.pdf
+\usepackage{amsfonts, amssymb, amsmath, amscd, amsthm}
+
+\usepackage{dsfont}   % pour faire le 1 d'indicatrice
+\usepackage{verbatim} % pour copier du texte tel quel avec mise en page à l'écran
+
+\usepackage{eurosym} % pour le symbole euro
+%\usepackage{harvard} % pour la biblio
+
+\usepackage{graphicx}
+\usepackage{here}
+\usepackage{epic}       % Capacités graphiques
+\usepackage{eepic}      %   étendues
+\usepackage{afterpage}  %
+\usepackage{rotating}   % Tourner du texte
+
+\usepackage{lscape}
+\usepackage{subfigure}
+
+\usepackage{fancyhdr}
+\usepackage{supertabular}
+
+\usepackage{url}
+\usepackage{hyperref}
+
+\usepackage{color}
+\definecolor{mygreen}{rgb}{0,0.6,0}
+\definecolor{mygrey}{rgb}{0.5,0.5,0.5}
+\definecolor{light-gray}{gray}{0.95}
+\definecolor{mymauve}{rgb}{0.58,0,0.82}
+\usepackage{listings} % for the coding style - R, SAS or so
+\lstloadlanguages{R,SAS}
+\lstset{ %
+  backgroundcolor=\color{light-gray},   % choose the background color; you must add \usepackage{color} or \usepackage{xcolor}; should come as last argument
+  basicstyle=\footnotesize,        % the size of the fonts that are used for the code
+  breakatwhitespace=false,         % sets if automatic breaks should only happen at whitespace
+  breaklines=true,                 % sets automatic line breaking
+  captionpos=b,                    % sets the caption-position to bottom
+  commentstyle=\color{mygreen},    % comment style
+  deletekeywords={...},            % if you want to delete keywords from the given language
+  escapeinside={\%*}{*)},          % if you want to add LaTeX within your code
+  extendedchars=true,              % lets you use non-ASCII characters; for 8-bits encodings only, does not work with UTF-8
+  frame=none,	                   % adds a frame around the code
+  keepspaces=true,                 % keeps spaces in text, useful for keeping indentation of code (possibly needs columns=flexible)
+  keywordstyle=\color{blue},       % keyword style
+  language=SAS,                 % the language of the code
+  morekeywords={*,...},           % if you want to add more keywords to the set
+  numbers=none,                    % where to put the line-numbers; possible values are (none, left, right)
+  numbersep=5pt,                   % how far the line-numbers are from the code
+  numberstyle=\tiny\color{black}, % the style that is used for the line-numbers
+  rulecolor=\color{black},         % if not set, the frame-color may be changed on line-breaks within not-black text (e.g. comments (green here))
+  showspaces=false,                % show spaces everywhere adding particular underscores; it overrides 'showstringspaces'
+  showstringspaces=false,          % underline spaces within strings only
+  showtabs=false,                  % show tabs within strings adding particular underscores
+  stepnumber=2,                    % the step between two line-numbers. If it's 1, each line will be numbered
+  stringstyle=\color{mymauve},     % string literal style
+  tabsize=2,	                   % sets default tabsize to 2 spaces
+  title=\lstname                   % show the filename of files included with \lstinputlisting; also try caption instead of title
+}
+
+% define command \up (exposant)
+\newcommand{\up}[1]{\textsuperscript{#1}}
+
+\usepackage{xspace}
+
+\newcommand{\R}{\textbf{\textsf{R}}\xspace}
+\newcommand{\SAS}{SAS\up{\textregistered}\xspace}
+
+\begin{document}
+
+\title{Production of social statistics... goes social!}
+\author{Jacopo Grazzini and Pierre Lamarche
+\\Eurostat, European Commission}
+\date{November 17, 2016}
+
+\maketitle
+
+\begin{abstract}
+The scope of this paper is to present a framework adopted in practice for the integration of software applications into a statistical production chain. The focus is the actual implementation of a high-level collaborative platform aiming not only at producing social statistics, but also at further fostering experimentation and analysis in that field. The need for transparency fosters an open, reusable, verifiable, reproducible and collaborative implementation of (statistical) processes, especially for data-driven policies. In this paper, we tackle the practical implementation framework of such processes - based on reasonable mix of \textit{bottom-up} and \textit{top-down} designs, as well as case studies. As a conclusion, we sketch the possible way forward and a future action plan.
+\end{abstract}
+
+\clearpage
+\input{introduction}
+\input{motivation}
+\input{principles}
+\input{implementation}
+\input{case-studies}
+\input{future}
+
+%\bibliographystyle{econometrica}
+\bibliographystyle{vancouver}
+%\section*{References}
+\nocite{*}
+\bibliography{biblio}
+
+\end{document}

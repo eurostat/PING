@@ -1,0 +1,83 @@
+# exclude everything below from versioning 
+
+# temp, share and dumb folders
+__backup/
+__backup/*
+__temp/
+__temp/*
+__share/
+__share/*
+
+# docs folder
+docs/html
+docs/latex
+docs/dox/html
+docs/dox/latex
+
+# library folder 
+library/autoexec/TMP_SUPPORT.sas
+library/autoexec/_module_.sas
+library/autoexec/_support_.sas
+library/autoexec/_support_macros_.sas
+library/autoexec/_configuration_.sas
+library/catalog
+library/catalog/*
+library/config/
+library/config/*
+library/pgm/TODO_*
+
+# 5.1_Integration folder 
+5.1_Integration/meta/*.xls
+5.1_Integration/meta/*.xlsx
+5.1_Integration/meta/COUNTRIES.csv
+5.1_Integration/meta/VARIABLE_LABELVALUE_H.csv
+5.1_Integration/meta/VARIABLE_LABELVALUE_P.csv
+5.1_Integration/pgm/TODO_*
+
+# 5.5_Estimation folder 
+5.5_Estimation/meta/*.xls
+5.5_Estimation/meta/*.xlsx
+5.5_Estimation/meta/COUNTRY_MAN_SCH_AGE.csv
+5.5_Estimation/meta/META_IDX2005xCOUNTRY.csv
+5.5_Estimation/meta/NUTS.csv
+5.5_Estimation/pgm/TODO_*
+
+# 5.5_Extraction folder 
+5.5_Extraction/meta/*.xls
+5.5_Extraction/meta/*.xlsx
+5.5_Extraction/meta/_old_rate_ppp.csv
+#5.5_Extraction/meta/idx2005.csv*
+5.5_Extraction/meta/VARIABLE_LABEL_IDB.csv
+5.5_Extraction/meta/VARIABLE_LABEL_PDB.csv
+5.5_Extraction/pgm/TODO_*
+
+# 5.7_Aggregates folder 
+5.7_Aggregates/meta/*.xls
+5.7_Aggregates/meta/*.xlsx
+#5.7_Aggregates/meta/ccwgh60.csv*
+#5.7_Aggregates/meta/Total\ population\ 97\ to\ 2014.xls*
+5.7_Aggregates/pgm/__tmp
+5.7_Aggregates/pgm/__tmp/*
+5.7_Aggregates/pgm/__old/
+5.7_Aggregates/pgm/__old/*
+
+# 6.3_Analysis folder
+# ok
+
+# 6.4_Anonymisation folder
+6.4_Anonymisation/pgm/udb_*
+
+# 7.1_Upload folder 
+7.1_Upload/pgm/__old/
+7.1_Upload/pgm/__old/*
+
+# 7.3_Dissemination folder 
+7.3_Dissemination/pgm/__old/
+7.3_Dissemination/pgm/__old/*
+# 7.3_Dissemination/data*
+
+# 7.4_Services folder
+# ok
+
+# 7.4_Visualisation folder
+# ok
