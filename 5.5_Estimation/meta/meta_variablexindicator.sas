@@ -28,18 +28,23 @@ Consider an input CSV table called `A.csv`, with same structure as above, and st
 named `B`. In order to create/update the SAS table `A` in library `C`, as described above, it is 
 then enough to run:
 
+~~~sas
 	%meta_variablexindicator(cds_varxind=A, cfg=B, clib=C);
-
+~~~
 Note that, by default, the command `%%meta_variablexindicator;` runs:
 
+~~~sas
 	%meta_variablexindicator(cds_varxind=&G_PING_VARIABLExINDICATOR, 
 						cfg=&G_PING_ESTIMATION/meta, 
 						clib=&G_PING_LIBCFG);
+~~~
 
 ### Example
 Generate the table `META_VARIABLExINDICATOR` in the `WORK` directory:
 
+~~~sas
 	%meta_variablexindicator(clib=WORK);
+~~~
 
 ### References
 1. Eurobase [online dictionary](http://ec.europa.eu/eurostat/estat-navtree-portlet-prod/BulkDownloadListing?sort=1&dir=dic%2Fen).
