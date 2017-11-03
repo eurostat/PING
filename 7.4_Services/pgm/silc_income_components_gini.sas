@@ -1,10 +1,10 @@
 /** 
-## income_components_gini {#sas_income_components_gini}
+## silc_income_components_gini {#sas_silc_income_components_gini}
 Compute the Gini coefficients of composite variable incomes for given geographical area(s)
 and period(s). 
 
 ~~~sas
-	%income_components_gini(geo, year, varadd=, varsub=, weight=, type=G, odsn=GINI_INC, olib=WORK);
+	%silc_income_components_gini(geo, year, varadd=, varsub=, weight=, type=G, odsn=GINI_INC, olib=WORK);
 ~~~
 
 ### Arguments
@@ -169,12 +169,12 @@ survivor's benefits):
 2. DG EMPL (2015): ["Wage and income inequality in the European Union"](http://ec.europa.eu/eurostat/cros/system/files/05-2014-wage_and_income_inequality_in_the_eu_0.pdf).
 
 ### See also
-[%gini](@ref sas_gini), [%income_components_disaggregated](@ref sas_income_components_disaggregated).
+[%gini](@ref sas_gini), [%silc_income_components_disaggregated](@ref sas_silc_income_components_disaggregated).
 */ /** \cond */
 
 /* credits: grazzja */
 
-%macro income_components_gini(geo		/* Area of interest 											(REQ) */
+%macro silc_income_components_gini(geo		/* Area of interest 											(REQ) */
 							, year		/* Year of interest 											(REQ) */
 							, varadd= 	/* Personal/Household variables that count positively in income (OPT) */
 							, varsub= 	/* Personal/Household variablesthat count negatively in income 	(OPT) */
@@ -692,7 +692,7 @@ survivor's benefits):
  	/* clean */
 
 	%exit:
-%mend income_components_gini;
+%mend silc_income_components_gini;
 
 /** \endcond */
 
