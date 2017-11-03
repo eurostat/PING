@@ -3,7 +3,9 @@
 Count the number of pensioners and/or retired people of a given citizenship abroad, or in a 
 given country by citizenship. 
 
+~~~sas
 	%pension_population_count(geo, year, zone=, idir=, ilib=, odsn=, olib=);
+~~~
 
 ### Arguments
 * `geo` : a country code whose population is considered: both retired/pensioned people:
@@ -50,13 +52,14 @@ _pensioned or retired_ people living abroad, and similarly for 2015, like in the
 
 you can simply launch:
 
+~~~sas
 	%pension_count(2014, UK, zone=EU28);
 	%ds_export(THS_POP_PENRET_FOR_IN_UK_14, fmt=csv);
 	%ds_export(THS_POP_PENRET_UK_IN_FOR_14, fmt=csv);
 	%pension_count(2015, UK, zone=EU28);
 	%ds_export(THS_POP_PENRET_FOR_IN_UK_15, fmt=csv);
 	%ds_export(THS_POP_PENRET_UK_IN_FOR_15, fmt=csv);
-
+~~~
 then similarly with year 2015. 
 
 ### Note
@@ -64,6 +67,9 @@ The status of a personed is evaluated as:
 * _retired_ when `PL031 = 7`,
 * _pensioned_ when `(PY035G>0 or PY080G>0 or PY100G>0 or PY110G>0)`,
 * either _retired or pensioned_ when any of the cases above occurs.
+
+### See also
+[pension_gap_coverage_rate](@ref pension_gap_coverage_rate).
 */ /** \cond */
 
 /* credits: grazzja, grillma */
