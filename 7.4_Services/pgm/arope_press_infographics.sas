@@ -3,7 +3,9 @@
 Perform ad-hoc extraction for infographics publication on _AROPE_ on the occasion of the 
 _International Day for the Eradication of Poverty_. 
 
+~~~sas
 	%arope_press_infographics(year, geo=, ilib=, idir=, odsn=, olib=);
+~~~
 
 ### Arguments
 * `year` : a (single) year of interest;
