@@ -1,3 +1,11 @@
+/** 
+## sql_clause_where {#sas_sql_clause_where}
+Generate a quoted text that can be interpreted by the `CASE` clause of a SQL procedure.
+
+~~~sas
+	%sql_clause_where(dsn, var, _where_=, op=, lab=, log=);
+~~~
+*/
 
 /* credits: grazzja */
 
@@ -9,7 +17,7 @@
 						, log=
 						);
 
-	%list_append(&varop, %list_quote(&varlab,rep=_EMPTY_), 
+	%list_append(&op, %list_quote(&lab,rep=_EMPTY_), 
 								zip=%quote(=), 
 								rep=%quote( and )
 						);
