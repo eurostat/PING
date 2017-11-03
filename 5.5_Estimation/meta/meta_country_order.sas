@@ -61,23 +61,29 @@ Consider an input CSV table called `A.csv`, with same structure as above, and st
 named `B`. In order to create/update the SAS table `A` in library `C`, as described above, it is 
 then enough to run:
 
+~~~sas
 	%meta_country_order(cds_ctry_order=A, cfg=B, clib=C);
-
+~~~
 In order to generate the protocol order of countries only (without any mention to geographical 
 areas), it is necessary to set an additional keyword parameter:
 
+~~~sas
 	%meta_country_order(cds_ctry_order=A, cfg=B, clib=C, zone=no);
-
+~~~
 Note that, by default, the command `%%meta_country_order;` runs:
 
+~~~sas
 	%meta_country_order(cds_ctry_order=&G_PING_COUNTRY_ORDER, 
 					cfg=&G_PING_ESTIMATION/meta, 
 					clib=&G_PING_LIBCFG, zone=yes);
+~~~
 
 ### Example
 Generate the table `META_COUNTRY_ORDER` in the `WORK` directory:
 
+~~~sas
 	%meta_country_order(clib=WORK);
+~~~
 
 ### Reference
 Eurostat _Statistics Explained_ [webpage](http://ec.europa.eu/eurostat/statistics-explained/index.php/Glossary:Protocol_order) 
