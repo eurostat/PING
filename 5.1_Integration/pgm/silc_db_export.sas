@@ -46,7 +46,7 @@ Export EU-SILC bulk datasets from SAS format (`.sas7bdat`) to any format support
 			+ the location of your project if you are using SAS EG (see [%_egp_path](@ref sas__egp_path)),
 			+ the path of `%sysget(SAS_EXECFILEPATH)` if you are running on a Windows server,
 			+ the location of the library passed through `ilib` (_i.e._, `%sysfunc(pathname(&ilib))`) 
-			otherwise;
+			otherwise.
 
 ## Example
 Let us export some bulk datasets from the so-called BDB into `Stata` native format (`dta`):
