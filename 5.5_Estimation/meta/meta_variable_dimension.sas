@@ -24,18 +24,24 @@ Consider an input CSV table called `A.csv`, with same structure as above, and st
 named `B`. In order to create/update the SAS table `A` in library `C`, as described above, it is 
 then enough to run:
 
+~~~sas
 	%meta_variable_dimension(cds_var_dim=A, cfg=B, clib=C);
+~~~
 
 Note that, by default, the command `%%meta_variable_dimension;` runs:
 
+~~~sas
 	%meta_variable_dimension(cds_var_dim=&G_PING_VARIABLE_DIMENSION, 
 					cfg=&G_PING_ESTIMATION/meta, 
 					clib=&G_PING_LIBCFG);
+~~~
 
 ### Example
 Generate the table `META_VARIABLE_DIMENSION` in the `WORK` directory:
 
+~~~sas
 	%meta_variable_dimension(clib=WORK);
+~~~
 
 ### References
 1. Eurobase [online dictionary](http://ec.europa.eu/eurostat/estat-navtree-portlet-prod/BulkDownloadListing?sort=1&dir=dic%2Fen).
