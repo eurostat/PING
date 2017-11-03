@@ -1,4 +1,11 @@
+/** 
+## sql_clause_where {#sas_sql_clause_if}
+Generate a quoted text that can be interpreted by the `IF` clause of a SQL procedure.
 
+~~~sas
+	%sql_clause_if(dsn, var, _if_=, op=, lab=, log=);
+~~~
+*/
 /* credits: grazzja */
 
 %macro sql_clause_if(dsn
@@ -9,7 +16,7 @@
 						, log=
 						);
 
-	%list_append(&varop, %list_quote(&varlab,rep=_EMPTY_), 
+	%list_append(&op, %list_quote(&lab,rep=_EMPTY_), 
 								zip=%quote(=), 
 								rep=%quote( and )
 						);
