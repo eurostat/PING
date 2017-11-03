@@ -1,7 +1,7 @@
 PING
 ====
 
-Library of macro/function utilities developed in R/SAS/Stata for 
+Library of macro/function utilities implemented in R/SAS/Stata for 
 *statistical data handling and processing in production environments*.
 ---
 
