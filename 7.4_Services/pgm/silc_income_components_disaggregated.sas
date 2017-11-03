@@ -1,9 +1,9 @@
 /** 
-## income_components_disaggregated {#sas_income_components_disaggregated}
+## silc_income_components_disaggregated {#sas_silc_income_components_disaggregated}
 Retrieve (count) the occurrences of (dis)aggregated income variables in the input database. 
 
 ~~~sas
-	%income_components_disaggregated(geo, year, var, idsn=, level=, weight=, cond=FILLED,
+	%silc_income_components_disaggregated(geo, year, var, idsn=, level=, weight=, cond=FILLED,
 		index=0 1 2 3 4, odsn=SUMMARY_INC, ilib=WORK, olib=WORK);
 ~~~
 
@@ -49,12 +49,12 @@ the condition(s) expressed in `COND`. It does not use any `PROC FREQ` for instan
 EU-SILC survey reference document [doc65](https://circabc.europa.eu/sd/a/2aa6257f-0e3c-4f1c-947f-76ae7b275cfe/DOCSILC065%20operation%202014%20VERSION%20reconciliated%20and%20early%20transmission%20October%202014.pdf).
 
 ### See also
-[%income_components_gini](@ref sas_income_components_gini), [%silc_db_locate](@ref sas_silc_db_locate).
+[%silc_income_components_gini](@ref sas_silc_income_components_gini), [%silc_db_locate](@ref sas_silc_db_locate).
 */ /** \cond */
 
-/* credits: bernabr, grazzja */
+/* credits: grazzja */
 
-%macro income_components_disaggregated (geo			/* Area of interest 									(REQ) */
+%macro silc_income_components_disaggregated (geo			/* Area of interest 									(REQ) */
 										, year		/* Year of interest 									(REQ) */
 										, var 		/* Main (aggregated) income variable 					(OPT) */
 										, index=	/* Index of disaggregated income variable 				(OPT) */
@@ -395,6 +395,6 @@ EU-SILC survey reference document [doc65](https://circabc.europa.eu/sd/a/2aa6257
 	%end;
 
 	%exit:
-%mend income_components_disaggregated;
+%mend silc_income_components_disaggregated;
 
 /** \endcond */
