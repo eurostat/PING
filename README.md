@@ -8,17 +8,18 @@ Library of macro/function utilities developped in R/SAS/Stata for
 **About**
 
 `PING` Is Not GSAST! 
-*version*:      0.9
 
-*since*:        2016
-
-*license*:      [EUPL](https://joinup.ec.europa.eu/sites/default/files/eupl1.1.-licence-en_0.pdf)
-
-*documentation*: 
+<table align="center">
+    <tr> <td align="left"><i>documentation</i></td> <td align="left">available at: https://gjacopo.github.io/PING/</td> </tr> 
+    <tr> <td align="left"><i>version</i></td> <td align="left">0.9</td> </tr> 
+    <tr> <td align="left"><i>since</i></td> <td align="left">2016</td> </tr> 
+    <tr> <td align="left"><i>contributors</i></td> <td align="left">see the list <a href="https://gjacopo.github.io/PING/d3/df9/mainpage_about.html">here</a></td> </tr> 
+    <tr> <td align="left"><i>license</i></td> <td align="left"><a href="https://joinup.ec.europa.eu/sites/default/files/eupl1.1.-licence-en_0.pdfEUPL">EUPL</a></td> </tr> 
+</table>
 
 **Usage**
 
-Check the usage page.
+Check the [usage page](https://gjacopo.github.io/PING/dd/dcb/mainpage_usage.html).
 
 **<a name="References"></a>References**
 
