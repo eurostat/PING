@@ -69,6 +69,9 @@ library/pgm/TODO_*
 # ok
 
 # 6.4_Anonymisation folder
+#6.4_Anonymisation/data/
+#6.4_Anonymisation/data/*
+6.4_Anonymisation/data.lnk
 6.4_Anonymisation/pgm/udb_*
 
 # 7.1_Upload folder 
@@ -76,6 +79,9 @@ library/pgm/TODO_*
 7.1_Upload/pgm/__old/*
 
 # 7.3_Dissemination folder 
+7.3_Dissemination/data.lnk
+#7.3_Dissemination/data/
+#7.3_Dissemination/data/*
 7.3_Dissemination/pgm/__old/
 7.3_Dissemination/pgm/__old/*
 # 7.3_Dissemination/data*
