@@ -26,18 +26,23 @@ Consider an input CSV table called `A.csv`, with same structure as above, and st
 named `B`. In order to create/update the SAS table `A` in library `C`, as described above, it is 
 then enough to run:
 
+~~~sas
 	%meta_indicator_codes(cds_ind_cod=A, cfg=B, clib=C);
-
+~~~
 Note that, by default, the command `%%meta_indicator_contents;` runs:
 
+~~~sas
 	%meta_indicator_codes(cds_ind_cod=&G_PING_INDICATOR_CODES, 
 					cfg=&G_PING_ESTIMATION/meta, 
 					clib=&G_PING_LIBCFG, zone=yes);
+~~~
 
 ### Example
 Generate the table `META_INDICATOR_CODES` in the `WORK` directory:
 
+~~~sas
 	%meta_indicator_codes(clib=WORK);
+~~~
 
 ### See also
 [%meta_variablexindicator](@ref meta_variablexindicator), [%meta_indicator_contents](@ref meta_indicator_contents), 
