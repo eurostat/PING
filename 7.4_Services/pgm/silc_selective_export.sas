@@ -1,9 +1,9 @@
 /** 
-## data_selective_export {#sas_data_selective_export}
+## silc_selective_export {#sas_data_selective_export}
 Perform selective export of a dataset to any format accepted by `PROC EXPORT`.
 
 ~~~sas
-	%data_selective_export(idsn, time=, geo=, idir=, ilib=, odir=, _ofn_=, fmt=csv);
+	%silc_selective_export(idsn, time=, geo=, idir=, ilib=, odir=, _ofn_=, fmt=csv);
 ~~~
 
 ### Arguments
@@ -35,7 +35,7 @@ Perform selective export of a dataset to any format accepted by `PROC EXPORT`.
 
 /* credits: grazzja */
 
-%macro data_selective_export(idsn		/* Input dataset(s)									(REQ) */
+%macro silc_selective_export(idsn		/* Input dataset(s)									(REQ) */
 							, time=		/* Input year under consideration 					(OPT) */ 
 							, geo=		/* Input country under consideration 				(OPT) */
 							, idir=		/* Input directory name								(OPT) */
@@ -207,12 +207,12 @@ Perform selective export of a dataset to any format accepted by `PROC EXPORT`.
 	%end;
 	
 	%exit:
-%mend data_selective_export;
+%mend silc_selective_export;
 
 /*test
 %let idir=/ec/prod/server/sas/0eusilc/5.5_Modules/participation_deprivation_2015/data;
 %let idsn=eusilcprod218_3;
-%data_selective_export(&idsn, idir=&idir, time=2015, geo=AT);
+%silc_selective_export(&idsn, idir=&idir, time=2015, geo=AT);
 /**/
 
 /** \endcond */
