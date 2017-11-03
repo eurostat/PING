@@ -1,10 +1,10 @@
 /** 
-## arope_press_news {#sas_arope_press_news}
+## silc_arope_press_news {#sas_silc_arope_press_news}
 Perform ad-hoc extraction for Eurostat press release on _AROPE_ on the occasion of the 
 _International Day for the Eradication of Poverty_. 
 
 ~~~sas
-	%arope_press_news(year, year_ref=, geo=, idir=, ilib=, odsn=, olib=);
+	%silc_arope_press_news(year, year_ref=, geo=, idir=, ilib=, odsn=, olib=);
 ~~~
 
 ### Arguments
@@ -40,7 +40,7 @@ and `PC_AROPE_SERIES_15`, used for the tables of the 2015 press release below:
 you can simply launch:
 
 ~~~sas
-	%arope_press_news(2015);
+	%silc_arope_press_news(2015);
 	%ds_export(PC_AROPE_FIGURES_15, fmt=csv);
 	%ds_export(PC_AROPE_COMPONENTS_15, fmt=csv);
 	%ds_export(PC_AROPE_SERIES_15, fmt=csv);
@@ -67,12 +67,12 @@ http://www.un.org/en/events/povertyday.
 4. Statistics explained on [poverty and social exclusion](http://ec.europa.eu/eurostat/statistics-explained/index.php/People_at_risk_of_poverty_or_social_exclusion).
 
 ### See also
-[%arope_press_infographics](@ref sas_arope_press_infographics).
+[%silc_arope_press_infographics](@ref sas_silc_arope_press_infographics).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: grazzja, grillma */
 
-%macro arope_press_news(year		/* Year of interest 			(REQ) */
+%macro silc_arope_press_news(year		/* Year of interest 			(REQ) */
 						, year_ref=	/* Reference year 				(OPT) */
 						, geo=		/* Area of interest 			(OPT) */
 						, idir=		/* Input directory name			(OPT) */
@@ -422,6 +422,6 @@ http://www.un.org/en/events/povertyday.
 	%end;
 
 	%exit:
-%mend arope_press_news;
+%mend silc_arope_press_news;
 
 /** \endcond */
