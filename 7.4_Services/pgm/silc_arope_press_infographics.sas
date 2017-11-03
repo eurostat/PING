@@ -1,10 +1,10 @@
 /** 
-## arope_press_infographics {#sas_arope_press_infographics}
+## silc_arope_press_infographics {#sas_silc_arope_press_infographics}
 Perform ad-hoc extraction for infographics publication on _AROPE_ on the occasion of the 
 _International Day for the Eradication of Poverty_. 
 
 ~~~sas
-	%arope_press_infographics(year, geo=, ilib=, idir=, odsn=, olib=);
+	%silc_arope_press_infographics(year, geo=, ilib=, idir=, odsn=, olib=);
 ~~~
 
 ### Arguments
@@ -36,9 +36,11 @@ used for the graphic representations of the 2015 infographics publication below:
 
 you can simply launch:
 
-	%arope_press_infographics(2015);
+~~~sas
+	%silc_arope_press_infographics(2015);
 	%ds_export(PC_AROPE_RESULTS_15, fmt=csv);
 	%ds_export(PC_AROPE_TOTAL_15, fmt=csv);
+~~~
 
 ### Note
 The publication is based on the following _AROPE_ indicators:
@@ -57,12 +59,12 @@ http://www.un.org/en/events/povertyday.
 3. Statistics explained on [poverty and social exclusion](http://ec.europa.eu/eurostat/statistics-explained/index.php/People_at_risk_of_poverty_or_social_exclusion).
 
 ### See also
-[%arope_press_news](@ref sas_arope_press_news).
+[%silc_arope_press_news](@ref sas_silc_arope_press_news).
 */ /** \cond */
 
 /* credits: grazzja */
 
-%macro arope_press_infographics(year	/* Year of interest 			(REQ) */
+%macro silc_arope_press_infographics(year	/* Year of interest 			(REQ) */
 								, geo=	/* Area of interest 			(OPT) */
 								, idir=	/* Input directory name			(OPT) */
 								, ilib=	/* Input library name 			(OPT) */
@@ -153,7 +155,7 @@ http://www.un.org/en/events/povertyday.
 	/************************************************************************************/
 	/**                                 actual computation                             **/
 	/************************************************************************************/
-%put geo=&geo;
+
 	%local yy;
 	%let yy=%substr(&year,3,2);
 
@@ -298,6 +300,6 @@ http://www.un.org/en/events/povertyday.
 	%work_clean(AROPE, AROPE_SEX, AROPE_AGE, AROPE_WSTATUS, AROPE_HHTYP, AROPE_ISCED11);
 
 	%exit:
-%mend arope_press_infographics;
+%mend silc_arope_press_infographics;
 
 /** \endcond */
