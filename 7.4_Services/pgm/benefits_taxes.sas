@@ -1,10 +1,10 @@
 /** 
-## benefits_taxes {#sas_benefits_taxes}
+## silc_benefits_taxes {#sas_silc_benefits_taxes}
 Compute the per-capita benefits and taxes (benefits/allowances; taxes and social security contributions) for given 
 geographical area(s) and period(s). 
 
 ~~~sas
-	%benefits_taxes(geo, year, varaddh=, varaddp=,vartaxes= ,breakdowns1=, breakdowns2=, weight=, 
+	%silc_benefits_taxes(geo, year, varaddh=, varaddp=,vartaxes= ,breakdowns1=, breakdowns2=, weight=, 
 		type=G, yes_or_not=YES, odsn=Benefits_Taxes_YES, olib=WORK);
 ~~~
 
@@ -154,7 +154,7 @@ and `vartaxes` variables) are to be chosen among:
 
 /* credits: grillma */
 
-%macro benefits_taxes(geo			/* Area of interest 											(REQ) */
+%macro silc_benefits_taxes(geo			/* Area of interest 											(REQ) */
 					, year			/* Year of interest 											(REQ) */
 					, varaddp= 		/* Personal variables 										    (OPT) */
 					, varaddh= 		/* Household variables  										(OPT) */
@@ -834,6 +834,6 @@ and `vartaxes` variables) are to be chosen among:
 	*%work_clean(&odsn);
 
 	%exit:
-%mend benefits_taxes;
+%mend silc_benefits_taxes;
 
 /** \endcond */
