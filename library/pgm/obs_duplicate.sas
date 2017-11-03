@@ -30,7 +30,7 @@ Extract duplicated/unique observations from a given dataset.
 
 ### See also
 [%obs_select](@ref sas_obs_select), [%ds_isempty](@ref sas_ds_isempty), [%ds_check](@ref sas_ds_check),
-[%sql_clause_by](@ref sas_sql_clause_by), [%sql_clause_as](@ref sas_sql_clause_as), [%obs_select](@ref sas_select), 
+[%sql_clause_by](@ref sas_sql_clause_by), [%sql_clause_as](@ref sas_sql_clause_as), [%ds_select](@ref sas_ds_ select), 
 [SELECT ](http://support.sas.com/documentation/cdl/en/proc/61895/HTML/default/viewer.htm#a002473678.htm).
 */ /** \cond */
 
