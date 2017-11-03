@@ -24,7 +24,7 @@ Perform selective export of a dataset to any format accepted by `PROC EXPORT`.
 	name(s);
 * `odir` : (_option_) output directory/library to store the converted dataset; by default,
 	it is set to:
-			+ the location of your project if you are using SAS EG (see [%egp_path](@ref sas_egp_path)),
+			+ the location of your project if you are using SAS EG (see [%_egp_path](@ref sas__egp_path)),
 			+ the path of `%sysget(SAS_EXECFILEPATH)` if you are running on a Windows server,
 			+ the location of the library passed through `ilib` (_i.e._, `%sysfunc(pathname(&ilib))`) 
 			otherwise.
