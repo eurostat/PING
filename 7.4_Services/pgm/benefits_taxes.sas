@@ -32,6 +32,7 @@ geographical area(s) and period(s).
 
 ### Example
 Let us consider the following configuration parameters:
+
 ~~~sas
 	%let year=2015;
 	%let geo=AT;
@@ -46,8 +47,8 @@ Let us consider the following configuration parameters:
 	%let odsn=Ben_taxes.NotZero;
 	%let olib=WORK;
 ~~~
-
 we implicitely compute the Benefits and taxes, normally expressed as:
+
 ~~~sas
 	%let var=HY050;
 	SUM(PY010G,PY020G,PY050G,PY080G,PY090G,PY100G,PY110G,PY130G,PY140G) as totgross at personal level
@@ -55,13 +56,12 @@ we implicitely compute the Benefits and taxes, normally expressed as:
 	&var/tot_H as allowratio_&vars
 	allowratio_&var * totgross as new &var
 ~~~
-
 so as to produce the following `Ben_taxes.NotZero` table in `WORK` library:
 | GEO | TIME |  AGE  |  SEX  | BENEFIT_TAX  | MEAN   | FLAG  |  N    |  NTOT |   NTOTWGH   |
 |:---:|:----:|:-----:|:-----:|:------------:|:------:|:-----:|:-----:|:-----:|:-----------:|
 | AT  |	2015 | Y15-19|  T    |      HY050   | 350.4  |       |  742  |  742  | 518055.49   |	
-
 In practice, the example above realises the following stepwise calculations:
+
 ~~~sas
 	PROC SQL;  
 		CREATE TABLE work.dsn AS
@@ -117,6 +117,7 @@ and `vartaxes` variables) are to be chosen among:
 2. The breakdowns to be considered are generally:
 	+ `breakdowns1`: all benefits and taxes variables,
 	+ `breakdowns2: `age` (0-4, ........., 95+) and `sex`, e.g. using the following formats:
+
 ~~~sas
       VALUE f_age_ (multilabel)
             0 - 4 = "Y0-4"
