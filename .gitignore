@@ -29,6 +29,7 @@ library/pgm/TODO_*
 # 5.1_Integration folder 
 5.1_Integration/meta/*.xls
 5.1_Integration/meta/*.xlsx
+5.1_Integration/meta/*.lnk
 5.1_Integration/meta/COUNTRIES.csv
 5.1_Integration/meta/VARIABLE_LABELVALUE_H.csv
 5.1_Integration/meta/VARIABLE_LABELVALUE_P.csv
@@ -37,6 +38,7 @@ library/pgm/TODO_*
 # 5.5_Estimation folder 
 5.5_Estimation/meta/*.xls
 5.5_Estimation/meta/*.xlsx
+5.5_Estimation/meta/*.lnk
 5.5_Estimation/meta/COUNTRY_MAN_SCH_AGE.csv
 5.5_Estimation/meta/META_IDX2005xCOUNTRY.csv
 5.5_Estimation/meta/NUTS.csv
@@ -45,6 +47,7 @@ library/pgm/TODO_*
 # 5.5_Extraction folder 
 5.5_Extraction/meta/*.xls
 5.5_Extraction/meta/*.xlsx
+5.5_Extraction/meta/*.lnk
 5.5_Extraction/meta/_old_rate_ppp.csv
 #5.5_Extraction/meta/idx2005.csv*
 5.5_Extraction/meta/VARIABLE_LABEL_IDB.csv
@@ -54,6 +57,7 @@ library/pgm/TODO_*
 # 5.7_Aggregates folder 
 5.7_Aggregates/meta/*.xls
 5.7_Aggregates/meta/*.xlsx
+5.7_Aggregates/meta/*.lnk
 #5.7_Aggregates/meta/ccwgh60.csv*
 #5.7_Aggregates/meta/Total\ population\ 97\ to\ 2014.xls*
 5.7_Aggregates/pgm/__tmp
