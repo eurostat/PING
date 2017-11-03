@@ -3,7 +3,9 @@
 Perform ad-hoc extraction for Eurostat press release on _AROPE_ on the occasion of the 
 _International Day for the Eradication of Poverty_. 
 
+~~~sas
 	%arope_press_news(year, year_ref=, geo=, idir=, ilib=, odsn=, olib=);
+~~~
 
 ### Arguments
 * `year` : a (single) year of interest;
@@ -37,10 +39,12 @@ and `PC_AROPE_SERIES_15`, used for the tables of the 2015 press release below:
 
 you can simply launch:
 
+~~~sas
 	%arope_press_news(2015);
 	%ds_export(PC_AROPE_FIGURES_15, fmt=csv);
 	%ds_export(PC_AROPE_COMPONENTS_15, fmt=csv);
 	%ds_export(PC_AROPE_SERIES_15, fmt=csv);
+~~~
 
 ### Note
 The publication is based on the following  indicators:
