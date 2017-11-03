@@ -43,13 +43,13 @@ Export EU-SILC bulk datasets from SAS format (`.sas7bdat`) to any format support
 * `_ofn_` : name (string) of the macro variable storing the output exported file name.
 * `odir` : (_option_) output directory/library to store the converted dataset; by default,
 	it is set to:
-			+ the location of your project if you are using SAS EG (see [%egp_path](@ref sas_egp_path)),
+			+ the location of your project if you are using SAS EG (see [%_egp_path](@ref sas__egp_path)),
 			+ the path of `%sysget(SAS_EXECFILEPATH)` if you are running on a Windows server,
 			+ the location of the library passed through `ilib` (_i.e._, `%sysfunc(pathname(&ilib))`) 
 			otherwise;
 
 ## Example
-Let us export some bulk datasets from the so-called BDB into Stata native format (`dta`):
+Let us export some bulk datasets from the so-called BDB into `Stata` native format (`dta`):
 
 ~~~sas
 	%let survey=CROSS;
@@ -61,10 +61,10 @@ Let us export some bulk datasets from the so-called BDB into Stata native format
 	%silc_db_export(CROSS, 2015, odir=&odir, _ofn_=ofn, fmt=&fmt, db=&db, src=&src);
 ~~~
 
-On our current system (see _G_PING_ROOTPATH_ definition), the following output files will be created:
-* /ec/prod/server/sas/0eusilc/bdb_c15d.dta
-* /ec/prod/server/sas/0eusilc/bdb_c15h.dta
-* /ec/prod/server/sas/0eusilc/bdb_c15r.dta
+In our current environment (see `G_PING_ROOTPATH` definition), the following output files will be created:
+* 0eusilc/bdb_c15d.dta
+* 0eusilc/bdb_c15h.dta
+* 0eusilc/bdb_c15r.dta
 	
 ### See also
 [%silc_ds_extract](@ref sas_silc_ds_extract), [%silc_db_locate](@ref sas_silc_db_locate),
