@@ -1,7 +1,9 @@
+[![DOI](https://zenodo.org/badge/79137006.svg)](https://zenodo.org/badge/latestdoi/79137006)
+
 PING
 ====
 
-Library of macro/function utilities developped in R/SAS/Stata for 
+Library of macro/function utilities implemented in R/SAS/Stata for 
 *statistical data handling and processing in production environments*.
 ---
 
