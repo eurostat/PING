@@ -25,6 +25,7 @@ In `rclass` object `db`, _i.e._ <code>"`r(db)'"</code> the path to the bulk data
 
 ### Example
 Running for instance:
+
 ~~~stata
     . silc_db_locate 2016 bdb p test
 	. use "`r(db)'", clear
@@ -33,9 +34,8 @@ Running for instance:
 will load: `test\bdb_c16p.dta`.
 	
 ### See also
-[SAS implementation](@ref sas_silc_db_locate).
+[silc_db_locate (SAS)](@ref sas_silc_db_locate).
 */	
-
 
 /* credits: nicaver */
 
