@@ -32,6 +32,7 @@ outcomes/benefits across EU-28.
 ### Example
 In order to (re)generate two csv files `GAP_2016_in_pension` and  `COVERAGE_RATE_2016_in_pension` 
 for geo=EU28, stored in &odir, you can simply launch:
+
 ~~~sas
 	%pension_gap_coverage_rate(2016, geo=EU28, odsn=GAP COVERAGE, weight=PB040, ext=_in_pension, 
 		odir=&odir, olib=WORK);
@@ -44,7 +45,7 @@ page 150):
 
 <img src="img/pension-gap_box3-4_page150" border="1" width="60%" alt="Pension gap">
  
-In addition, the coverage gap is defined as the extent to which women have less access to the 
+  In addition, the coverage gap is defined as the extent to which women have less access to the 
 pension system than men (_e.g._ zero pension income – as defined in EU-SILC).
 2. Note the following methodological issues in the choice made for this indicator: 
 * whether to include or not individuals with zero income in the average pension calculation 
