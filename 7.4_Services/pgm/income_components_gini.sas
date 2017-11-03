@@ -169,7 +169,7 @@ survivor's benefits):
 2. DG EMPL (2015): ["Wage and income inequality in the European Union"](http://ec.europa.eu/eurostat/cros/system/files/05-2014-wage_and_income_inequality_in_the_eu_0.pdf).
 
 ### See also
-[income_components_disaggregated](@ref sas_income_components_disaggregated).
+[%gini](@ref sas_gini), [%income_components_disaggregated](@ref sas_income_components_disaggregated).
 */ /** \cond */
 
 /* credits: grazzja */
