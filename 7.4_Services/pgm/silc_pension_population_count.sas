@@ -1,10 +1,10 @@
 /** 
-## pension_population_count {#sas_pension_population_count}
+## silc_pension_population_count {#sas_silc_pension_population_count}
 Count the number of pensioners and/or retired people of a given citizenship abroad, or in a 
 given country by citizenship. 
 
 ~~~sas
-	%pension_population_count(geo, year, zone=, idir=, ilib=, odsn=, olib=);
+	%silc_pension_population_count(geo, year, zone=, idir=, ilib=, odsn=, olib=);
 ~~~
 
 ### Arguments
@@ -69,12 +69,12 @@ The status of a personed is evaluated as:
 * either _retired or pensioned_ when any of the cases above occurs.
 
 ### See also
-[pension_gap_coverage_rate](@ref pension_gap_coverage_rate).
+[%silc_pension_gap_coverage_rate](@ref sas_silc_pension_gap_coverage_rate).
 */ /** \cond */
 
 /* credits: grazzja, grillma */
 
-%macro pension_population_count(geo			/* Citizenship/country of interest 	(REQ) */
+%macro silc_pension_population_count(geo			/* Citizenship/country of interest 	(REQ) */
 								, year		/* Year of interest 				(REQ) */
 								, zone=		/* Area of interest 				(OPT) */
 								, idir=		/* Input directory name				(OPT) */
@@ -249,7 +249,7 @@ The status of a personed is evaluated as:
 					by=		PB010);
 
 	%exit:
-%mend pension_population_count;
+%mend silc_pension_population_count;
 
 /** \endcond */
 
