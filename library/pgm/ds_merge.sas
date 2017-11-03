@@ -47,12 +47,12 @@ geo | value | unit
 
 then we can "merge" `_dstest30` into `_dstest31` by invoking the macro as follows:
  
-    %let cond=%quote(in=a in=b);
+~~~sas
+    	%let cond=%quote(in=a in=b);
 	%let by=%quote(geo );
 	%let if=%quote(A and B);
-
+~~~
 so that we get the output table:
-
 geo | value | unit
 ----|-------|-----
 AT	|  0.1	| EUR
@@ -65,9 +65,11 @@ since the condition `cond` applies on the table `ds_input_vi`.
 
 Run macro `%%_example_ds_merge` for more examples.
 
-### Notes
-1. The macro `%%ds_merge` processes several occurrences of the `data setp merge`, _e.g._ in short it runs
+### Note
+The macro `%%ds_merge` processes several occurrences of the `data setp merge`, _e.g._ in short it runs
 something like:
+
+~~~sas
 	DATA  &rlib..&ref;
 		merge  
 	 	%do _i=1 %to &ndsn;
@@ -88,13 +90,14 @@ something like:
 			if &if;
 		%end;
  	run; 
+~~~
 
 ### References
 1. Michael J. Wieczkowski, IMS HEALTH, Plymouth Meeting: [Alternatives to Merging SAS Data Sets ... But Be Careful] (http://www.ats.ucla.edu/stat/sas/library/nesug99/bt150.pdf)
 2. IDRE Research Technology Group["SAS learning module match merging data files in SAS"](http://www.ats.ucla.edu/stat/sas/modules/merge.htm).
 
 ### See also
-[%ds_check](@ref ds_check), [%ds_delete](@ref ds_delete), [%ds_sort](@ref ds_sort). 
+[%ds_check](@ref sas_ds_check), [%ds_delete](@ref sas_ds_delete), [%ds_sort](@ref sas_ds_sort). 
 */ /** \cond */
 
 /* credits: grazzja, grillma */
