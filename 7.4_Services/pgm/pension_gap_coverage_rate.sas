@@ -59,7 +59,7 @@ and [II](https://webgate.ec.europa.eu/emplcms/social/BlobServlet?docId=14545&lan
 2. ["Report on equality between women and men in the EU"](http://ec.europa.eu/newsroom/document.cfm?doc_id=43416), 2017.
 
 ### See also
-[pension_gap_coverage_rate](@ref pension_gap_coverage_rate).
+[pension_population_count](@ref pension_population_count).
 */ /** \cond */
 
 /* credits: grillo, grazzja */
