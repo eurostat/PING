@@ -1,6 +1,6 @@
 # Metadata/configuration tables  {#metadata}
 
-Content:
+Contents:
 
 - @subpage meta_country_order
 - @subpage meta_countryxzone
