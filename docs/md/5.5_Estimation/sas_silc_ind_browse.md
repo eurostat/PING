@@ -68,5 +68,5 @@ will store in the output html `oreport` file the following table:
 </table>
 
 ### See also
-[%ds_contents](@ref %sas_ds_contents), [%file_check](@ref sas_file_check), [%ds_check](@ref sas_ds_check),
+[%ds_contents](@ref sas_ds_contents), [%file_check](@ref sas_file_check), [%ds_check](@ref sas_ds_check),
 [%par_check](@ref sas_par_check).
