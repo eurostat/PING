@@ -1,6 +1,6 @@
 # Procedures {#library_proc}
 
-Content:
+Contents:
 
 - @subpage sas_proc_surveyselect
 - @subpage sas_sql_clause_add
