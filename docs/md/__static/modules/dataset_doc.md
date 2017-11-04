@@ -1,6 +1,6 @@
 # Dataset manipulation {#library_dataset}
 
-Content:
+Contents:
 
 - @subpage sas_clist_to_var
 - @subpage sas_ds_alter
