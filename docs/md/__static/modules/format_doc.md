@@ -1,6 +1,6 @@
 # Format manipulation {#library_format}
 
-Content:
+Contents:
 - @subpage sas_label_zip
 
 @defgroup Format
