@@ -1,6 +1,6 @@
 # Structure manipulation {#library_struct}
 
-Content:
+Contents:
 
 - @subpage sas_clist_append
 - @subpage sas_clist_compare
