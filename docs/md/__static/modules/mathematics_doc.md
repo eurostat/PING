@@ -1,6 +1,6 @@
 # Basic math operations {#library_math}
 
-Content:
+Contents:
 
 - @subpage sas_digits
 
