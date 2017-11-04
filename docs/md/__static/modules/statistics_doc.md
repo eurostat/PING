@@ -1,6 +1,6 @@
 # Statistical operations {#library_stats}
 
-Content:
+Contents:
 
 - @subpage sas_gini
 - @subpage quantile
