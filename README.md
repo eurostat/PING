@@ -41,7 +41,7 @@ Hence, depending on your context, you can follow any of the methods described in
 Note that our preference for the settings goes to the last two methods. In particular, the 
 [last one](#EGautoexec) being preferred for users running on SAS EG.
 
-(1) <a name="SASautocall"></a> Use `autocall` directly
+####### (1) <a name="SASautocall"></a> Use `autocall` directly
 
 You will first need to set the path of your install, then you will be able to configure the `SASAUTOS` 
 environment (defining where to look for macros) using the corresponding keyword with `options` as follows:
@@ -110,9 +110,9 @@ above), _e.g._:
 Then, SAS can be launched by specifying this file in the `-autoexec` option of the inline command, _.e.g._ (in 
 general, you will need to be on the SAS server for this command to run):
 	
-	```bash
+```bash
 	sas_autoexec </your/server/PING/>/library/autoexec/cfg_SAS_PING.sas
-	```
+```
 	
 granted that the location of SAS software has been added to your `PATH` (otherwise, in our case we would run 
 `<SAS_SERVER>/sas/bin/SAS92/SASFoundation/9.2/sas`), and considering the configuration file has been saved 
@@ -131,10 +131,10 @@ will launch your SAS session with all desired settings.
 The `autoexec` feature  of SAS EG can be used to load all `PING` settings, _.e.g_ by creating an `autoexec` workflow in your 
 project, and either:
 * embedding in it a copy of, or inserting a link to, the file `cfg_SAS_PING.sas` (**recommended**), or
-<img src="img/sas_eg_autoexec1.png" border="1" alt="cfg_SAS_PING.sas in autoexec">
+<img src="docs/img/sas_eg_autoexec1.png" border="1" alt="cfg_SAS_PING.sas in autoexec">
 * inserting a reference to the default configuration file `_setup_.sas` (located in `library/autoexec`) 
 and linking to an embedded program that runs (only) `%%_default_setup_;`.
-<img src="img/sas_eg_autoexec2.png" border="1" alt="_setup_.sas in autoexec">
+<img src="docs/img/sas_eg_autoexec2.png" border="1" alt="_setup_.sas in autoexec">
 
 SAS EG will then submit the programs associated to the `autoexec` workflow when your Workspace Server session is 
 created on the SAS Server (see ["Writing code in SAS Enterprise Guide"](http://www.lexjansen.com/wuss/2013/83_Paper.pdf)). 
