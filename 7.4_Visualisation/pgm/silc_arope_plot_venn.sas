@@ -1,8 +1,8 @@
 /** 
-## arope_plot_venn {#sas_arope_plot_venn}
+## silc_arope_plot_venn {#silc_sas_arope_plot_venn}
 Create a 3-way (non-proportional) Venn diagram of _AROPE_ and its components. 
 
-	%arope_plot_venn(year, geo=, ind=, idir=, ilib=, ofn=, odir=, unit=, title=, 
+	%silc_arope_plot_venn(year, geo=, ind=, idir=, ilib=, ofn=, odir=, unit=, title=, 
 					age=, sex=, wstatus=, quantile=, hhtyp=, isced11=, citizen=, c_birth=, tenure=);
 
 ### Arguments
@@ -45,7 +45,7 @@ deprived" population (`DEP`), and population with "low work intensity" (`LWI`):
 
 you can simply launch:
 
-	%arope_plot_venn(2015, geo=FR, age=TOTAL, sex=T, unit=PC, title=%bquote(AROPE 2015 FR - All ages, all sexes));
+	%silc_arope_plot_venn(2015, geo=FR, age=TOTAL, sex=T, unit=PC, title=%bquote(AROPE 2015 FR - All ages, all sexes));
 
 ### Note
 Launching the example below is (in short) equivalent to running the following instructions/procedures: 
@@ -74,12 +74,12 @@ Launching the example below is (in short) equivalent to running the following in
 				  format= percent8.1);
 
 ### See also
-[%diagram_venn](@ref sas_diagram_venn), [%AROPE_press_infographics](@ref sas_AROPE_press_infographics).
+[%diagram_venn](@ref sas_diagram_venn), [%silc_arope_press_infographics](@ref sas_silc_arope_press_infographics).
 */ /** \cond */
 
 /* credits: grazzja */
 
-%macro arope_plot_venn(year		/* Year of interest 			(REQ) */
+%macro silc_arope_plot_venn(year		/* Year of interest 			(REQ) */
 						, geo=		/* Area of interest 			(OPT) */
 						, ind=
 						, idir=		/* Input directory name			(OPT) */
@@ -408,7 +408,7 @@ Launching the example below is (in short) equivalent to running the following in
 	%work_clean(&_dsn.1);
 
 	%exit:
-%mend arope_plot_venn;
+%mend silc_arope_plot_venn;
 
 /** \endcond */
 
