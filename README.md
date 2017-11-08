@@ -38,18 +38,18 @@ environment (defining where to look for macros) using the corresponding keyword 
 	%let G_PING_ROOTPATH=</your/server/>; 
 	options MAUTOSOURCE;
 	options SASAUTOS =(SASAUTOS 
-						"&G_PING_ROOTPATH/library/pgm/" 		
-						"&G_PING_ROOTPATH/library/test" 			
-						"&G_PING_ROOTPATH/5.1_Integration/pgm/"
-						"&G_PING_ROOTPATH/5.3_Validation/pgm/"
-						"&G_PING_ROOTPATH/5.5_Extraction/pgm/"
-						"&G_PING_ROOTPATH/5.5_Estimation/pgm/"
-						"&G_PING_ROOTPATH/5.7_Aggregates/pgm/"
-						"&G_PING_ROOTPATH/7.1_Upload/pgm/"
-						"&G_PING_ROOTPATH/7.3_Dissemination/pgm/"
-						"&G_PING_ROOTPATH/7.4_Visualisation/pgm/"
-						"&G_PING_ROOTPATH/7.4_Services/pgm/"
-						);
+			"&G_PING_ROOTPATH/library/pgm/" 		
+			"&G_PING_ROOTPATH/library/test" 			
+			"&G_PING_ROOTPATH/5.1_Integration/pgm/"
+			"&G_PING_ROOTPATH/5.3_Validation/pgm/"
+			"&G_PING_ROOTPATH/5.5_Extraction/pgm/"
+			"&G_PING_ROOTPATH/5.5_Estimation/pgm/"
+			"&G_PING_ROOTPATH/5.7_Aggregates/pgm/"
+			"&G_PING_ROOTPATH/7.1_Upload/pgm/"
+			"&G_PING_ROOTPATH/7.3_Dissemination/pgm/"
+			"&G_PING_ROOTPATH/7.4_Visualisation/pgm/"
+			"&G_PING_ROOTPATH/7.4_Services/pgm/"
+			);
 
 This way you will be able to run `PING` macros. 
 However, this command alone will not allow you to load/set all default configuration parameters (_e.g._ global variables) associated to the `PING` library.
@@ -126,7 +126,7 @@ project, and either:
 <img src="docs/img/sas_eg_autoexec1.png" border="1" alt="cfg_SAS_PING.sas in autoexec">
 
 * inserting a reference to the default configuration file `_setup_.sas` (located in `library/autoexec`) 
-and linking to an embedded program that runs (only) `%%_default_setup_;`.
+and linking to an embedded program that runs (only) `%_default_setup_;`.
 <img src="docs/img/sas_eg_autoexec2.png" border="1" alt="_setup_.sas in autoexec">
 
 `SAS EG` will then submit the programs associated to the `autoexec` workflow when your Workspace Server session is 
