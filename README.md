@@ -41,7 +41,8 @@ Hence, depending on your context, you can follow any of the methods described in
 Note that our preference for the settings goes to the last two methods. In particular, the 
 [last one](#EGautoexec) being preferred for users running on SAS EG.
 
-####### (1) <a name="SASautocall"></a> Use `autocall` directly
+<a name="SASautocall"></a> 
+####### (1) Use `autocall` directly
 
 You will first need to set the path of your install, then you will be able to configure the `SASAUTOS` 
 environment (defining where to look for macros) using the corresponding keyword with `options` as follows:
@@ -65,7 +66,7 @@ environment (defining where to look for macros) using the corresponding keyword 
 This way you will be able to run `PING` macros. 
 However, this command alone will not allow you to load/set all default configuration parameters (_e.g._ global variables) associated to the `PING` library.
 
-(2) <a name="macroSASautocall"></a> Use a default setup (_e.g._, `_default_setup_`) macro
+####### <a name="macroSASautocall"></a> Use a default setup (_e.g._, `_default_setup_`) macro
 
 In order to load all PING macros, as well as associated default configuration parameters, we provide a 
 configuration file named `_setup_.sas` (documentation [here](#sas_setup_); file is located in the directory 
@@ -83,11 +84,12 @@ it will not be very elegant), _e.g._:
 
 
 	%macro _ping_setup;
-		%if %symexist(G_PING_ROOTPATH) EQ 0 %then %do; 
-			%if %symexist(G_PING_SETUPPATH) EQ 0 %then 	%let G_PING_SETUPPATH=</your/server/PING>; 
-			%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
-			%_default_setup_;
-		%end;
+	    %if %symexist(G_PING_ROOTPATH) EQ 0 %then %do; 
+	        %if %symexist(G_PING_SETUPPATH) EQ 0 %then 	
+	            %let G_PING_SETUPPATH=</your/server/PING>; 
+	        %include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
+	        %_default_setup_;
+	    %end;
 	%mend _ping_setup;
 	%_ping_setup;
 
@@ -122,7 +124,9 @@ Further, we provide the bash script `sas_ping.sh` (located in practice in librar
 as an alias for this operation to be performed on-the-fly (hence, no need to create the configuration file beforehand), 
 _e.g._:
 
+```bash
 	bash </your/server/PING/>/library/bin/sas_ping.sh
+```
 	
 will launch your SAS session with all desired settings. 
 
@@ -132,6 +136,7 @@ The `autoexec` feature  of SAS EG can be used to load all `PING` settings, _.e.g
 project, and either:
 * embedding in it a copy of, or inserting a link to, the file `cfg_SAS_PING.sas` (**recommended**), or
 <img src="docs/img/sas_eg_autoexec1.png" border="1" alt="cfg_SAS_PING.sas in autoexec">
+
 * inserting a reference to the default configuration file `_setup_.sas` (located in `library/autoexec`) 
 and linking to an embedded program that runs (only) `%%_default_setup_;`.
 <img src="docs/img/sas_eg_autoexec2.png" border="1" alt="_setup_.sas in autoexec">
