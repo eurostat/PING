@@ -29,7 +29,7 @@ they are retrieved by providing SAS with their actual location. In the future, t
 processes (`/ store` option) and, therefore, will be retrieved through the `MSTORED` option. 
 
 There are then different ways to set your environment so as to be able to load and run available `PING` macros, 
-depending whether **you are already running a SAS session**, _e.g._ employing:
+depending **whether you are already running a SAS session or not**, _e.g._ employing:
 1. the **autocall option**:
 
 You will first need to set the path of your install, then you will be able to configure the `SASAUTOS` 
@@ -83,9 +83,7 @@ it will not be very elegant), _e.g._:
 
 Note moreover that you can implement your own default configuration and load it similarly.
 
-**or not**, _e.g._ launching SAS:
-3. with an **autoexec file** to launch your SAS session,
-
+3. an **autoexec file** to launch your SAS session,
 
 The commands above can be inserted into a file that will be automatically loaded (and ran) by SAS at launch time. 
 This feature is enabled by the so-called `autoexec` option (see 
