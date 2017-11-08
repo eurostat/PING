@@ -15,9 +15,9 @@ depending whether **you are already running a SAS session**, _e.g._ employing:
 * with an [autoexec file](@ref SASautoexec),
 * with SAS Enterprise Guide and an [autoexec workflow](@ref EGautoexec).
 
-Hence, depending on your context, you can follow any of the methods desribed in the instructions below. 
+Hence, depending on your context, you can follow any of the methods described in the instructions below. 
 Note that our preference for the settings goes to the last two methods. In particular, the 
-[last one](@ref EGautoexec) being prefered for users running on SAS EG.
+[last one](@ref EGautoexec) being preferred for users running on SAS EG.
 
 <a name="SASautocall"></a>
 #### Use `autocall` directly {#SASautocall}
@@ -26,7 +26,7 @@ You will first need to set the path of your install, then you will be able to co
 environment (defining where to look for macros) using the corresponding keyword with `options` as follows:
 
 ~~~sas
-	%let G_PING_ROOTPATH=/ec/prod/server/sas/0eusilc; /* our own case */
+	%let G_PING_ROOTPATH=</your/server/>; 
 	options MAUTOSOURCE;
 	options SASAUTOS =(SASAUTOS 
 						"&G_PING_ROOTPATH/library/pgm/" 		
@@ -53,7 +53,7 @@ configuration file named `_setup_.sas` (documentation [here](#sas_setup_); file 
 `library/autoexec`). You can then set your SAS environment with something similar to the following command:
 
 ~~~sas
-	%let G_PING_SETUPPATH=/ec/prod/server/sas/0eusilc; /* again, specific to our own case */
+	%let G_PING_SETUPPATH=</your/server/PING/>; /* again, specific to our own case */
 	%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";	
 	%_default_setup_;
 ~~~
@@ -66,7 +66,7 @@ it will not be very elegant), _e.g._:
 ~~~sas
 	%macro _ping_setup;
 		%if %symexist(G_PING_ROOTPATH) EQ 0 %then %do; 
-			%if %symexist(G_PING_SETUPPATH) EQ 0 %then 	%let G_PING_SETUPPATH=/ec/prod/server/sas/0eusilc; 
+			%if %symexist(G_PING_SETUPPATH) EQ 0 %then 	%let G_PING_SETUPPATH=</your/server/PING>; 
 			%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
 			%_default_setup_;
 		%end;
@@ -87,7 +87,7 @@ above), _e.g._:
 
 ~~~sas
 	%global G_PING_SETUPPATH
-	%let G_PING_SETUPPATH=/ec/prod/server/sas/0eusilc;
+	%let G_PING_SETUPPATH=</your/server/PING/>;
 	%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
 	%_default_setup_;
 ~~~
