@@ -22,7 +22,7 @@ Library of macro/function utilities implemented in R/SAS/Stata for
 
 Check the [usage page](https://gjacopo.github.io/PING/dd/dcb/mainpage_usage.html).
 
-### PING SAS macros 
+##### PING SAS macros 
 
 Currently, SAS macros in `PING` library are made available through the `autocall` functionality, _i.e._ 
 they are retrieved by providing SAS with their actual location. In the future, they will be saved as stored 
@@ -42,7 +42,7 @@ Note that our preference for the settings goes to the last two methods. In parti
 [last one](#EGautoexec) being preferred for users running on SAS EG.
 
 <a name="SASautocall"></a>
-#### Use `autocall` directly
+###### Use `autocall` directly
 You will first need to set the path of your install, then you will be able to configure the `SASAUTOS` 
 environment (defining where to look for macros) using the corresponding keyword with `options` as follows:
 
@@ -66,7 +66,7 @@ This way you will be able to run `PING` macros.
 However, this command alone will not allow you to load/set all default configuration parameters (_e.g._ global variables) associated to the `PING` library.
 
 <a name="macroSASautocall"></a>
-#### Use a default setup (_e.g._, `_default_setup_`) macro
+###### Use a default setup (_e.g._, `_default_setup_`) macro
 In order to load all PING macros, as well as associated default configuration parameters, we provide a 
 configuration file named `_setup_.sas` (documentation [here](#sas_setup_); file is located in the directory 
 `library/autoexec`). You can then set your SAS environment with something similar to the following command:
@@ -94,7 +94,7 @@ it will not be very elegant), _e.g._:
 Note moreover that you can implement your own default configuration and load it similarly.
 	
 <a name="SASautoexec"></a>
-#### Use an `autoexec` file to launch your SAS session
+###### Use an `autoexec` file to launch your SAS session
 The commands above can be inserted into a file that will be automatically loaded (and ran) by SAS at launch time. 
 This feature is enabled by the so-called `autoexec` option (see 
 ["Customizing Your SAS Session by Using Configuration and Autoexec Files"](http://support.sas.com/documentation/cdl/en/hostunx/63053/HTML/default/viewer.htm#p13flc1vsrqwr8n1vutzds8rp3t0.htm)).
@@ -110,7 +110,9 @@ above), _e.g._:
 Then, SAS can be launched by specifying this file in the `-autoexec` option of the inline command, _.e.g._ (in 
 general, you will need to be on the SAS server for this command to run):
 	
+	```bash
 	sas_autoexec </your/server/PING/>/library/autoexec/cfg_SAS_PING.sas
+	```
 	
 granted that the location of SAS software has been added to your `PATH` (otherwise, in our case we would run 
 `<SAS_SERVER>/sas/bin/SAS92/SASFoundation/9.2/sas`), and considering the configuration file has been saved 
@@ -125,7 +127,7 @@ _e.g._:
 will launch your SAS session with all desired settings. 
 
 <a name="EGautoexec"></a>
-#### Use an `autoexec` workflow with your SAS EG session
+###### Use an `autoexec` workflow with your SAS EG session
 The `autoexec` feature  of SAS EG can be used to load all `PING` settings, _.e.g_ by creating an `autoexec` workflow in your 
 project, and either:
 * embedding in it a copy of, or inserting a link to, the file `cfg_SAS_PING.sas` (**recommended**), or
@@ -139,10 +141,10 @@ created on the SAS Server (see ["Writing code in SAS Enterprise Guide"](http://w
 This occurs at launch time of SAS EG.
 
 <a name="Stata"></a>
-### PING Stata functions
+##### PING Stata functions
 
 <a name="R"></a>
-### PING R functions
+##### PING R functions
 
 `R` functions are not defined into a package. They need to be loaded manually.
 
