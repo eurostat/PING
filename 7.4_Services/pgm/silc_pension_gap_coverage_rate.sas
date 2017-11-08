@@ -4,7 +4,7 @@ Compute indicators on gender pension gap, _i.e._ gender differences in pension
 outcomes/benefits across EU-28.
 
 ~~~sas
-	%silc_pension_gap_coverage_rate(year, geo=, odsn=, weight=, ext=, olib=, odir=);
+	%silc_pension_gap_coverage_rate(year, geo=, odsn=, weight=, olib=, odir=, ext=);
 ~~~
 
 ### Arguments
@@ -17,25 +17,23 @@ outcomes/benefits across EU-28.
 * `odsn`: (_option_) a (list of) string characterising the output indicator(s) to be 
 	calculated; it can be either:
 		+ `GAP` when the gender gap in pension is calculated; a dataset `GAP` is created
-			and exported to a csv file named `GENDER_&years&ext` for all available 
+			and exported to a csv file named `GENDER_&year&ext` for all available 
 			countries/areas and all year(s) of interest;
 		+ `COVERAGE` when the coverage rate is calculated; _ibid_, a dataset `COVERAGE` 
-			is created and exported to a csv file named `COVERAGE_&years&ext` for all 
+			is created and exported to a csv file named `COVERAGE_&year&ext` for all 
 			available countries/areas and all year(s) of interest;
 
 	default: `odsn=GAP COVERAGE`, _i.e._ both are calculated;
 * `olib`:  (_option_) name of the library where the output indicator(s) is (are)
-	stored; by default: `lib=WORK`;
-* `odir`: (_option_) name of the directory where the output file(s) is (are)
-	exported to.			 
+	stored; by default: `olib=WORK`;
+* `odir`: (_option_) name of the directory where the output file(s) is (are) exported to.			 
 
 ### Example
 In order to (re)generate two csv files `GAP_2016_in_pension` and  `COVERAGE_RATE_2016_in_pension` 
 for geo=EU28, stored in &odir, you can simply launch:
-
 ~~~sas
-	%silc_pension_gap_coverage_rate(2016, geo=EU28, odsn=GAP COVERAGE, weight=PB040, ext=_in_pension, 
-		odir=&odir, olib=WORK);
+	%silc_pension_gap_coverage_rate(2016, geo=EU28, odsn=GAP COVERAGE, weight=PB040, ext=_in_pension, olib=WORK,
+		odir=&odir , ext=_in_pension);
 ~~~
 
 ### Notes
@@ -43,9 +41,9 @@ for geo=EU28, stored in &odir, you can simply launch:
 male and female pensions in the manner defined in the "Pension Adequacy Report" (Box 3.4, 
 page 150):
 
-<img src="img/pension-gap_box3-4_page150" border="1" width="60%" alt="Pension gap">
+<img src="img/pension-gap_box3-4_page150.png" border="1" width="60%" alt="Pension gap">
  
-  In addition, the coverage gap is defined as the extent to which women have less access to the 
+In addition, the coverage gap is defined as the extent to which women have less access to the 
 pension system than men (_e.g._ zero pension income – as defined in EU-SILC).
 2. Note the following methodological issues in the choice made for this indicator: 
 * whether to include or not individuals with zero income in the average pension calculation 
@@ -60,55 +58,57 @@ and [II](https://webgate.ec.europa.eu/emplcms/social/BlobServlet?docId=14545&lan
 2. ["Report on equality between women and men in the EU"](http://ec.europa.eu/newsroom/document.cfm?doc_id=43416), 2017.
 
 ### See also
-[%silc_pension_population_count](@ref sas_silc_pension_population_count).
+[%silc_pension_population_count](@ref silc_pension_population_count).
 */ /** \cond */
 
 /* credits: grillo, grazzja */
 
-%macro silc_pension_gap_coverage_rate(year	    /* Area of interest 						  (REQ) */
-								, dsn_name  /* Type of calculation (GAP/COVERAGE RATE)   (REQ) */                                   
-								, weight    /* Weight variable    					      (REQ) */ 
-								, geo=	    /* Country/Zone   						      (OPT) */
-								, lib= 	    /* Output Library - default is WORK      	  (OPT) */
-								, odir=	    /* Output directory name			          (OPT) */
-								, ext=  	/* Generic output dataset name 	          (OPT) */
-								);
+%macro silc_pension_gap_coverage_rate(year 	    /* Area of interest 						  	(REQ) */
+							  , odsn        /* Type of calculation (GAP/COVERAGE RATE)   	(REQ) */                                   
+							  , weight      /* Weight variable    					      	(REQ) */ 
+						 	  , geo=	    /* Country/Zone   						      	(OPT) */
+							  , odir=		/* Output directory name						(OPT) */
+							  , olib=		/* Output library name 							(OPT) */
+							  , ext=  	    /* Generic output dataset name 	          		(OPT) */
+						   	  );
 
-    %local _mac;
-	%let _mac=&sysmacroname;
+ 	%local _mac;
+ 	%let _mac=&sysmacroname;
+ 	%macro_put(&_mac);
 
-	/************************************************************************************/
-	/**                                 checkings/settings                             **/
-	/************************************************************************************/
+ 	/************************************************************************************/
+ 	/**                                 checkings/settings                             **/
+ 	/************************************************************************************/
+	%local _iy 			/* loop increment for year    		  */
+		_ic				/* loop increment for country 		  */
+		yyyy   			/* scanned year               	 	  */
+		area type       /* area and type of interest  		  */
+		isgeo           /* countries list             		  */
+	    existsOutput    /* boolean variable           		  */
+		ctrylst         /* countries list per specific area   */
+		ctrylst_in      /* countries list already calculated  */
+		wdsn            /* working output dataset     		  */
+		_year           /* list of year with _   as separetor */
+		_ans;           /* result from test macro  		      */
 
-	%local _iy 	/* loop increment for year */
-		_ic		/* loop increment for country */
-		yyyy   	/* scanned year from years */
-		area type
-		isgeo
-        existsOutput
-		TMPdsn
-        ctrylst
-		ctrylst_in
-		_ans;
-    %let existsOutput=NO;
+	%let existsOutput=NO;
+	%let wdsn=TMP;
 
 	%let g_flag=;
- 	/* run the operation (generation+update) for:
+	 /* run the operation (generation+update) for:
 	 * 	- all years in &years 
 	 * 	- all countries/zones in &geos */
 
-    %if %macro_isblank(lib)     %then %let  lib=WORK;
-    
 	/* ODSN: check/set */
-	%if %macro_isblank(odsn) %then 	%let odsn=GAP COVERAGE;
-	%else 							%let odsn=%update(&odsn);
+	%if %macro_isblank(odsn)	 	%then 		%let odsn=GAP COVERAGE;
+	%else 										%let odsn=%upcase(&odsn);
+
 	%let _ans=%list_ones(%list_length(&odsn), item=0);
 
 	%if %error_handle(ErrorInputParameter,
 			%par_check(&odsn, type=CHAR, set=GAP COVERAGE) NE &_ans, mac=&_mac,
 			txt=%bquote(!!! Option ODSN not recognised - Must be either GAP or COVERAGE !!!)) %then
-		%goto exit; 
+		%goto exit;  
 
 	/* GEO: check/set */
 	%if %macro_isblank(geo) %then	%let geo=EU28;
@@ -118,87 +118,91 @@ and [II](https://webgate.ec.europa.eu/emplcms/social/BlobServlet?docId=14545&lan
 			%list_count(&isgeo, 0) NE 0, mac=&_mac,		
 			txt=%quote(!!! Wrong parameter GEO: must be country/geographical zone ISO code(s) !!!)) %then
 		%goto exit;
+	 /* ODIR/OLIB: check/set default output library */
+	%if %error_handle(ErrorInputParameter, 
+			%dir_check(&odir)  NE 0 , mac=&_mac,
+			txt=%quote(!!! ODIR directory does not exist - !!!)) %then
+		%goto exit;
 
-	/* check WEIGHT variable  */
+	%if "&olib" NE "WORK"  %then %do;
+	    libname olib "&olib"; 
+		%let olib=olib;
+	%end;
+
+	/* WEIGHT: check variable  */
 	%if %error_handle(WarningParameter, 
 			%macro_isblank(weight) EQ 1, mac=&_mac, 
 		    txt=%bquote(! No weight variable passed - Uniform weighting is used !), verb=warn) %then %do;
 		 %let weight=PB040;
-         %goto warning;
+	     %goto warning;
 	%end;
-    %warning:
-	
-	/************************************************************************************/
-	/**         creating/temporary and/or permanent dataset                            **/
-	/************************************************************************************/
-    %macro create(dsn    /* permanet dataset to create    */
-		, yyyy           /* current year                  */ 
-		, geo            /* current geo/zone              */ 
-		, lib=           /* library to create the dataset */
-        , labs=          /* labels od dimensions          */
-        , types=         /* type of dimensions            */
-		, lens=          /* lenght of dimensions          */
-		, work=        /* temporary working dataset     */
-        );
+	%warning:
 
+	/***************************************************************************************/
+	/**         creating/temporary and/or permanent dataset                              **/
+	/**************************************************************************************/
+	%macro create(dsn    		/* permanet dataset to create    */
+	   		   	,olib=          /* library to create the dataset */
+	       		,labs=          /* labels od dimensions          */
+	        	,types=         /* type of dimensions            */
+				,lens=          /* lenght of dimensions          */
+				,wdsn=        	/* temporary working dataset     */  
+	    		);
 		/* local variables used in this macro */
 		%local _i
 			idsn
 			ans				/* local test variable */
 			warmsg errmsg;	/* error management */
 
-   		%if %macro_isblank(lib)      %then   %let lib=WORK;;
-		%if %macro_isblank(work)   %then 	 %let work=dsn; 
+	  	/* working dataset */
+	    %if  %macro_isblank(wdsn) EQ 0 		%then   %let wdsn=TMP;
 
-		/* working dataset */
-   		%if  %ds_check(&work, lib=WORK) EQ 1 %then %do;
+		%if  %ds_check(&wdsn, lib=WORK) EQ 1 %then %do;
 		    %if "&dsn"="GAP" %then %do;
-			 	%let vara= geo time  age   sex  unit  ivalue  iflag  unrel  n   nwgh  ntot  totwgh lastup lastuser ;
-			 	%let lena= 15   8     15     1    8      8      8     8      8     8     8     8        8      8    ;
-			 	%let typa= char num  char  char char   num    char   num   num   num  num    num     char    char  ;
+				%let vara= geo time  age   sex  unit  ivalue  iflag  unrel  n   nwgh  ntot  totwgh lastup lastuser ;
+				%let lena= 15   8     15     1    8      8      8     8      8     8     8     8        8      15    ;
+				%let typa= char num  char  char char   num    char   num   num   num  num    num     char    char  ;
 			%end;
 			%else %if "&dsn"="COVERAGE" %then %do;
-				%let vara= geo time  age   sex  npension unit ivalue  iflag  unrel  n   nwgh  ntot  totwgh lastup lastuser  ;
-				%let lena= 15   8     15     1      8      8     8      8      8     8     8    8      8       8      8      ;
-				%let typa= char num  char  char  num	  char  num    char   num   num   num  num    num     char   char    ;
-		    %end;
-			%ds_create(&work, var=&vara, type=&typa, len=&lena,  ilib=WORK, olib=WORK);
-		%end;
-  
+					%let vara= geo time  age   sex  npension unit ivalue  iflag  unrel  n   nwgh  ntot  totwgh lastup lastuser  ;
+					%let lena= 15   8     15     1      8      8     8      8      8     8     8    8      8       8      15      ;
+					%let typa= char num  char  char  num	  char  num    char   num   num   num  num    num     char   char    ;
+			%end;
+			%ds_create(&wdsn, var=&vara, type=&typa, len=&lena,  ilib=WORK, olib=WORK);
+	    %end;
+
 		%if %error_handle(ExistingDataset, 
-				%ds_check(&dsn, lib=&lib) EQ 0, 
+				%ds_check(&dsn, lib=&olib) EQ 0,  
 				txt=! Output table already exist !, verb=warn) %then 
-			%goto quit;
-	
-		/* permanent dataset */
+			%goto exit;
+
+		/* final dataset */
 		%if "&dsn"="GAP" %then 
-			%let idsn=INDICATOR_CONTENTS_SEX;
+			%let idsn=META_INDICATOR_CONTENTS_SEX;
 		%else %if "&dsn"="COVERAGE" %then
-			%let idsn=INDICATOR_CONTENTS;
- 		%ds_create(&dsn, var=&labs, len=&lens, type=&types, idsn=&idsn, olib=&lib, ilib=LIBCFG);
-   
+			%let idsn=META_INDICATOR_CONTENTS;
+	 	%ds_create(&dsn, var=&labs, len=&lens, type=&types, idsn=&idsn, olib=&olib, ilib=LIBCFG);
+
 		%exit:
 	%mend create;
 
-	/************************************************************************************/
-	/**         extraction                                                             **/
-	/************************************************************************************/
-    %macro extract( yyyy	 /* Year of interest                                          (REQ) */
-			, clist			 /* Country/geographical area of interest                     (REQ) */
-			, weight         /* weight                                                    (REQ) */
-			, idb			 /* idb library                                               (REQ) */
-			, pdb			 /* idb library                                               (REQ) */
-			, odsn			 /* output dataset                                            (REQ) */
-			, dimensions=	 /* breakdown variables                                       (OPT) */
-			, vsum=		     /* list of varible to sum                                    (OPT) */
-			, cond=          /* condition to apply to if condition  (program number 1)    (OPT) */
-			, elderly =      /* boolean value N/Y to take in account the elderly person   (OPT) */
-			, pensioners =   /* boolean value N/Y to take in account the pensioner person (OPT) */ 
-			);
-		
+	/************************************************************************************************/
+	/**         extraction                                                                         **/
+	/************************************************************************************************/
+	%macro extract(yyyy	         /* Single Year of interest                                   (REQ) */
+				, clist			 /* Country/geographical area of interest                     (REQ) */
+				, weight         /* weight                                                    (REQ) */
+				, idb			 /* idb library                                               (REQ) */
+				, pdb			 /* idb library                                               (REQ) */
+				, odsn			 /* output dataset                                            (REQ) */
+				, dimensions=	 /* breakdown variables                                       (OPT) */
+				, vsum=		     /* list of varible to sum                                    (OPT) */
+				, elderly =      /* boolean value N/Y to take in account the elderly person   (OPT) */
+				, pensioners =   /* boolean value N/Y to take in account the pensioner person (OPT) */ 
+				);
 		/* local variables that depend on the input parameters or simply used inside the macro */
 		%local _i		/* loop increment                                     */
-			yy			/* year substring, e.g. if yyyy=2012 then yy=12       */
+			yy			/* year substring, e.g. if year=2012 then yy=12       */
 			vtyp		/* type of variable: personal (P) or household (H)    */
 			ndim		/* number of dimensions                               */
 			dim			/* single scanned dimension                           */
@@ -206,11 +210,11 @@ and [II](https://webgate.ec.europa.eu/emplcms/social/BlobServlet?docId=14545&lan
 			_vsum       /* single vsum variables                              */
 			__vsum      /* single scanned vsum  plus dsn                      */
 			_pvar       /* list vsum variables plus dsn with comma separater  */
-			wrnmsg; 	/* error management variable                          */
+		    ;
 	 
-		/* test whether input parameters GEO and YYYY were passed */
+		/* test whether input parameters GEO and year were passed */
 		%if %macro_isblank(clist) or %macro_isblank(yyyy) or  %macro_isblank(vsum)    %then   %goto exit;
-        
+	    
 		/* proceed ... */
 		%let yy=%substr(&yyyy,3,2);
 		%let vtyp=%lowcase(%sysfunc(substr(&vsum, 1, 1)));
@@ -224,8 +228,7 @@ and [II](https://webgate.ec.europa.eu/emplcms/social/BlobServlet?docId=14545&lan
 		%warning: 
 
 		%if %macro_isblank(dimensions)       %then 	%let dimensions= AGE RB090;      /* list separator */
-	    %if %macro_isblank(cond)             %then 	%let cond= where PENSION  ne 0;  /* list separator */
-		%if %macro_isblank(elderly)    		 %then 	%let elderly=N;                  /* list separator */
+	 	%if %macro_isblank(elderly)    		 %then 	%let elderly=N;                  /* list separator */
 		%if %macro_isblank(pensioners)  	 %then 	%let pensioners=Y;               /* list separator */
 	 
 		/* retrieve the number of dimensions */
@@ -244,7 +247,7 @@ and [II](https://webgate.ec.europa.eu/emplcms/social/BlobServlet?docId=14545&lan
 	    %let _pvar=%list_quote(&pvar, mark=_EMPTY_);
 
 		PROC SQL;
-			CREATE TABLE WORK.&odsn as SELECT
+			CREATE TABLE WORK.idb as SELECT
 				idb.DB010, 
 				idb.DB020,
 				idb.DB030,  
@@ -262,40 +265,39 @@ and [II](https://webgate.ec.europa.eu/emplcms/social/BlobServlet?docId=14545&lan
 				LEFT JOIN &pdb..c&yy.&vtyp as &vtyp on (&vtyp..PB020=idb.DB020 and &vtyp..PB030=idb.RB030)
 			WHERE  IDB.DB010=&yyyy and idb.AGE ge 65 and DB020 in (&qctry);
 	 	QUIT;
+
 		%if "&odsn"="GAP" %then %do; /* applied only for  gap (program number 1) */
 			data &odsn; 
 				 set &odsn; 
 				 %if &elderly =N and  &pensioners=Y %then %do;
-				  	 &cond;
+				  	 where PENSION  ne 0;
 				 %end;
 				 %else %if &elderly =Y and  &pensioners=N %then %do;
 				     ;
 				 %end;
-				 %else %do;
-				 	 %put made correct selection for Elderly and Pensioners;
-					 %goto exit;
-				 %end;
 			run;
 	      %end;
+
 		%exit:
 	%mend extract;
-	
-	/************************************************************************************/
-	/**         computation                                                            **/
-	/************************************************************************************/
-	%macro compute (idsn 	    /* input dataset      					(REQ)*/
-			, yyyy  		 	/* reference year     					(REQ)*/
-			, odsn  		 	/* output dataset     					(REQ)*/
-			, var=           	/* pension/npension                     (REQ)*/
-			, dimensions=    	/* breakdown variables                  (OPT)*/
-			, labels=        	/* labels for breakdown variables       (OPT)*/
-			, iflag=         	/* flag variable 						(OPT)*/
-			, stat2=         	/* statistic variable 					(OPT)*/
-			);
-		%if &stat2= 					%then 	%let stat2=mean;
-		%if &iflag= 					%then 	%let iflag=;
-		
-			/* locally used variables */
+
+	/*******************************************************************************************/
+	/**         computation                                                                   **/
+	/*******************************************************************************************/
+	%macro compute(idsn 	        /* input dataset      			     	(REQ)*/
+				, yyyy  		 	/* reference year     					(REQ)*/
+				, wdsn  		 	/* temporary output dataset     		(REQ)*/
+				, dsn               /* output dataset                       (REQ)*/
+				, var=           	/* pension/npension                     (REQ)*/
+				, dimensions=    	/* breakdown variables                  (OPT)*/
+				, labels=        	/* labels for breakdown variables       (OPT)*/
+				, iflag=         	/* flag variable 						(OPT)*/
+				, stat2=         	/* statistic variable 					(OPT)*/
+				);
+		%if &stat2= 		%then 	%let stat2=mean;
+		%if &iflag= 		%then 	%let iflag=;
+
+		/* locally used variables */
 		%local _i			/* loop increment */
 			_j			/* loop increment */
 			TMP				/* name of the temporary dataset */
@@ -304,16 +306,15 @@ and [II](https://webgate.ec.europa.eu/emplcms/social/BlobServlet?docId=14545&lan
 			per_dimensions;	/* formatted crossed dimensions */
 			 ; 
 		%let TMP=TMP_compute;
-		
+
 		/* retrieve the number of dimensions */
 		%let ndim=%sysfunc(countw(&dimensions)); /* %list_length(&dimensions) */
-
-	    %let per_dimensions=%list_quote(&dimensions, mark=_EMPTY_, rep=%quote(*));;
+		%let per_dimensions=%list_quote(&dimensions, mark=_EMPTY_, rep=%quote(*));;
 		%let _dimensions=%list_quote(&dimensions, mark=_EMPTY_, rep=%quote(,));
 
 		/* set default labels */
 		%if %macro_isblank(labels) %then %let labels=&dimensions;
-	   
+
 		/* define the list of "per variables", i.e. if dimensions=AGE RB090 HT1 QITILE,
 		* then we will have per_dimensions=AGE*RB090*HT1*QITILE 
 		* this is useful for the following PROC TABULATE */
@@ -331,8 +332,8 @@ and [II](https://webgate.ec.europa.eu/emplcms/social/BlobServlet?docId=14545&lan
 		run;
 
 		/* perform the tabulate operation*/
-	    %if "&odsn"="COVERAGE" %then %do;
-	    	PROC TABULATE data=work.IDB out=WORK.&TMP ;
+		%if "&dsn"="COVERAGE" %then %do;
+		    PROC TABULATE data=work.IDB out=WORK.&TMP._1 ;
 			 	%do _i=1 %to &ndim;
 					%let dim=%scan(&dimensions, &_i);
 					FORMAT &dim _fmt_&dim._.;
@@ -343,8 +344,8 @@ and [II](https://webgate.ec.europa.eu/emplcms/social/BlobServlet?docId=14545&lan
 			 	VAR weight;
 			    TABLE DB020  * &per_dimensions, &var * weight * (RowPctSum N Sum) /printmiss;
 		    run; 
-	     %end;
-		 %else %if "&odsn"="GAP" %then %do;
+		 %end;
+		 %else %if "&dsn"="GAP" %then %do;
 		 	PROC MEANS data=work.idb  &stat2 N sumwgt noprint;
 				CLASS DB020; 			/* DB020 will be used as row */
 				%do _i=1 %to &ndim;
@@ -356,13 +357,12 @@ and [II](https://webgate.ec.europa.eu/emplcms/social/BlobServlet?docId=14545&lan
 				WEIGHT WEIGHT;
 				OUTPUT out=work.&TMP &stat2()=&stat2._20 N()=n sumwgt()=sum_of_WGHT ;
 			run;
- 
 			%ds_select(&TMP, &TMP._1, where=_TYPE_=7);
 		%end;
 
 		PROC SQL;
-	    	INSERT INTO work.&odsn  
-	    	SELECT DISTINCT
+		    INSERT INTO work.&wdsn  
+		    SELECT DISTINCT
 				tmp.DB020 as geo FORMAT=$5. LENGTH=5,
 		 		&yyyy as time,
 		   		%do _i=1 %to &ndim;
@@ -370,38 +370,38 @@ and [II](https://webgate.ec.europa.eu/emplcms/social/BlobServlet?docId=14545&lan
 					%let lab=%scan(&labels, &_i);
 					&dim as &lab,
 				%end; 
-				%if "&odsn"="COVERAGE" %then %do;
+				%if "&dsn"="COVERAGE" %then %do;
 		 			tmp.&var as &var,
-	  				"Dif" as unit, 
+		  			"Dif" as unit, 
 		 			tmp.weight_PctSum_1101 as ivalue,
 				%end;
-				%else %if "&odsn"="GAP" %then %do;
+				%else %if "&dsn"="GAP" %then %do;
 					"avg" as unit, 
 					mean_20 as ivalue,
 				%end;
 		   		"&iflag "  as iflag,
-				%if "&odsn"="COVERAGE" %then %do;
+				%if "&dsn"="COVERAGE" %then %do;
 		 			(case when sum(tmp.weight_N) < 20  then 2
 		  			 	when sum(tmp.weight_N) < 50  then 1
 		  		 		else 0 end) as unrel,
 					tmp.weight_N as n,
 		 			tmp.weight_sum as nwgh,
 		 			sum(tmp.weight_N) as ntot,
-	     			sum(tmp.weight_Sum) as totwgh,
+		     		sum(tmp.weight_Sum) as totwgh,
 				%end;
-				%else %if "&odsn"="GAP" %then %do;
+				%else %if "&dsn"="GAP" %then %do;
 					(case when n < 20 then 2
 					when n < 50 then 1
 					else 0 end) as unrel,
-	            	n as n,
+		            n as n,
 					sum_of_WGHT as nwgh,
 					n as ntot,
 					sum(sum_of_WGHT) as totwgh,
 				%end;
 		    	"&sysdate" as lastup,
-		    	"&sysuserid" as	lastuser 
+		    	"&sysuserid" as	lastuser FORMAT=$15. LENGTH=15 
 			FROM WORK.&TMP._1 as tmp
-	    	GROUP BY tmp.DB020,
+		    GROUP BY tmp.DB020,
 			%do _i=1 %to &ndim;
 				%let dim=%scan(&dimensions, &_i);
 				tmp.&dim,
@@ -412,34 +412,33 @@ and [II](https://webgate.ec.europa.eu/emplcms/social/BlobServlet?docId=14545&lan
 		%work_clean(&TMP, &TMP._1);
 		%exit:
 	%mend compute;
-	
-	/************************************************************************************/
-	/**         update rate                                                        **/
-	/************************************************************************************/
-	%macro update(odsn  	/* output dataset                        (REQ)*/
-				, idsn  	/* input  dataset                        (REQ)*/
-				, ctry  
-				, yyyy		/* reference year                        (REQ)*/
-				, var   	/* variable to analyze                   (OPT)*/
-				, cond=    	/* condition to apply to ds_append macro (OPT)*/
-				, where=    /* condition to apply to ds_select macro (OPT)*/
-				, lib=      /* output libname                        (OPT)*/
-				, iflag=    /* iflag value                           (OPT)*/
-			    );	
-	    %local ans TMP;
-		
+
+	/**************************************************************************************/
+	/**         update rate                                                              **/
+	/**************************************************************************************/
+	%macro update(odsn  	/* output dataset                         (REQ)*/
+			   , idsn  	    /* input  dataset                         (REQ)*/
+			   , ctry       /* reference country                      (REQ)*/
+			   , yyyy		/* single reference year                  (REQ)*/
+			   , var   	    /* variable to analyze                    (OPT)*/
+			   , cond=    	/* condition to apply to ds_append macro  (OPT)*/
+			   , where=     /* condition to apply to ds_select macro  (OPT)*/
+			   , olib=      /* output libname                         (OPT)*/
+			   , iflag=     /* iflag value                            (OPT)*/
+		       );
+		%local ans TMP;
+
 		%let TMP=TMP_update;
-	   
-	    %if %macro_isblank(var)         %then 	%let var=npension; 
-	    %if %macro_isblank(iflag)       %then 	%let iflag= ;  
-		%if %macro_isblank(lib)         %then 	%let lib=WORK ;  
+
+		%if %macro_isblank(var)         %then 	%let var=npension; 
+		%if %macro_isblank(iflag)       %then 	%let iflag= ;  
 
 		%if "&odsn"="COVERAGE" %then %do;
 		    %ds_select(&idsn, &TMP._1, where=%str(&var=1));  /* filter: selection of retirement persons */
 		%end;
 		%else %if "&odsn"="GAP" %then %do;
 			%ds_copy(&idsn, &TMP._1);
-		    %ds_select(&idsn, &TMP, where=%str(sex="F")); /* keep for later... */
+		    %ds_select(&idsn, &TMP, where=%str(sex="F")); 	 /* keep for later... */
 		%end;
 
 		%ds_sort(&TMP._1, asc=GEO AGE SEX);
@@ -479,8 +478,9 @@ and [II](https://webgate.ec.europa.eu/emplcms/social/BlobServlet?docId=14545&lan
 			   		round((ivalue - f_ivalue),0.1) as ivalue,
 				%end;
 				%else %if "&odsn"="GAP" %then %do;
-				"&iflag" as iflag FORMAT=$8. LENGTH=8,
-				a.unrel,
+					"&iflag" as iflag FORMAT=$8. LENGTH=8,
+					a.unrel,
+				%end;
 				%if "&odsn"="COVERAGE" %then %do;
 					(n - f_n) as n,
 					(nwgh -f_nwgh) as nwgh ,
@@ -503,60 +503,65 @@ and [II](https://webgate.ec.europa.eu/emplcms/social/BlobServlet?docId=14545&lan
 			%if "&odsn"="GAP" %then %do;
 		 		LEFT JOIN &TMP as b ON (a.geo = b.geo) AND (a.age = b.age)  
 			%end;
+			;
 		quit;
- 
-		%ds_select(&TMP._3, &TMP._4, where=%str(time =&yyyy and geo = "&ctry")); 
-		%ds_append(&odsn, &TMP._4,  cond=&cond, lib=&lib, ilib=WORK);
 
+		%ds_select(&TMP._3, &TMP._4, where=%str(time =&yyyy and geo = "&ctry")); 
+		%ds_append(&odsn, &TMP._4,  cond=&cond, lib=&olib, ilib=WORK);
 		%work_clean(&TMP, &TMP._1, &TMP._2, &TMP._3, &TMP._4);
 		%exit:
 	%mend update;
 
-    /************************************************************************************/
-	/**         run the operation                                                      **/
-	/************************************************************************************/
+	/******************************************************************************************/
+	/**         run the operation                                                            **/
+	/******************************************************************************************/
+	/* for ad-hoc works, load PING library if it is not yet the case */
 
-	%let years=%list_quote(&year, mark=_EMPTY_, rep=%quote(_)); 
+	%if %symexist(G_PING_ROOTPATH) EQ 0 %then %do; 
+		%if %symexist(G_PING_SETUPPATH) EQ 0 %then 	%let G_PING_SETUPPATH=/ec/prod/server/PING; 
+		%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
+		%_default_setup_;
+	%end;
+
 	/* run the operation (generation+update) for:
 		 *  - all datasets, and 
 	 	 * 	- all years in &years, and 
 		 * 	- all countries/zones in &geos */
 	%do _i=1 %to %list_length(&odsn)  ;      /* type  of calculation: GAP/COVERAGE  rate*/ 
- 
+	    
 	    %let dsn=%scan(&odsn, &_i);
 
 		/************************************************************************************/
 	       						%put CALCULATION for %upcase(&dsn) ;  
 	 	/************************************************************************************/
 
-		%macro_put(&_mac, txt=Loop over  %list_length(&year) zones/countries for geo &geo); 
+		%macro_put(&_mac, txt=Loop over %list_length(&year) zones/countries for geo &geo); 
 
-		%put year=&year;
-        %let ctrylst_in=;
+	    %let ctrylst_in=;
 
-		%do _iy=1 %to %list_length(&year);		/* loop over the list of input years */
+		%do _iy=1 %to %list_length(&year);		/* loop over the list of input year */
 
-            %let yyyy=%scan(&year, &_iy);
+	        %let yyyy=%scan(&year, &_iy);
 			/************************************************************************************/
-		       						%put CALCULATION for %upcase(&yyyy) ;  
-		 	/************************************************************************************/
-            %if %error_handle(ExistingDataset, 
-					%ds_check(&dsn, lib=WORK) EQ 0, mac=&_mac
-					txt=%bquote(! Output table already exists - Results will be appended!),verb=warn) %then %do;
+	       						%put CALCULATION for &yyyy year;  
+			/************************************************************************************/
+	        %if %error_handle(ExistingDataset, 
+					%ds_check(&dsn, lib=WORK) EQ 0, mac=&_mac,
+					txt=%bquote(! Output table already exists - Results will be appended !),verb=warn) %then %do;
 				%let existsOutput=YES;
 				%goto warning1; 
 			%end;
 			%warning1:
-	
-            %create(&dsn, &yyyy, &geo, lib=&olib, labs=age, types=char, lens=15, work=dsn);  
- 			
-			%macro_put(&_mac, txt=Loop over  %list_length(&geo) zones/countries for year &yyyy); 
+
+	        %create(&dsn, olib=&olib, labs=age, types=char, lens=15, wdsn=&wdsn);  
+
+			%macro_put(&_mac, txt=Loop over %list_length(&geo) zones/countries for year &yyyy); 
 
 	        /* run the operation (generation+update) for:
 			 * 	- one single year &yyyy, and 
 			 * 	- all countries/zones in &geos */
 			%do _ig=1 %to %list_length(&geo); 		/* loop over the list of countries/zones */
-                %put geo=&geo; 
+	            %put geo=&geo; 
 				%let area=%scan(&geo, &_ig);
 				%let type=%scan(&isgeo, &_ig);
 	           
@@ -574,12 +579,12 @@ and [II](https://webgate.ec.europa.eu/emplcms/social/BlobServlet?docId=14545&lan
 
 					/* check what still needs to be computed: this is useful if you have already
 					* made the calculation for countries that do belong to the zone 	*/ 
-					%ds_isempty(dsn, var=GEO, _ans_=_ans, lib=WORK);
+					%ds_isempty(&wdsn, var=GEO, _ans_=_ans, lib=WORK);
 
 					%if	&_ans NE 1 %then %do; 
 						/* first retrieve the list of countries present in the dataset (i.e. 
 						* processed already) */
-					    %var_to_list(dsn, GEO, _varlst_=ctrylst_in, distinct=YES);
+					    %var_to_list(&wdsn, GEO, _varlst_=ctrylst_in, distinct=YES);
 						%put  ctrylst_in=&ctrylst_in in &dsn ;
 						/* then update the list of countries with those still to be computed by
 						* difference */
@@ -589,7 +594,7 @@ and [II](https://webgate.ec.europa.eu/emplcms/social/BlobServlet?docId=14545&lan
 					%else /* no change */
 						%let ctrylst_in=&ctrylst;
 				%end;
-		
+	
 				/* retrieve the total number #{countries to be calculated}; this will be
 				*  - 1 if you passed a country that was not calculated already 
 				*  - #{countries in the zone} - #{countries already calculated} if you passed a zone
@@ -597,44 +602,45 @@ and [II](https://webgate.ec.europa.eu/emplcms/social/BlobServlet?docId=14545&lan
 				%do _ic=1 %to %list_length(&ctrylst_in); /* this may be 1 */
 					%let ctry=%list_slice(&ctrylst_in, ibeg=&_ic, iend=&_ic);
 					/* actually compute the GAP or COVERAGE rate  coefficients */
-					%extract(&yyyy, &ctry, &weight, libcidb, libpdb, idb, &dsn, dimensions=AGE RB090,
+					%extract(&yyyy, &ctry, &weight, libcidb, libpdb, idb, dimensions=AGE RB090,
 							vsum=PY100G PY080G PY110G); 
 
 					%if "&dsn"="GAP"  %then
 						%let var=pension;
 					%else %if  "&dsn"="COVERAGE" %then
 						  %let var=npension; 
-					
-					%compute(idb, &yyyy, dsn, &dsn,var=&var, dimensions=AGE RB090, labels=AGE SEX);
-					%update(&dsn, dsn, &ctry, &yyyy, cond=(not(time=&yyyy and geo = "&ctry")), lib=&olib);   				
+					%compute(idb, &yyyy, &wdsn,&dsn,var=&var, dimensions=AGE RB090, labels=AGE SEX);
+					%update(&dsn, &wdsn, &ctry, &yyyy, cond=(not(time=&yyyy and geo = "&ctry")), olib=&olib);   				
 				%end;
+
 				%if &type = 2 %then %do;
 			       	/* Aggregate calculation  */
-				
 					%if "&dsn"="GAP"  %then
 						%let force_Nwgh=1;
 					%else %if  "&dsn"="COVERAGE" %then
 						  %let force_Nwgh=0; 
-
-				   	%silc_agg_compute(&area, &yyyy, dsn, AGGR,  force_Nwgh=&force_Nwgh,
+				   	%silc_agg_compute(&area, &yyyy, &wdsn, AGGR,  force_Nwgh=&force_Nwgh,
 						max_yback=0, thr_min=0.7, ilib=WORK, olib=WORK);  
-					%update(&dsn, AGGR, &area, &yyyy, cond=(not(time=&yyyy and geo = "&area")), lib=&olib);    
-
-                    %work_clean(AGGR); 
+					%update(&dsn, AGGR, &area, &yyyy, cond=(not(time=&yyyy and geo = "&area")), olib=&olib);    
+	                %work_clean(AGGR); 
 				%end;
- 			%end;                  		/* end loop over the list of input geo */
-			%work_clean(dsn); 
-		%end;                           /* end loop over the list of input years */
-	   	%put end of first year &yyyy ;
+	 		%end;   /* end loop "%do _ig=1 %to %list_length(&geo)" over the list of input geo */
+
+			%work_clean(&wdsn); 
+		%end;  /* end loop "%do _iy=1 %to %list_length(&year)" over the list of input years */
+   		%put end of  &year year loop ;
 
 		/************************************************************************************/
-	       						%put EXPORT  %upcase(&dsn_name) file in csv ;   
+	       						%put EXPORT  %upcase(&dsn) file in csv ;   
 	 	/************************************************************************************/
-		%ds_export(&dsn, odir=&odir, ofn=&dsn._&years&ext, delim=, dbms=, fmt=csv);
+		%let _year=%list_quote(&year, mark=_EMPTY_, rep=%quote(_)); 
 
+		%ds_export(&dsn, odir=&odir, ofn=&dsn._&_year&ext, delim=, dbms=, fmt=csv);
+	    %work_clean(&dsn);
 		%next:
-	%end; /* end loop over number of request: gap and coverage */ 
 
+	%end; /* end loop "%do _i=1 %to %list_length(&odsn)" of number output indicator(s) to be calculated: gap and coverage */ 
+	%exit:
 %mend silc_pension_gap_coverage_rate;
 
 
