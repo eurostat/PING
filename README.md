@@ -145,6 +145,12 @@ Note that our preference for the settings goes to the last two methods. In parti
 
 `R` functions are not defined into a package. They need to be loaded manually.
 
+**<a name="Resources"></a>Other useful resources**
+
+* SAS programs and macros for statistical graphics: [SAS Graphic Programs and Macros](http://www.datavis.ca/sasmac/).
+* Github SAS code repositories for statistical data handling: Hu's ["Programming-SAS"](https://github.com/Jiangtang/Programming-SAS) and [SAS_ListProcessing](https://github.com/Jiangtang/SAS_ListProcessing), as well as Bass's [SAS macros](https://github.com/scottbass/SAS/tree/master/Macro).
+* Unit testing framework for SAS programs: [SASUnit](https://sourceforge.net/projects/sasunit/) and [FUTS](http://thotwave.com/portfolio-item/futs-framework-for-unit-testing-sas/).
+
 **<a name="References"></a>References**
 
 * Grazzini J. and Lamarche P. (2017): 
