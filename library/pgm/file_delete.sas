@@ -51,6 +51,7 @@ Run macro `%%_example_file_delete` for examples.
 	%let _rc=%sysfunc(filename(_filrf));
 
 	&rc
+	%exit:
 %mend file_delete;
 
 %macro _example_file_delete;
