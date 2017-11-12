@@ -101,9 +101,11 @@ Config is changed as follows:
 * Add the content of the src folder to your doxygen working directory.
 * Edit the following doxygen config file options:
 
-	HTML_EXTRA_STYLESHEET  = style\doxygen-modern\doxygen-modern.css
-	HTML_EXTRA_FILES       = style\doxygen-modern\SourceCodePro-Regular-webfont.woff \
+	```
+ 	HTML_EXTRA_STYLESHEET  = style\doxygen-modern\doxygen-modern.css 
+ 	HTML_EXTRA_FILES       = style\doxygen-modern\SourceCodePro-Regular-webfont.woff \
                          	style\doxygen-modern\Roboto-Light-webfont.woff \
                          	style\doxygen-modern\Roboto-Regular-webfont.woff \
                          	style\doxygen-modern\folder.png \
                          	style\doxygen-modern\code.png
+	```
