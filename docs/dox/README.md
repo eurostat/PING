@@ -94,12 +94,10 @@ following tags:
 
 #### Optional operations
 
-Doxygen style sheet - "Doxygen modern"
-Files can be found here: https://github.com/muhbaasu/doxygen-modern.
-
-Config is changed as follows:
-* Add the content of the src folder to your doxygen working directory.
-* Edit the following doxygen config file options:
+We use the so-called _"Doxygen modern"_ style sheet.
+The configuration is adapted as follows:
+* add the content of the src folder to your doxygen working directory,
+* edit the following doxygen config file options:
 
 	```
  	HTML_EXTRA_STYLESHEET  = style\doxygen-modern\doxygen-modern.css 
@@ -109,3 +107,6 @@ Config is changed as follows:
                          	style\doxygen-modern\folder.png \
                          	style\doxygen-modern\code.png
 	```
+
+Supporting material can be found here: sheets can be found here: 
+https://github.com/muhbaasu/doxygen-modern.
