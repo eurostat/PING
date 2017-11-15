@@ -22,8 +22,6 @@ library/autoexec/_support_macros_.sas
 library/autoexec/_configuration_.sas
 library/catalog
 library/catalog/*
-library/config/
-library/config/*
 library/pgm/TODO_*
 
 # 5.1_Integration folder 
