@@ -90,7 +90,7 @@ returns .
 	%let when=%sysfunc(compbl(%quote(&when)));
 	
 	/* replace with dummy improbable char */
-	%let REP=%str(£); 
+	%let REP=%str($); 
 	%let when=%quote(%sysfunc(tranwrd(%bquote(&when), %str(%), %(), &REP)));
 	%let then=%quote(%sysfunc(tranwrd(%bquote(&then), %str(%), %(), &REP)));
 
