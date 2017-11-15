@@ -1,5 +1,7 @@
 # exclude everything below from versioning 
 
+.gitignore
+
 # temp, share and dumb folders
 __backup/
 __backup/*
@@ -20,6 +22,7 @@ library/autoexec/_module_.sas
 library/autoexec/_support_.sas
 library/autoexec/_support_macros_.sas
 library/autoexec/_configuration_.sas
+library/autoexec/cfg_SAS_PING.sas
 library/catalog
 library/catalog/*
 library/pgm/TODO_*
@@ -89,3 +92,4 @@ library/pgm/TODO_*
 
 # 7.4_Visualisation folder
 # ok
+
