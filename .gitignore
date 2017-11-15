@@ -1,7 +1,5 @@
 # exclude everything below from versioning 
 
-.gitignore
-
 # temp, share and dumb folders
 __backup/
 __backup/*
