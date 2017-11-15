@@ -36,7 +36,7 @@ Run macro `%%_example_clist_index` for more examples.
 and error is generated.
 2. For wrongly typed indexes (_e.g._ non numeric index), an error is also generated.
 3. In general case of error, the output `res` returned is empty (_i.e._ `res=`).
-4. The macro will not return exactly what you want if the symbol £ appears somewhere in the list.
+4. The macro will not return exactly what you want if the symbol $ appears somewhere in the list.
 
 ### See also
 [%list_index](@ref sas_list_index), [%clist_slice](@ref sas_clist_slice), [%clist_compare](@ref sas_clist_compare), 
@@ -70,7 +70,7 @@ and error is generated.
 
 	/* REP: setting */
 	%if %symexist(G_PING_UNLIKELY_CHAR) %then 		%let REP=%quote(&G_PING_UNLIKELY_CHAR);
-	%else											%let REP=£;
+	%else											%let REP=$;
 
 	/************************************************************************************/
 	/**                                 actual computation                             **/

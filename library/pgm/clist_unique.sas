@@ -35,7 +35,7 @@ returns: `cluni=("A","B","C","D","E","F")`.
 Run macro `%%_example_clist_unique` for more examples.
 
 ### Note
-The macro will not return exactly what you want if the symbol £ appears somewhere in the list.
+The macro will not return exactly what you want if the symbol $ appears somewhere in the list.
 
 ### See also
 [%list_unique](@ref sas_list_unique), [%list_slice](@ref sas_list_slice), [%clist_compare](@ref sas_clist_compare), 
@@ -67,7 +67,7 @@ The macro will not return exactly what you want if the symbol £ appears somewher
 
 	/* REP: setting */
 	%if %symexist(G_PING_UNLIKELY_CHAR) %then 		%let REP=%quote(&G_PING_UNLIKELY_CHAR);
-	%else											%let REP=£;
+	%else											%let REP=$;
 
 	/************************************************************************************/
 	/**                                 actual computation                             **/

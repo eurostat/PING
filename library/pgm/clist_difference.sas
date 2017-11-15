@@ -38,7 +38,7 @@ returns: `diff=()`.
 Run macro `%%_example_clist_difference` for more examples.
 
 ### Note
-The macro will not return exactly what you want if the symbol £ appears somewhere in the list.
+The macro will not return exactly what you want if the symbol $ appears somewhere in the list.
 
 ### See also
 [%list_difference](@ref sas_list_difference), [%clist_compare](@ref sas_clist_compare), [%clist_append](@ref sas_clist_append), 
@@ -70,7 +70,7 @@ The macro will not return exactly what you want if the symbol £ appears somewher
 
 	/* REP: setting */
 	%if %symexist(G_PING_UNLIKELY_CHAR) %then 		%let REP=%quote(&G_PING_UNLIKELY_CHAR);
-	%else											%let REP=£;
+	%else											%let REP=$;
 
 	/************************************************************************************/
 	/**                                 actual computation                             **/

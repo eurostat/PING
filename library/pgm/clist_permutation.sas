@@ -46,7 +46,7 @@ Run macro `%%_example_list_permutation` for examples.
 
 ### Notes
 1. In the example above, one can simply check that `%%list_compare(&par, &olist)=0` holds.
-2. The macro will not return exactly what you want if the symbol £ appears somewhere in the list.
+2. The macro will not return exactly what you want if the symbol $ appears somewhere in the list.
 
 ### See also
 [%ranuni](@ref sas_ranuni), [%list_sequence](@ref sas_list_sequence).
@@ -84,7 +84,7 @@ Run macro `%%_example_list_permutation` for examples.
 
 	/* REP: setting */
 	%if %symexist(G_PING_UNLIKELY_CHAR) %then 		%let REP=%quote(&G_PING_UNLIKELY_CHAR);
-	%else											%let REP=£;
+	%else											%let REP=$;
 
 	/************************************************************************************/
 	/**                                 actual computation                             **/

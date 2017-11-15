@@ -36,7 +36,7 @@ returns `res1=("1","2","3","1","2","3","1","2","3","1","2","3","1","2","3")`.
 Run macro `%%_example_clist_ones` for more examples.
 
 ### Note
-The macro will not return exactly what you want if the symbol £ appears somewhere in the list.
+The macro will not return exactly what you want if the symbol $ appears somewhere in the list.
 
 ### See also
 [%list_ones](@ref sas_list_ones), [%list_append](@ref sas_list_append), [%list_index](@ref sas_list_index).
@@ -67,7 +67,7 @@ The macro will not return exactly what you want if the symbol £ appears somewher
 	
 	/* REP: setting */
 	%if %symexist(G_PING_UNLIKELY_CHAR) %then 		%let REP=%quote(&G_PING_UNLIKELY_CHAR);
-	%else											%let REP=£;
+	%else											%let REP=$;
 
 	/************************************************************************************/
 	/**                                 actual computation                             **/

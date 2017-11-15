@@ -41,7 +41,7 @@ returns: `conc=("1","A","2","B","3","C")`.
 Run macro `%%_example_clist_append` for more examples.
 
 ### Note
-The macro will not return exactly what you want if the symbol £ appears somewhere in the list.
+The macro will not return exactly what you want if the symbol $ appears somewhere in the list.
 
 ### See also
 [%clist_append](@ref sas_clist_append), [%clist_difference](@ref sas_clist_difference), [%clist_unquote](@ref sas_clist_unquote), [%list_quote](@ref sas_list_quote).
@@ -72,7 +72,7 @@ The macro will not return exactly what you want if the symbol £ appears somewher
 
 	/* REP: setting */
 	%if %symexist(G_PING_UNLIKELY_CHAR) %then 		%let REP=%quote(&G_PING_UNLIKELY_CHAR);
-	%else											%let REP=£;
+	%else											%let REP=$;
 
 	/************************************************************************************/
 	/**                                 actual computation                             **/
