@@ -1,4 +1,4 @@
-/**
+	/**
 ## file_delete {#sas_file_delete}
 Delete a (external) file given by its name if it exists.
 
@@ -30,7 +30,7 @@ Run macro `%%_example_file_delete` for examples.
 	%let _mac=&sysmacroname;
 
 	%if %error_handle(ErrorInputFile, 
-			%file_check(&ifn) EQ 1, mac=&_mac,		
+			%file_check(&fn) EQ 1, mac=&_mac,		
 			txt=%quote(!!! Input file %upcase(&fn) does not exist !!!)) %then
 		%goto exit;
 
