@@ -44,24 +44,39 @@ variables:
 /** !!!       POSSIBLY CHANGE TO YOUR OWN PROJECT       !!! **/
 /** !!!       POSSIBLY CHANGE YOUR ROOT DIRECTORY       !!! **/
 /** !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! **/
+
+
+%global 
+	/* project name */
+	G_PING_PROJECT
+	/* root directory */
+	G_PING_ROOTDIR;
+
+%global
+	SASServer
+	SASext;
+%let SASext=sas;
+%let SASServer=%sysfunc(pathname(sasroot));
 	
 /* Environment variables for SAS setup/install */
-%global SASMain
-		SASServer
-		SASext;
-%let SASMain=/ec/prod/server/sas;
-%let SASServer=%sysfunc(pathname(sasroot));
-%*let SASServer=&SASMain/bin/SAS92/SASFoundation/9.2/;
-%let SASext=sas;
+%macro _cfg_environment_;
+	%if %symexist(G_PING_SETUPPATH) %then %do; 
+		%let G_PING_PROJECT=PING;
+		%let G_PING_ROOTDIR=&G_PING_SETUPPATH;	
+	%end;
+	%else %do;
+		/* otherwise that the root path will be determined by default */	
+		%let SASMain=/ec/prod/server/sas;
+		%*let SASServer=&SASMain/bin/SAS92/SASFoundation/9.2/;
 
-/* project name */
-%global G_PING_PROJECT;
-%let G_PING_PROJECT=EUSILC;
+		%let G_PING_PROJECT=EUSILC;
+		%let G_PING_ROOTDIR=&SASMain/1eusilc;
+	%end;
 
-/* root directory */
-%global G_PING_ROOTDIR;
-%let G_PING_ROOTDIR=&SASMain/0eusilc;
-/* note that the root path will be determined automatically */	
+%mend _cfg_environment_;
+
+%_cfg_environment_;
+
 
 /** !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! **/
 /** !!! DON'T MODIFY THE SETUP FILE BELOW !!! **/
@@ -366,7 +381,7 @@ variables:
 	 * - either you do not run on SAS EG (_SASSERVERNAME is not defined), 
 	 * - or you run on the server: _SASSERVERNAME=SASMain 
 	 * in both cases we define _path as the following */
-	%let _path=&G_PING_ROOTDIR/PING;
+	%let _path=&G_PING_ROOTDIR;
 
 	%quit:
 	/* "return" the path */
