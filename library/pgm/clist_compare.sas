@@ -43,7 +43,7 @@ returns `ans=1`.
 Run macro `%%_example_clist_compare` for more examples.
 
 ### Note
-The macro will not return exactly what you want if the symbol £ appears somewhere in the list.
+The macro will not return exactly what you want if the symbol $ appears somewhere in the list.
 
 ### See also
 [%list_compare](@ref sas_list_compare), [%clist_unquote](@ref sas_clist_unquote).
@@ -74,7 +74,7 @@ The macro will not return exactly what you want if the symbol £ appears somewher
 
 	/* REP: setting */
 	%if %symexist(G_PING_UNLIKELY_CHAR) %then 		%let REP=%quote(&G_PING_UNLIKELY_CHAR);
-	%else											%let REP=£;
+	%else											%let REP=$;
 
 	/************************************************************************************/
 	/**                                 actual computation                             **/
