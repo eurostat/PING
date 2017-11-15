@@ -52,7 +52,7 @@ libname maclib "&macro_lib" ;
 
 options mstored sasmstore=maclib ;
 
-%let list_to_exclude = libformat_update _egp_geotime _egp_path _egp_prompt _example_check _template_macro str_type ;
+%let list_to_exclude = libformat_update _egp_geotime _egp_path _egp_prompt _example_check _template_macro str_type _run_geotime ;
 
 %let list_to_exclude_regex=\b%sysfunc(prxchange(s/ +/ ?\b|\b/oi,-1,&list_to_exclude))\b;
 %let list_script=%sysfunc(prxchange(s/&list_to_exclude_regex//oi,-1,&list_script));
@@ -86,7 +86,7 @@ options mstored sasmstore=maclib ;
 	else if lag(keep_obs) > 0 and index(lowcase(text),%nrstr('%macro')) > 0 and scan(lowcase(text),1) = "macro" then do ; /* macro inside another macro */
 		keep_obs + 1 ;
 	end ;
-	if index(lowcase(lag(text)),%nrstr('%mend')) > 0 and scan(lowcase(text),1) = "mend" then keep_obs = keep_obs - 1 ;
+	if index(lowcase(lag(text)),%nrstr('%mend')) > 0 and scan(lowcase(lag(text)),1) = "mend" then keep_obs = keep_obs - 1 ;
 	run ;
 
 	data temp ;
