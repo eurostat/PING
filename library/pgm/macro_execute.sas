@@ -145,8 +145,6 @@ to be ran as:
 options NOSOURCE MRECALL MLOGIC MPRINT NOTES;
 %_example_macro_execute; 
 */
-%_example_macro_execute; 
-
 
 %macro _bass_execute_macro(macroname);
    	%let debug=0;
