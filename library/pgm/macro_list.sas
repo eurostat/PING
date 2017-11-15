@@ -280,8 +280,8 @@ Droogendyk, H. (2009): ["Which SASAUTOS macros are available to my SAS session?"
 
 			return;
 
-			/* This code is specified here and LINKed to from two different places.  NOT using sashelp.vcatalog
-			* because it just got toooooo complicated because I don’t have the libname.  Gets complicated with
+			/* This code is specified here and LINKed to from two different places. NOT using sashelp.vcatalog
+			* because it just got toooooo complicated because I don’t have the libname. Gets complicated with
 			* compiled macros.  We’re getting catalog details in the following step. */
 
 			do_cat:

@@ -82,7 +82,7 @@ This message is not an error. See [%list_to_var](@ref sas_list_to_var).
 
 	/* REP: setting */
 	%if %symexist(G_PING_UNLIKELY_CHAR) %then 		%let REP=%quote(&G_PING_UNLIKELY_CHAR);
-	%else											%let REP=£;
+	%else											%let REP=$;
 
 	/************************************************************************************/
 	/**                                 actual computation                             **/

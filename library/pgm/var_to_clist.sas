@@ -144,7 +144,7 @@ derives from.
 	/* SEP, REP: setting */
 	%let SEP=%quote( );
 	%if %symexist(G_PING_UNLIKELY_CHAR) %then 		%let REP=%quote(&G_PING_UNLIKELY_CHAR);
-	%else											%let REP=£;
+	%else											%let REP=$;
 
 	/************************************************************************************/
 	/**                                 actual computation                             **/
