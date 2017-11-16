@@ -442,7 +442,7 @@ Licensed under [European Union Public License](https://joinup.ec.europa.eu/commu
 
 		%mend _quantile_univariate;
 		/* run the macro */
-		%_quantile_univariate(&var, weighs=&weights, probs=&probs, type=&type, qname=&qname, 
+		%_quantile_univariate(&var, weights=&weights, probs=&probs, type=&type, qname=&qname, 
 			idsn=&idsn, ilib=&ilib, odsn=&tmp, olib=WORK);
 	%end;
 
