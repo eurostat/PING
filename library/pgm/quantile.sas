@@ -10,6 +10,9 @@ Compute empirical quantiles of a variable with sample data corresponding to give
 		+ the name of the variable in a dataset storing the data; in that case, the parameter 
 			`idsn` (see below) should be set; 
 		+ a list of (blank separated) numeric values;
+* `weight` : (_option_) name of the variable containing the weights, in the case where the 
+	computation of quantiles has to be performed on survey data. Please note that only methods
+	available in the `PROC UNIVARIATE` are available so far.
 * `probs` : (_option_) list of probabilities with values in [0,1]; the smallest observation 
 	corresponds to a probability of 0 and the largest to a probability of 1; in the case 
 	`method=INHERIT` (see below), these values are multiplied by 100 in order to be used by 
@@ -20,7 +23,7 @@ Compute empirical quantiles of a variable with sample data corresponding to give
 	discussed in Hyndman and Fan's article (see references) and detailed below to be used; 
 	| `type` |                    description                                 | `PCTLDEF` |
 	|:------:|:---------------------------------------------------------------|:---------:|
-	|    1   | inverted empirical CDF					  |     3     |
+	|    1   | inverted empirical CDF					 					  |     3     |
 	|    2   | inverted empirical CDF with averaging at discontinuities       |     5     |        
 	|    3   | observation numberer closest to qN (piecewise linear function) |     2     | 
 	|    4   | linear interpolation of the empirical CDF                      |     1     | 
@@ -128,6 +131,7 @@ Licensed under [European Union Public License](https://joinup.ec.europa.eu/commu
 /* credits: grazzja, lamarpi */
 
 %macro quantile(var			/* Name of the input variable/list 		(REQ) */
+		,weights = 		/* Name of the weighting variable (OPT)*/
 		, probs=		/* List of probabilities 			(OPT) */
 		, type=			/* Type of interpolation considered 		(OPT) */
 		, method=		/* Flag used to select the estimation method 	(OPT) */
@@ -278,8 +282,24 @@ Licensed under [European Union Public License](https://joinup.ec.europa.eu/commu
 		%if %error_handle(ErrorInputDataset, 
 				%var_check(&idsn, &var, lib=&ilib) NE 0, mac=&_mac,		
 				txt=%quote(!!! Input variable %upcase(&var) not found in %upcase(&idsn) !!!)) %then
-			%goto exit;
+		%goto exit;
 		%let varname=&var;
+	%end; 
+
+	/* WEIGHTS: check/set */
+	%if %macro_isblank(weights) = 0 %then %do ;
+		%if %error_handle(ErrorInputDataset, %macro_isblank(idsn), mac=&_mac,
+		txt=%quote(!!! Input dataset not specified !!!)) %then
+			%goto exit;
+		%if %error_handle(ErrorInputDataset,
+			%var_check(&idsn, &weights, lib = &ilib) NE 0, mac=&_mac,
+			txt=%quote(!!! Weighting variable %upcase(&weights) not found in %upcase(&idsn) !!!) %then
+		%goto %exit;
+		%if %error_handle(ErrorInputParameter,
+			"&method"^="INHERIT", mac=&_mac,
+			txt=%quote(!!! Method &method does not implement the computation of weighted quantiles yet. 
+			Please set the parameter METHOD to INHERIT !!!) %then
+		%goto %exit;
 	%end; 
 
 	/* TYPE: check/set */
@@ -356,7 +376,7 @@ Licensed under [European Union Public License](https://joinup.ec.europa.eu/commu
 
 	%if "&method"="INHERIT" %then %do;
 		/* implementation based on existing PROC UNIVARIATE */
-		%macro _quantile_univariate(var, probs=, type=, qname=, idsn=, ilib=, odsn=, olib=);
+		%macro _quantile_univariate(var, weights=, probs=, type=, qname=, idsn=, ilib=, odsn=, olib=);
 
 			%local tmp
 				pctlpts
@@ -402,6 +422,9 @@ Licensed under [European Union Public License](https://joinup.ec.europa.eu/commu
 			PROC UNIVARIATE data=&ilib..&idsn  pctldef = &pctldef;
 			   VAR &varname;
 			   OUTPUT out=&tmp pctlpre=&qname._ pctlpts = &pctlpts; /* pctlpre is dummy here */
+			%if %macro_isblank(weights) = 0 ;
+				WEIGHT &weights ;
+			%end ;
 			run;
 			ods results on; /* reactivate */
 
@@ -419,7 +442,7 @@ Licensed under [European Union Public License](https://joinup.ec.europa.eu/commu
 
 		%mend _quantile_univariate;
 		/* run the macro */
-		%_quantile_univariate(&var, probs=&probs, type=&type, qname=&qname, 
+		%_quantile_univariate(&var, weighs=&weights, probs=&probs, type=&type, qname=&qname, 
 			idsn=&idsn, ilib=&ilib, odsn=&tmp, olib=WORK);
 	%end;
 
