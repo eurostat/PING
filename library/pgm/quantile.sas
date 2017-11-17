@@ -2,7 +2,7 @@
 ## SAS quantile {#sas_quantile}
 Compute empirical quantiles of a variable with sample data corresponding to given probabilities. 
 	
-	%quantile(var, probs=, _quantiles_=, names=, type=7, method=DIRECT,  
+	%quantile(var, weights=, probs=, _quantiles_=, names=, type=7, method=DIRECT,  
 		idsn=, odsn=, ilib=WORK, olib=WORK, na_rm = YES);
 
 ### Arguments
@@ -10,7 +10,7 @@ Compute empirical quantiles of a variable with sample data corresponding to give
 		+ the name of the variable in a dataset storing the data; in that case, the parameter 
 			`idsn` (see below) should be set; 
 		+ a list of (blank separated) numeric values;
-* `weight` : (_option_) name of the variable containing the weights, in the case where the 
+* `weights` : (_option_) name of the variable containing the weights, in the case where the 
 	computation of quantiles has to be performed on survey data. Please note that only methods
 	available in the `PROC UNIVARIATE` are available so far.
 * `probs` : (_option_) list of probabilities with values in [0,1]; the smallest observation 
