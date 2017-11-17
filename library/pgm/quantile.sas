@@ -146,7 +146,7 @@ Licensed under [European Union Public License](https://joinup.ec.europa.eu/commu
 	%local _mac;
 	%let _mac=&sysmacroname;
 
-	%if	%symexist(_FORCE_STANDALONE_) EQ 0 %then %let &_FORCE_STANDALONE_ = ;
+	%if	%symexist(_FORCE_STANDALONE_) EQ 0 %then %let _FORCE_STANDALONE_ = ;
 	%if &_FORCE_STANDALONE_ EQ %then %let _FORCE_STANDALONE_=1;
 
 	%if %symexist(G_PING_ROOTPATH) EQ 1 %then %do; 
@@ -255,7 +255,7 @@ Licensed under [European Union Public License](https://joinup.ec.europa.eu/commu
 	%let SAS_DEF_QU_METHOD=	3;
 	%let DEF_QU_METHOD=		&R_DEF_QU_METHOD;
 
-	%if %symexist(G_PING_MACHINE_EPSILON) %then %let MACHINE_EPSILON=&G_PING_EPSILON;
+	%if %symexist(G_PING_MACHINE_EPSILON) %then %let MACHINE_EPSILON=&G_PING_MACHINE_EPSILON;
 	%else /* likewise R */						%let MACHINE_EPSILON=%sysevalf(1./10**14);
 
 	/* shall we use low-level macros from PING, or not?
@@ -293,13 +293,13 @@ Licensed under [European Union Public License](https://joinup.ec.europa.eu/commu
 			%goto exit;
 		%if %error_handle(ErrorInputDataset,
 			%var_check(&idsn, &weights, lib = &ilib) NE 0, mac=&_mac,
-			txt=%quote(!!! Weighting variable %upcase(&weights) not found in %upcase(&idsn) !!!) %then
-		%goto %exit;
+			txt=%quote(!!! Weighting variable %upcase(&weights) not found in %upcase(&idsn) !!!)) %then
+			%goto %exit;
 		%if %error_handle(ErrorInputParameter,
 			"&method"^="INHERIT", mac=&_mac,
 			txt=%quote(!!! Method &method does not implement the computation of weighted quantiles yet. 
-			Please set the parameter METHOD to INHERIT !!!) %then
-		%goto %exit;
+			Please set the parameter METHOD to INHERIT !!!)) %then
+			%goto exit;
 	%end; 
 
 	/* TYPE: check/set */
