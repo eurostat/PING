@@ -58,12 +58,19 @@ However, this command alone will not allow you to load/set all default configura
 
 In order to load all PING macros, as well as associated default configuration parameters, we provide a 
 configuration file named `_setup_.sas` (documentation [here](#sas_setup_); file is located in the directory 
-`library/autoexec`). You can then set your SAS environment with something similar to the following command:
+`library/autoexec`). You can then set your `SAS` environment with something similar to the following command:
 
-	%let G_PING_SETUPPATH=</your/server/PING/>; /* again, specific to our own case */
+	%global G_PING_SETUPPATH
+		G_PING_PROJECT 
+		G_PING_DATABASE;
+	%let G_PING_SETUPPATH=	</path/to/your/server/PING/>; 
+	%let G_PING_PROJECT=	<you_choose>;
+	%let G_PING_DATABASE=	</path/to/your/data/server/>;
 	%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";	
 	%_default_setup_;
 	
+where we also set the global macro variables associated with your project name (by default, simply `PING` but 
+you may fork it to another project) and common source datasets.
 Note however that this will work only if you have not already set your `SASAUTOS` environment using (_e.g._ 
 using the `options SASAUTOS` command like above) since `SASAUTOS` can be set once only. So as to avoid launching
 the `options SASAUTOS` several times, you can put the setup commands above inside a conditional macro as follows, 
