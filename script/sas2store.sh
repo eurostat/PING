@@ -63,10 +63,6 @@ TODAY=`date +'%y%m%d'` # `date +%Y-%m-%d`
 
 BASHVERS=${BASH_VERSION%.*}
 
-hash find 2>/dev/null || { echo >&2 " !!! Command FIND required but not installed - Aborting !!! "; exit 1; }
-hash awk 2>/dev/null || { echo >&2 " !!! Command AWK required but not installed - Aborting !!! "; exit 1; }
-hash sed 2>/dev/null ||  { echo >&2 " !!! Command SED required but not installed - Aborting !!! "; exit 1; }
-
 case "$(uname -s)" in
     Linux*)     MACHINE=Linux;;
     Darwin*)    MACHINE=Mac;;
@@ -77,6 +73,13 @@ case "$(uname -s)" in
     SunOS*)     MACHINE=SunOS;;
     *)          MACHINE="UNKNOWN:${OSTYPE}"
 esac
+
+[ "${MACHINE}" = "Mac" ] && AWK=gawk || AWK=awk
+[ "${MACHINE}" = "Mac" ] && SED=gsed || SED=sed
+
+hash find 2>/dev/null || { echo >&2 " !!! Command FIND required but not installed - Aborting !!! "; exit 1; }
+hash ${AWK} 2>/dev/null || { echo >&2 " !!! Command ${AWK} required but not installed - Aborting !!! "; exit 1; }
+hash ${SED} 2>/dev/null ||  { echo >&2 " !!! Command ${SED} required but not installed - Aborting !!! "; exit 1; }
 
 function usage() { 
     ! [ -z "$1" ] && echo "$1";
@@ -154,7 +157,7 @@ function  greaterorequal (){
 	# returns:	 	0 when argument $1 >= $2
 	#				1 otherwise
 	# note: 0 is the normal bash "success" return value (to be used in a "if...then" test)
-	return `awk -vv1="$1" -vv2="$2" 'BEGIN { print (v1 >= v2) ? 0 : 1 }'`
+	return `${AWK} -vv1="$1" -vv2="$2" 'BEGIN { print (v1 >= v2) ? 0 : 1 }'`
 }
 
 function uppercase () {
@@ -183,7 +186,7 @@ function remcomms () {
         # source: https://gist.github.com/mystix/426760
 		a="`echo | tr '\012' '\001'`"
       	b="`echo | tr '\012' '\002'`"
-       	sed '
+       	${SED} '
        	    # if no start comment then go to end of script
             /\/\*/!b
        	    :a
@@ -213,7 +216,7 @@ function remcomms () {
     else 
         # source: https://www.gnu.org/software/gawk/manual/html_node/Plain-Getline.html#Plain-Getline
 	# some issue found with this approach
-	awk 
+	${AWK} 
 	    '{if ((i = index($0, "/*")) != 0) {
 	        out = substr($0, 1, i - 1)  
 		# leading part of the string
@@ -252,18 +255,18 @@ function remcomms () {
 function rememptylines () {
 	# argument: 	1:file
 	# returns: 		suppress repeated empty (including space/tabs) output lines
-	sed ' 
+	${SED} ' 
 		# space/tabs in  "empty" line
 		/^\s*$/N; /^\s*\n$/D
 		' $1
-	# sed '/^\s*$/D' $1 # remove all blank lines
-	# sed -re '$!N; /^\s*\n$/!P;D'
+	# ${SED} '/^\s*$/D' $1 # remove all blank lines
+	# ${SED} -re '$!N; /^\s*\n$/!P;D'
 }
 
 function getdesc () {
 	# argument: 	1:file
 	# returns: 		first lines of documentation
-	awk '
+	${AWK} '
 		/^\#\#/ && /\{\#/ {m=1; next} 
 			m==1 {if (!NF) {m=0; exit} else {print}
 				} 
@@ -271,90 +274,89 @@ function getdesc () {
 }
 
 function insstore () {
-echo insstore: $@
-echo insstore 2: $2
-echo insstore 3: $3
-echo insstore 4: $4
 	# argument: 	1:file 2:description 3:source flag 
 	# returns: 		instore the "\store" keyword after main macro declarations
-	[ $# -lt 2 ] && fname=_DUMMY_ || fname=`basename "$2" .${SASEXT}`
-	[ $# -lt 3 ] && desc= || desc="des=\"${3}\""
-	[ $# -lt 3 ] && tdesc= || tdesc="des=\"Test example for ${3}\""
+	local store="/ store"
+        local edesc=
+	local tdesc=
+	local ename=
+	local tname=
+	[ $# -lt 2 ] && fname= || fname=`basename "$2" .${SASEXT}`
+	[ $# -lt 3 ] && desc=   || desc=${3}
 	[ $# -lt 4 -o $4 -eq 0 ] && source= || source="source"
-	echo source=$source
-	store="/ store"
-	desc="des=\"${3}\""
-	tname=_test_$fname
-	tdesc="des=\"Test for $fname\""
-	ename=_example_$fname
-	edesc="des=\"Example for $fname\""
-	# options=("/ store")
+        ! [ -z "$fname" ]                                               \
+	    && tname=_test_$fname                                       \
+	    && ename=_example_$fname  
+        ! [ -z "$desc" ]                                                \
+	    && desc="des=\"$desc\""                                     \
+	    && tdesc="des=\"Test case for macro $fname\""               \
+	    && edesc="des=\"Example of application of macro $fname\"" 
+	# options=("/ storea")
 	# ! [ -z $source ] && options+=(" source")
-	awk -v fname="$fname" -v ename="$ename" -v tname="$tname" 		\
-			-v store="$store" -v source="$source" 					\
-			-v desc="$desc" -v edesc="$edesc" -v tdesc="$tdesc" 	\
-		' BEGIN {m=0; f=0; count=0}
-		# note the presence of the blank after the keyword "%macro"
-		/%macro /{
+	${AWK} -v fname="$fname" -v ename="$ename" -v tname="$tname" 	\
+		-v store="$store" -v source="$source" 			\
+		-v desc="$desc" -v edesc="$edesc" -v tdesc="$tdesc" 	\
+		'BEGIN {m=0; f=0; 
+			nofname1="[[:alnum:]]+"fname; nofname2=fname"[[:alnum:]]+";
+			noename1="[[:alnum:]]+"ename; noename2=ename"[[:alnum:]]+";
+			notname1="[[:alnum:]]+"tname; notname2=tname"[[:alnum:]]+"
+			}
+		# note the presence of the [[::space::]] after the keyword "%macro"
+		/%macro[[:space:]]/ {
 			# check whether the existence of a macro whose name is exactly the name of the file, 
-			# i.e. <fname>, hence look for either:
-			# 	%macro <fname> ...
-			# or:
-			# 	%macro <fname>( ...
-			# or:
-			# 	%macro <fname>; ...
-			# hence we care about the presence of blanks " ", semi-period ";" or parenthesis ")"
-			p1=index($0, " " fname " "); p2=index($0, " " fname "("); p3=index($0, " " fname ";");
-			p=p1+p2+p3;	# p=(p1>p2)?p1:p2; 
+			# i.e. <fname>, hence we need to care about the presence of spaces/blanks " ", semi-columns ";" 
+			# or parenthesis ")"
+			if ( $0 ~ fname && $0 !~ nofname1 && $0 !~ nofname2 ) {p=1} {p=0};
 			# ibid with example macro:
-			e1=index($0, " " ename " "); e2=index($0, " " ename "("); e3=index($0, " " ename ";");
-			e=e1+e2+e3;	 
+			if ( $0 ~ ename && $0 !~ noename1 && $0 !~ noename2 ) {e=1} {e=0};
+			# ibid with test macro:
+			if ( $0 ~ tname && $0 !~ notname1 && $0 !~ notname2 ) {t=1} {t=0};
 			# check for the presence of the <store> string, e.g. "/ store" to find out whether the
 			# macro currently analysed is already stored or not
-			s=index($0, store);
+			if ( $0 ~ store ) {s=1} {s=0};
 			# increment the flag variable m
-			m+=1; 
+			m+=1
 			} # m>0
 			{if (f==0) {
 				# still look for the <fname> and <store> strings... they may be on any line between 
 				# the keyword "%macro" and the semi-period
-				if (e<=0) {
-					e1=index($0, " " ename " "); e2=index($0, " " ename "("); e3=index($0, " " ename ";");
-					e=e1+e2+e3 }
-				if (p<=0) {
-					p1=index($0, " " fname " "); p2=index($0, " " fname "("); p3=index($0, " " fname ";");
-					p=p1+p2+p3 }
-				if (s<=0) {
-					s=index($0, store) } 
-				# look for the first occurrence of a semi-period right after the "%macro" keyword
+				if ( p<=0 && $0 ~ fname && $0 !~ nofname1 && $0 !~ nofname2 ) {p=1};
+				if ( e<=0 && $0 ~ ename && $0 !~ noename1 && $0 !~ noename2 ) {e=1};
+				if ( t<=0 && $0 ~ tname && $0 !~ notname1 && $0 !~ notname2 ) {t=1};
+				if ( s<=0 && $0 ~ store ) {s=1};
+				# look for the first occurrence of a semi-column right after the "%macro" keyword
 				if (/;/ && m==1) { 
 					i=index($0, ";");
 					if (s>0) {
-						print $0 
+						print $0
 					} else {
-						# look for example_<fname>
-						if (/ _example_/ && length(edesc)==0 && e>0) {
-							print substr($0, 0, i-1) " " store " " source " p=" p " " length(edesc) " " edesc " " substr($0, i)
-						} else if (length(desc)==0 && p>0) { 
-							print substr($0, 0, i-1) " " store " " source " p=" p " " length(desc) " " desc " " substr($0, i) 
+						# look for _example_<fname>
+						if (e>0 && length(edesc)>0) {
+							print substr($0, 0, i-1) " " store " " source " " edesc " " substr($0, i)
+						# look for _test_<fname>
+						} else if (t>0 && length(tdesc)>0) { 
+							print substr($0, 0, i-1) " " store " " source " " tdesc " " substr($0, i) 
+						# simply look for <fname>
+						} else if (p>0 && length(desc)>0) { 
+							print substr($0, 0, i-1) " " store " " source " " desc " " substr($0, i) 
 						} else { 
-							print substr($0, 0, i-1) " " store " " source " p=" p " " substr($0, i)
+							print substr($0, 0, i-1) " " store " " source " " substr($0, i)
 						}
 					}
 					# reset the parameter f so that nothing occurs (except the printing) for all following 
 					# lines prior to the next occurence of the keyword "%macro"
 					f=1; 
 					# also reset the other parameters
-					p=0; s=0;
+					p=0; s=0; e=0; t=0;
 				} else {
 					print $0
 				}
 			} else {
-				print $0
+				print $0 
 			}
-			}
+			} 
 		# ibid: note the presence of the blank after the keyword %mend or a semi-column ;
-		/%mend / || /%mend;/ {m-=1} 
+		/%mend[[:space:]]/ || /%mend;/ {m-=1} 
 			{if (m==0) {f=0};
 			}
 		' $1
