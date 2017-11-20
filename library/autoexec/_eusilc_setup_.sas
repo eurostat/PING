@@ -21,7 +21,7 @@ then run the following instructions for the complete install:
 
 ~~~sas
 	%include "&G_PING_SETUPPATH/library/autoexec/_eusilc_setup_.sas";
-	%_default_setup_;
+	%_default_setup_; 
 ~~~
 
 ### Note
@@ -35,6 +35,8 @@ It is essential for this folder to be located in the same location as the
 		
 %global 
 		G_PING_VAR_GEO
+		G_PING_VAR_TIME
+		G_PING_VAR_ID
 		/* Name of the file storing the type of transmission file per year 								*/
 		G_PING_TRANSMISSIONxYEAR
 		/* Names of the files which contain the list of indicator codes and their description 			*/
@@ -236,7 +238,9 @@ It is essential for this folder to be located in the same location as the
 
 	%_setup_var_(debug=&debug);
 
+	%let G_PING_VAR_TIME=	B010;
 	%let G_PING_VAR_GEO=	B020;
+	%let G_PING_VAR_ID=		B030;
 
 	%let G_PING_AGG_POP_THRESH=0.7; 
 
@@ -258,7 +262,7 @@ It is essential for this folder to be located in the same location as the
 
 	%_setup_lab_;
 
-	/* nothing */
+	%let G_PING_LAB_TOTWGH=	totwgh; /* overwrite the "standard" definition (ntotwgh) */
 
 	%exit:
 %mend _setup_eusilc_lab_;

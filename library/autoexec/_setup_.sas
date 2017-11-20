@@ -121,15 +121,18 @@ global variables:
 		/* Name of the variable defining countries; 
 		* default: GEO */
 		G_PING_LAB_GEO
+		G_PING_LEN_GEO
 		/* Name of the variable defining geographic zones/areas/; 
 		* default: ZONE */
 		G_PING_LAB_ZONE
 		/* Name of the variable defining the temporal frame; 
 		* default: TIME */
 		G_PING_LAB_TIME
+		G_PING_LEN_TIME
 		/* Name of the variable defining the common unit; 
 		* default: UNIT */
 		G_PING_LAB_UNIT
+		G_PING_LEN_UNIT
 		/* Name of the variable defining the actual measured value; 
 		* default: IVALUE */
 		G_PING_LAB_VALUE
@@ -151,6 +154,10 @@ global variables:
 		/* Name of the flag; 
 		* default: IFLAG */
 		G_PING_LAB_IFLAG
+		G_PING_LEN_IFLAG
+		/* Name of the weight variable; 
+		* default: WEIGHT */
+		G_PING_LAB_WEIGHT
 		;
 /* note: all these variables can be set to default values by running the macro _default_setup_lab_ below */
 		
@@ -513,9 +520,14 @@ global variables:
 	%let G_PING_LAB_N=		n;
 	%let G_PING_LAB_NWGH=	nwgh;
 	%let G_PING_LAB_NTOT=	ntot;
-	%let G_PING_LAB_TOTWGH=	totwgh;
+	%let G_PING_LAB_TOTWGH=	ntotwgh;
 	%let G_PING_LAB_IFLAG=	iflag;
+	%let G_PING_LAB_WEIGHT= weight;
 
+	%let G_PING_LEN_GEO=15;
+	%let G_PING_LEN_TIME=4;
+	%let G_PING_LEN_UNIT=8;
+	%let G_PING_LEN_IFLAG=8;
 %mend _setup_lab_;
 
 /* _DEFAULT_SETUP_

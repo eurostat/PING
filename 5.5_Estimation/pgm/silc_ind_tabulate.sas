@@ -42,29 +42,29 @@
 		v_IFLAG;		/* ibid, iflag */
 
 	/* retrieve global setting whenever it exitsts */
-	%if %symexist(G_PING_VAR_GEO) %then 		%let v_GEO=&G_PING_VAR_GEO;
+	%if %symexist(G_PING_LAB_GEO) %then 		%let v_GEO=&G_PING_LAB_GEO;
 	%else										%let v_GEO=geo;
-	%if %symexist(G_PING_VAR_TIME) %then 		%let v_TIME=&G_PING_VAR_TIME;
+	%if %symexist(G_PING_LAB_TIME) %then 		%let v_TIME=&G_PING_LAB_TIME;
 	%else										%let v_TIME=time;
-	%if %symexist(G_PING_VAR_WEIGHT) %then 		%let v_WEIGHT=&G_PING_VAR_WEIGHT;
+	%if %symexist(G_PING_LAB_WEIGHT) %then 		%let v_WEIGHT=&G_PING_LAB_WEIGHT;
 	%else										%let v_WEIGHT=weight;
-	%if %symexist(G_PING_VAR_GEO) %then 		%let v_GEO=&G_PING_VAR_GEO;
+	%if %symexist(G_PING_LAB_GEO) %then 		%let v_GEO=&G_PING_LAB_GEO;
 	%else										%let v_GEO=geo;
-	%if %symexist(G_PING_VAR_TIME) %then 		%let v_TIME=&G_PING_VAR_TIME;
+	%if %symexist(G_PING_LAB_TIME) %then 		%let v_TIME=&G_PING_LAB_TIME;
 	%else										%let v_TIME=time;
-	%if %symexist(G_PING_VAR_UNIT) %then 		%let v_UNIT=&G_PING_VAR_UNIT;
+	%if %symexist(G_PING_LAB_UNIT) %then 		%let v_UNIT=&G_PING_LAB_UNIT;
 	%else										%let v_UNIT=unit;
-	%if %symexist(G_PING_VAR_VALUE) %then 		%let v_VALUE=&G_PING_VAR_VALUE;
+	%if %symexist(G_PING_LAB_VALUE) %then 		%let v_VALUE=&G_PING_LAB_VALUE;
 	%else										%let v_VALUE=ivalue;
-	%if %symexist(G_PING_VAR_UNREL) %then 		%let v_UNREL=&G_PING_VAR_UNREL;
+	%if %symexist(G_PING_LAB_UNREL) %then 		%let v_UNREL=&G_PING_LAB_UNREL;
 	%else										%let v_UNREL=unrel;
-	%if %symexist(G_PING_VAR_N) %then 			%let v_N=&G_PING_VAR_N;
+	%if %symexist(G_PING_LAB_N) %then 			%let v_N=&G_PING_LAB_N;
 	%else										%let v_N=n;
-	%if %symexist(G_PING_VAR_NTOT) %then 		%let v_NTOT=&G_PING_VAR_NTOT;
+	%if %symexist(G_PING_LAB_NTOT) %then 		%let v_NTOT=&G_PING_LAB_NTOT;
 	%else										%let v_NTOT=ntot;
-	%if %symexist(G_PING_VAR_TOTWGH) %then 		%let v_TOTWGH=&G_PING_VAR_TOTWGH;
+	%if %symexist(G_PING_LAB_TOTWGH) %then 		%let v_TOTWGH=&G_PING_LAB_TOTWGH;
 	%else										%let v_TOTWGH=totwgh;
-	%if %symexist(G_PING_VAR_IFLAG) %then 		%let v_IFLAG=&G_PING_VAR_IFLAG;
+	%if %symexist(G_PING_LAB_IFLAG) %then 		%let v_IFLAG=&G_PING_LAB_IFLAG;
 	%else										%let v_IFLAG=iflag;
 
 	%if &stats= %then 	%let stats='RowPctSum' 'N' 'Sum'; 
