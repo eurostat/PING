@@ -23,6 +23,7 @@ library/autoexec/_configuration_.sas
 library/autoexec/cfg_SAS_PING.sas
 library/autoexec/_eusilc_*.sas
 library/autoexec/_eusilc?_*.sas
+library/autoexec/.cfg_*.sas
 library/catalog
 library/catalog/*
 library/pgm/TODO_*
