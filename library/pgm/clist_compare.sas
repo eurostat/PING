@@ -43,7 +43,9 @@ returns `ans=1`.
 Run macro `%%_example_clist_compare` for more examples.
 
 ### Note
-The macro will not return exactly what you want if the symbol $ appears somewhere in the list.
+The macro will not return exactly what you want if the symbol `$` appears somewhere in the list. If you need to
+use `$`, you can reset the global macro variable `G_PING_UNLIKELY_CHAR` (see `_setup_` file) to another dumb 
+(unlikely) character of your own.
 
 ### See also
 [%list_compare](@ref sas_list_compare), [%clist_unquote](@ref sas_clist_unquote).
