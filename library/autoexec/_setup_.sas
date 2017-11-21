@@ -483,7 +483,7 @@ global variables:
 
 	%let G_PING_MACHINE_EPSILON=		%sysevalf(1./10**14);
 	%let G_PING_LIST_SEPARATOR=		_; /*:*/
-	%let G_PING_UNLIKELY_CHAR=		$ /*£*/; /* most unlikely character to appear in a list... */
+	%let G_PING_UNLIKELY_CHAR=		$; /*£*/ /* most unlikely character to appear in a list... */
 
 	%let G_PING_IDOP=			_ID_; 
 	%let G_PING_FMT_CODE=			csv;
