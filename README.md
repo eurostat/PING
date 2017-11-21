@@ -100,8 +100,12 @@ other location), or created on-the-fly, so as to contain the following settings 
 above), _e.g._:
 
 	%global G_PING_SETUPPATH
-	%let G_PING_SETUPPATH=</your/server/PING/>;
-	%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
+		G_PING_PROJECT 
+		G_PING_DATABASE;
+	%let G_PING_SETUPPATH=	</path/to/your/server/PING/>; 
+	%let G_PING_PROJECT=	<you_choose>;
+	%let G_PING_DATABASE=	</path/to/your/data/server/>;
+	%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";	
 	%_default_setup_;
  
 Then, SAS can be launched by specifying this file in the `-autoexec` option of the inline command, _.e.g._ (in 
