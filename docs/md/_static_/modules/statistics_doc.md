@@ -3,7 +3,7 @@
 Contents:
 
 - @subpage sas_gini
-- @subpage quantile
+- @subpage quantile_doc
 - @subpage sas_quantile_attribute
 - @subpage sas_ranuni
 
