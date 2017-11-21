@@ -35,20 +35,21 @@ depending **whether you are already running a SAS session or not**, _e.g._ emplo
 You will first need to set the path of your install, then you will be able to configure the `SASAUTOS` 
 environment (defining where to look for macros) using the corresponding keyword with `options` as follows:
 
-	%let G_PING_ROOTPATH=</your/server/>; 
+	%let G_PING_SETUPPATH=</your/server/PING>; 
 	options MAUTOSOURCE;
 	options SASAUTOS =(SASAUTOS 
-			"&G_PING_ROOTPATH/library/pgm/" 		
-			"&G_PING_ROOTPATH/library/test" 			
-			"&G_PING_ROOTPATH/5.1_Integration/pgm/"
-			"&G_PING_ROOTPATH/5.3_Validation/pgm/"
-			"&G_PING_ROOTPATH/5.5_Extraction/pgm/"
-			"&G_PING_ROOTPATH/5.5_Estimation/pgm/"
-			"&G_PING_ROOTPATH/5.7_Aggregates/pgm/"
-			"&G_PING_ROOTPATH/7.1_Upload/pgm/"
-			"&G_PING_ROOTPATH/7.3_Dissemination/pgm/"
-			"&G_PING_ROOTPATH/7.4_Visualisation/pgm/"
-			"&G_PING_ROOTPATH/7.4_Services/pgm/"
+			"&G_PING_SETUPPATH/library/pgm/" 		
+			"&G_PING_SETUPPATH/library/test" 			
+			"&G_PING_SETUPPATH/5.1_Integration/pgm/"
+			"&G_PING_SETUPPATH/5.3_Validation/pgm/"
+			"&G_PING_SETUPPATH/5.5_Extraction/pgm/"
+			"&G_PING_SETUPPATH/5.5_Estimation/pgm/"
+			"&G_PING_SETUPPATH/5.7_Aggregates/pgm/"
+			"&G_PING_SETUPPATH/7.1_Upload/pgm/"
+			"&G_PING_SETUPPATH/7.3_Dissemination/pgm/"
+			"&G_PING_SETUPPATH/7.4_Visualisation/pgm/"
+			"&G_PING_SETUPPATH/7.4_Services/pgm/"
+			/* more... */
 			);
 
 This way you will be able to run `PING` macros. 
