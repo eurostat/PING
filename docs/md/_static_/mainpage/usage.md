@@ -26,21 +26,21 @@ You will first need to set the path of your install, then you will be able to co
 environment (defining where to look for macros) using the corresponding keyword with `options` as follows:
 
 ~~~sas
-	%let G_PING_ROOTPATH=</your/server/>; 
+	%let G_PING_SETUPPATH=</your/server/PING>; 
 	options MAUTOSOURCE;
 	options SASAUTOS =(SASAUTOS 
-						"&G_PING_ROOTPATH/library/pgm/" 		
-						"&G_PING_ROOTPATH/library/test" 			
-						"&G_PING_ROOTPATH/5.1_Integration/pgm/"
-						"&G_PING_ROOTPATH/5.3_Validation/pgm/"
-						"&G_PING_ROOTPATH/5.5_Extraction/pgm/"
-						"&G_PING_ROOTPATH/5.5_Estimation/pgm/"
-						"&G_PING_ROOTPATH/5.7_Aggregates/pgm/"
-						"&G_PING_ROOTPATH/7.1_Upload/pgm/"
-						"&G_PING_ROOTPATH/7.3_Dissemination/pgm/"
-						"&G_PING_ROOTPATH/7.4_Visualisation/pgm/"
-						"&G_PING_ROOTPATH/7.4_Services/pgm/"
-						);
+		"&G_PING_SETUPPATH/library/pgm/" 		
+		"&G_PING_SETUPPATH/library/test" 			
+		"&G_PING_SETUPPATH/5.1_Integration/pgm/"
+		"&G_PING_SETUPPATH/5.3_Validation/pgm/"
+		"&G_PING_SETUPPATH/5.5_Extraction/pgm/"
+		"&G_PING_SETUPPATH/5.5_Estimation/pgm/"
+		"&G_PING_SETUPPATH/5.7_Aggregates/pgm/"
+		"&G_PING_SETUPPATH/7.1_Upload/pgm/"
+		"&G_PING_SETUPPATH/7.3_Dissemination/pgm/"
+		"&G_PING_SETUPPATH/7.4_Visualisation/pgm/"
+		"&G_PING_SETUPPATH/7.4_Services/pgm/"
+		);
 ~~~
 This way you will be able to run `PING` macros. However, this command alone will not allow you to load/set all 
 default configuration parameters (_e.g._ global variables) associated to the `PING` library.
@@ -53,7 +53,12 @@ configuration file named `_setup_.sas` (documentation [here](#sas_setup_); file 
 `library/autoexec`). You can then set your SAS environment with something similar to the following command:
 
 ~~~sas
-	%let G_PING_SETUPPATH=</your/server/PING/>; /* again, specific to our own case */
+	%global G_PING_SETUPPATH
+		G_PING_PROJECT 
+		G_PING_DATABASE;
+	%let G_PING_SETUPPATH=	</path/to/your/server/PING/>; 
+	%let G_PING_PROJECT=	<you_choose>;
+	%let G_PING_DATABASE=	</path/to/your/data/server/>;
 	%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";	
 	%_default_setup_;
 ~~~
@@ -87,8 +92,12 @@ above), _e.g._:
 
 ~~~sas
 	%global G_PING_SETUPPATH
-	%let G_PING_SETUPPATH=</your/server/PING/>;
-	%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
+		G_PING_PROJECT 
+		G_PING_DATABASE;
+	%let G_PING_SETUPPATH=	</path/to/your/server/PING/>; 
+	%let G_PING_PROJECT=	<you_choose>;
+	%let G_PING_DATABASE=	</path/to/your/data/server/>;
+	%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";	
 	%_default_setup_;
 ~~~
  

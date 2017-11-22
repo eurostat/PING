@@ -477,34 +477,34 @@ global variables:
 %macro _setup_var_(debug=no);
 
 	%let debug=%upcase(&debug);
-	%if "&debug"="YES" %then  			%let G_PING_DEBUG=0;
+	%if "&debug"="YES" %then  		%let G_PING_DEBUG=0;
 	%else %if "&debug"="YES" %then 		%let G_PING_DEBUG=1;
 	/* %else: should be numeric */
 
 	%let G_PING_MACHINE_EPSILON=		%sysevalf(1./10**14);
-	%let G_PING_LIST_SEPARATOR=			_; /*:*/
-	%let G_PING_UNLIKELY_CHAR=			£; /* most unlikely to be used in a list: there is something good about the Brexit... */
+	%let G_PING_LIST_SEPARATOR=		_; /*:*/
+	%let G_PING_UNLIKELY_CHAR=		$; /*Â£*/ /* most unlikely character to appear in a list... */
 
-	%let G_PING_IDOP=					_ID_; 
-	%let G_PING_FMT_CODE=				csv;
+	%let G_PING_IDOP=			_ID_; 
+	%let G_PING_FMT_CODE=			csv;
 
-	%let G_PING_ERROR_MSG=;
-	%let G_PING_ERROR_CODE=;
-	%let G_PING_ERROR_MACRO=;
+	%let G_PING_ERROR_MSG=			;
+	%let G_PING_ERROR_CODE=			;
+	%let G_PING_ERROR_MACRO=		;
 
-	%let G_PING_COUNTRY_ORDER=			META_COUNTRY_ORDER;
+	%let G_PING_COUNTRY_ORDER=		META_COUNTRY_ORDER;
 	%let G_PING_POPULATIONXCOUNTRY=		META_POPULATIONxCOUNTRY; 
-	%let G_PING_ZONEXYEAR=				META_ZONExYEAR;
+	%let G_PING_ZONEXYEAR=			META_ZONExYEAR;
 
-	%let countryx=                      META_COUNTRYx;
-	%let G_PING_COUNTRYXZONE=			&countryx.ZONE;
+	%let countryx=                      	META_COUNTRYx;
+	%let G_PING_COUNTRYXZONE=		&countryx.ZONE;
 	%let G_PING_COUNTRYXZONEYEAR=		&countryx.ZONEYEAR;
 
 	%let G_PING_INDICATOR_CONTENTS=		META_INDICATOR_CONTENTS;
 	%let G_PING_VARIABLE_DIMENSION=		META_VARIABLE_DIMENSION;
 	%let G_PING_VARIABLExINDICATOR=		META_VARIABLExINDICATOR;  
 	%let G_PING_VARIABLExVARIABLE=		META_VARIABLExVARIABLE;
-	%let G_PING_INDICATOR_CONTENTS_SEX= META_INDICATOR_CONTENTS_SEX;
+	%let G_PING_INDICATOR_CONTENTS_SEX= 	META_INDICATOR_CONTENTS_SEX;
 
 %mend _setup_var_;
 
