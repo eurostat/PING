@@ -79,6 +79,7 @@ fi
 input_directory=${DIRDOC}/md/
 static_directory=${input_directory}/_static
 module_directory=${input_directory}/_static_/modules
+process_directory=${input_directory}/_static_/processes
 output_directory=${DIRDOC}/
 
 doxygen_directory=${DIRDOC}/dox
@@ -216,6 +217,7 @@ export PINGDIR=${PINGDIR}
 export INPUT_DIRECTORY=${input_directory}
 export STATIC_DIRECTORY=${static_directory}
 export MODULE_DIRECTORY=${module_directory}
+export PROCESS_DIRECTORY=${process_directory}
 export OUTPUT_DIRECTORY=${output_directory}
 export DOXYGEN_DIRECTORY=${doxygen_directory}
 export IMAGE_DIRECTORY=${image_directory}

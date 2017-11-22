@@ -52,7 +52,9 @@ Run macro `%%_example_clist_slice` for more examples.
 2. The first occurrence of `end` is necessarily searched for in `list` after the `ibeg`-th position (or first occurrence of `beg`).
 3. The item at position `iend` (or first occurrence of `end`) is not inserted in the output `res` list.
 4. The macro returns an empty list `res=` instead of () when there is no match.
-5. The macro will not return exactly what you want if the symbol $ appears somewhere in the list.
+5. The macro will not return exactly what you want if the symbol `$` appears somewhere in the list. If you need to
+use `$`, you can reset the global macro variable `G_PING_UNLIKELY_CHAR` (see `_setup_` file) to another dumb 
+(unlikely) character of your own.
 
 ### See also
 [%list_slice](@ref sas_list_slice), [%clist_compare](@ref sas_clist_compare), [%clist_append](@ref sas_clist_append), 

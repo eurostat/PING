@@ -5,7 +5,7 @@ in the "old-fashioned" way.
 
 ~~~sas
 	%silc_EUvals(eu, ms, _idb=, _yyyy=, _tab=, _thres=, _grpdim=, _flag=, _not60=, 
-				_rdb=, _ex_data=, force_Nwgh=0);
+				_rdb=, _ex_data=, force_Nwgh=no);
 ~~~
 
 ### Arguments
@@ -26,9 +26,10 @@ in the "old-fashioned" way.
 * `_not60` : boolean flag (0/1) used to force the aggregate calculation;
 * `_ex_data`: name of the library where the file `_ccwgh60` with countries' population 
 	is stored;
-* `force_Nwgh` : additional boolean flag (0/1) set when an additional variable `nwgh` 
-	(representing the weighted sample) is present in the output dataset; note that 
-	this option is not foreseen in the original `EUvals` implementation.
+* `force_Nwgh` : additional boolean flag (`yes/no`) set when an additional variable 
+	`nwgh` (representing the weighted sample) is present in the output dataset; note that 
+	this option is not foreseen in the original `EUvals` implementation; default: 
+	`force_Nwgh=no`.
 
 ### Notes
 1. In addition to the macro defined above, this file provides additional macros/scripts so 
@@ -70,7 +71,7 @@ legacy `%%EUvals` program.
 					, _ccwgh60=		/* Name of the population dataset  					(REQ) */
 					, _rdb=			/* Name of the library with the input indicator 	(REQ) */
 					, _ex_data=		/* Name of the library with the population file 	(REQ) */
-					, force_Nwgh=0	/* Boolean flag used to add a NWGH variable 		(REQ) */
+					, force_Nwgh=NO	/* Boolean flag used to add a NWGH variable 		(REQ) */
 					); /* dirty stand-alone generic EUVALS */
 	%local _mac;
 	%let _mac=&sysmacroname;
@@ -256,7 +257,7 @@ legacy `%%EUvals` program.
 				(CALCULATED SUM_OF_wivalue / CALCULATED SUM_OF_totwgh ) AS euvalue,
 			%end;
 			SUM(n) AS SUM_OF_n,
-			%if &exists_Nwgh GT 0 or &force_Nwgh GT 0 %then %do;
+			%if &exists_Nwgh GT 0 or "&force_Nwgh" EQ "YES" %then %do;
 				SUM(nwgh) AS SUM_OF_nwgh, /* note: this is not used in original EUvals */
 			%end;
 			SUM(ntot) AS SUM_OF_ntot,
@@ -293,7 +294,7 @@ legacy `%%EUvals` program.
 			"&_flag" 		AS iflag FORMAT=$3. LENGTH=3,
 			euunrel 		AS unrel,
 			SUM_OF_n 		AS n,
-			%if &exists_Nwgh GT 0 or &force_Nwgh GT 0 %then %do;
+			%if &exists_Nwgh GT 0 or "&force_Nwgh" EQ "YES" %then %do;
 				SUM_OF_nwgh AS nwgh,
 			%end;
 			SUM_OF_ntot 	AS ntot,

@@ -13,14 +13,14 @@ Define the list of countries (_i.e._, the ISO codes) included in a given geograp
 
 ### Arguments
 * `zone` : code of a geographical zone, _e.g._, EU28, EA19, etc...;
-* `year` : (_option_) year to consider; if empty, all the countries that belong, or once belonged, 
-	to the given area `zone` are returned (see [%zone_to_ctry](@ref sas_zone_to_ctry)); by default,
-	it is set to the value `&G_PING_VAR_GEO` (_e.g._, `GEO`); 
-* `cds_ctryxzone` : (_option_) configuration file storing the description of geographical areas; by default,
-	it is named after the value `&G_PING_COUNTRYxZONE` (_e.g._, `COUNTRYxZONE`); for more details, see
-	also [%ctry_in_zone](@ref sas_ctry_in_zone);
-* `clib` : (_option_) name of the library where the configuration file is stored; default to the value
-	`&G_PING_LIBCFG`(_e.g._, `LIBCFG`) when not set.
+* `year` : (_option_) year to consider; if empty, all the countries that belong, or once 
+	belonged, to the given area `zone` are returned (see [%zone_to_ctry](@ref sas_zone_to_ctry)); 
+	by default, it is set to the value `&G_PING_LAB_GEO` (_e.g._, `GEO`); 
+* `cds_ctryxzone` : (_option_) configuration file storing the description of geographical areas; 
+	by default, it is named after the value `&G_PING_COUNTRYxZONE` (_e.g._, `COUNTRYxZONE`); for 
+	more details, see also [%ctry_in_zone](@ref sas_ctry_in_zone);
+* `clib` : (_option_) name of the library where the configuration file is stored; default to the
+	value `&G_PING_LIBCFG`(_e.g._, `LIBCFG`) when not set.
  
 ### Returns
 `_ctryclst_` or `_ctrylst_` : name of the macro variable storing the output list, either a list of 
@@ -63,8 +63,8 @@ returns `ctry_glob=AT BE DE DK EL ES FI FR IE IS IT LU NL NO PT SE UK LI`.
 Run macro `%%_example_ctry_define`.
 
 ### See also
-[%str_isgeo](@ref sas_str_isgeo), [%zone_to_ctry](@ref sas_zone_to_ctry), [%ctry_in_zone](@ref sas_ctry_in_zone), 
-[%var_to_clist](@ref sas_var_to_clist).
+[%str_isgeo](@ref sas_str_isgeo), [%zone_to_ctry](@ref sas_zone_to_ctry), 
+[%ctry_in_zone](@ref sas_ctry_in_zone), [%var_to_clist](@ref sas_var_to_clist).
 */ 
 
 /* credits: grazzja, grillma */
@@ -118,7 +118,7 @@ Run macro `%%_example_ctry_define`.
 		var; 	/* default name of the geo variable */
 	%let TMP=TMP_%upcase(&sysmacroname);
 
-	%if %symexist(G_PING_VAR_GEO) %then 			%let var=&G_PING_VAR_GEO;
+	%if %symexist(G_PING_LAB_GEO) %then 			%let var=&G_PING_LAB_GEO;
 	%else											%let var=GEO;
 
 	/* test the string passed as a parameter */

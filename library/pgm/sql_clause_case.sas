@@ -27,6 +27,11 @@ The simple example below:
 ~~~
 returns .
 
+### Note
+The macro will not return exactly what you want if the symbol `$` appears somewhere in the `when` or `then` lists. 
+If you need to use `$` in there, you can reset the global macro variable `G_PING_UNLIKELY_CHAR` (see `_setup_` 
+file) to another dumb (unlikely) character of your own.
+
 ### See also
 [%ds_select](@ref sas_ds_select), [%sql_clause_where](@ref sas_sql_clause_where), 
 [%sql_clause_as](@ref sas_sql_clause_as), [%sql_clause_add](@ref sas_sql_clause_add), 
@@ -90,7 +95,8 @@ returns .
 	%let when=%sysfunc(compbl(%quote(&when)));
 	
 	/* replace with dummy improbable char */
-	%let REP=%str($); 
+	%if %symexist(G_PING_UNLIKELY_CHAR) %then 		%let REP=%quote(&G_PING_UNLIKELY_CHAR);
+	%else							%let REP=%str($);
 	%let when=%quote(%sysfunc(tranwrd(%bquote(&when), %str(%), %(), &REP)));
 	%let then=%quote(%sysfunc(tranwrd(%bquote(&then), %str(%), %(), &REP)));
 
