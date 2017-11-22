@@ -24,6 +24,8 @@ library/autoexec/cfg_SAS_PING.sas
 library/catalog
 library/catalog/*
 library/pgm/TODO_*
+library/macros
+library/macros/*
 
 # 5.1_Integration folder 
 5.1_Integration/meta/*.xls
