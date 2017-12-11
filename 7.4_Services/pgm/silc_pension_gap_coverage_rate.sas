@@ -316,8 +316,8 @@ and [II](https://webgate.ec.europa.eu/emplcms/social/BlobServlet?docId=14545&lan
 		%if %macro_isblank(labels) %then %let labels=&dimensions;
 
 		/* define the list of "per variables", i.e. if dimensions=AGE RB090 HT1 QITILE,
-		* then we will have per_dimensions=AGE*RB090*HT1*QITILE 
-		* this is useful for the following PROC TABULATE */
+		* then we have per_dimensions=AGE*RB090*HT1*QITILE 
+		* this is useful for the subsequent PROC TABULATE */
 		PROC FORMAT;
 			VALUE  _fmt_RB090_ (multilabel)
 				1 = "M"
@@ -331,7 +331,7 @@ and [II](https://webgate.ec.europa.eu/emplcms/social/BlobServlet?docId=14545&lan
 				;
 		run;
 
-		/* perform the tabulate operation*/
+		/* perform the tabulate operation, for either GAP or COVERAGE indicator */
 		%if "&dsn"="COVERAGE" %then %do;
 		    PROC TABULATE data=work.IDB out=WORK.&TMP._1 ;
 			 	%do _i=1 %to &ndim;

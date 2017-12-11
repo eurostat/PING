@@ -141,7 +141,7 @@ Hamilton, J.(2012): ["Obtaining a list of files in a directory using SAS functio
 			txt=!!! Parameters BEG and END are boolean flags with values in (yes/no) !!!) %then
 		%goto exit;
 
-	%if %macro_isblank(sep) %then 		%let sep=%quote(); /*backward compatibility*/
+	%if %macro_isblank(sep) %then 		%let sep=%quote( ); /*backward compatibility*/
 
 	/************************************************************************************/
 	/**                                 actual computation                             **/
