@@ -243,7 +243,7 @@ datasets.
 	/**                                 actual computation                             **/
 	/************************************************************************************/
 
-   %local dsCandidateVarnames 
+  %local dsCandidateVarnames 
 		dsContents 
 		dsCopiedVars 
 		dsLocalOut 
@@ -479,7 +479,7 @@ datasets.
         ucnewvar = upcase(NewVar);
     run;
 
-    %let dsXtraVars = %str_dsname(xtravars, prefix=_);
+  	%let dsXtraVars = %str_dsname(xtravars, prefix=_);
     DATA &dsXtraVars;
         LENGTH ucnewvar $ 200;
         %do i = 1 %to &nbyvars;
@@ -676,7 +676,8 @@ datasets.
         quit;
 
         %if &s eq 1 %then %do;
-            %ds_rename(&dsTmp, &dsLocalOut);
+      %put test7.0;
+      %ds_rename(&dsTmp, odsn=&dsLocalOut);
             %let xnewvars=&newvars;
         %end;
         %else %do;
@@ -701,11 +702,11 @@ datasets.
                     ;
             quit;
             %work_clean(&dsLocalOut);
-       		%ds_rename(&dsTmpOut, &dsLocalOut);
+  
+    		%ds_rename(&dsTmpOut, odsn=&dsLocalOut);
             %let xnewvars=&xnewvars &newvars;
         %end;
     %end;
-
 
     %if &ncopy eq 0 %then %do;
     	/*%work_clean(&out);
@@ -763,7 +764,7 @@ datasets.
     quit;
     %work_clean(&dsTmp);
 
-    /* if pivot is a formatted variable, get the formats for each of its values, else define a label 
+   /* if pivot is a formatted variable, get the formats for each of its values, else define a label 
 	* as "pivot = Value" */
 
     %if &formattedPivot %then %do;
@@ -780,7 +781,7 @@ datasets.
 
         %if &anyfmtHigh %then %do;
        		%work_clean(&dsPivotObsValues);
-            %ds_rename(&dsTmp, &dsPivotObsValues);
+            %ds_rename(&dsTmp, odsn=&dsPivotObsValues);
             PROC SQL;
                 CREATE TABLE &dsTmp AS
                 SELECT s.PivotValue, s.PivotIndex, coalesce(s.Label, x.Label) as PivotLabel
@@ -793,7 +794,7 @@ datasets.
 
         %if &anyfmtLow %then %do;
        		%work_clean(&dsPivotObsValues);
-         	%ds_rename(&dsTmp, &dsPivotObsValues);
+         	%ds_rename(&dsTmp, odsn=&dsPivotObsValues);
             PROC SQL;
                 CREATE TABLE &dsTmp AS
                 SELECT s.PivotValue, s.PivotIndex, coalesce(s.Label, x.Label) as PivotLabel
@@ -806,7 +807,7 @@ datasets.
 
         %if &anyfmtOther %then %do;
           	%work_clean(&dsPivotObsValues);
-         	%ds_rename(&dsTmp, &dsPivotObsValues);
+         	%ds_rename(&dsTmp, odsn=&dsPivotObsValues);
             PROC SQL;
                 CREATE TABLE &dsTmp AS
                 SELECT s.PivotValue, 
@@ -827,7 +828,7 @@ datasets.
         quit;
     %end;
 	%work_clean(&dsPivotObsValues);
-    %ds_rename(&dsTmp, &dsPivotObsValues);
+    %ds_rename(&dsTmp, odsn=&dsPivotObsValues);
 
     PROC SQL noprint;
         SELECT N(PivotIndex) gt 0 
@@ -872,7 +873,7 @@ datasets.
        	quit;
 
 		%work_clean(&dsPivotObsValues);
-        %ds_rename(&dsTmp, &dsPivotObsValues);
+        %ds_rename(&dsTmp, odsn=&dsPivotObsValues);
     %end;
 
     * Give new labels to new (transposed) variables;
@@ -886,7 +887,7 @@ datasets.
         WHERE n.name eq t.name and n.PivotIndex eq s.PivotIndex;
     quit;
 	%work_clean(&dsNewVars);
-    %ds_rename(&dsTmp, &dsNewVars);
+    %ds_rename(&dsTmp, odsn=&dsNewVars);
 
     PROC SQL noprint;
         SELECT NewVar, 
@@ -983,9 +984,11 @@ datasets.
 	%ds_print(&dsn.1);
 
 	/* original: %MultiTranspose(data=&dsn.1, out=out1, vars=sbp wt, by=centre subjectno, pivot=visit); */
-	%ds_transpose(&dsn.1, &out.1, var=sbp wt, by=centre subjectno, pivot=visit);
-	%ds_print(&out.1);
-
+%put test;
+%ds_transpose(&dsn.1, &out.1, var=sbp wt, by=centre subjectno, pivot=visit);
+%put rum;
+%ds_print(&out.1);
+%goto exit;
 	/* original: %MultiTranspose(data=&dsn.1, out=out1_1, vars=sbp wt, by=centre subjectno, pivot=visit, dropMissingPivot=0); */ 
 	%ds_transpose(&dsn.1, &out.2, var=sbp wt, by=centre subjectno, pivot=visit, missing=yes);
 	%ds_print(&out.2);
@@ -998,11 +1001,13 @@ datasets.
 	%ds_transpose(&dsn.1, &out.4, var=sbp wt, by=centre subjectno, copy=gender);
 	%ds_print(&out.4);
 	%work_clean(&dsn.1, &out.1, &out.2, &out.3, &out.4);
+	%exit:
 %mend _example_ds_transpose;
 
 /* Uncomment for quick testing
 options NOSOURCE MRECALL MLOGIC MPRINT NOTES;
 %_example_ds_transpose;
 */
+%_example_ds_transpose;
 
 /** \endcond */
