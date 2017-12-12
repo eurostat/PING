@@ -96,11 +96,18 @@ use `$`, you can reset the global macro variable `G_PING_UNLIKELY_CHAR` (see `_s
 %mend clist_append;
 
 %macro _example_clist_append;
-	%if %symexist(G_PING_ROOTPATH) EQ 0 %then %do; 
-		%if %symexist(G_PING_SETUPPATH) EQ 0 %then 	%let G_PING_SETUPPATH=/ec/prod/server/sas/0eusilc/PING; 
-		%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
-		%_default_setup_;
-	%end;
+	%if %symexist(G_PING_SETUPPATH) EQ 0 %then %do; 
+        %if %symexist(G_PING_ROOTPATH) EQ 0 %then %do;	
+			%put WARNING: !!! PING environment not set - Impossible to run &sysmacroname !!!;
+			%put WARNING: !!! Set global variable G_PING_ROOTPATH to your PING install path !!!;
+			%goto exit;
+		%end;
+		%else %do;
+        	%let G_PING_SETUPPATH=&G_PING_ROOTPATH./PING; 
+        	%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
+        	%_default_setup_;
+		%end;
+    %end;
 
 	%local clist1 clist2;
 	%let clist1=("A","B","C","D","E","F");	
@@ -133,7 +140,7 @@ use `$`, you can reset the global macro variable `G_PING_UNLIKELY_CHAR` (see `_s
 		%put ERROR: TEST FAILED - Wrong concatenated list "clist1 + clist2" returned;
 
 	%put;
-
+    %exit:
 %mend _example_clist_append;
 
 /* Uncomment for quick testing

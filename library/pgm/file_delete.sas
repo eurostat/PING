@@ -55,17 +55,26 @@ Run macro `%%_example_file_delete` for examples.
 %mend file_delete;
 
 %macro _example_file_delete;
-	%if %symexist(G_PING_ROOTPATH) EQ 0 %then %do; 
-		%if %symexist(G_PING_SETUPPATH) EQ 0 %then 	%let G_PING_SETUPPATH=/ec/prod/server/sas/0eusilc/PING; 
-		%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
-		%_default_setup_;
-	%end;
+	%if %symexist(G_PING_SETUPPATH) EQ 0 %then %do; 
+        %if %symexist(G_PING_ROOTPATH) EQ 0 %then %do;	
+			%put WARNING: !!! PING environment not set - Impossible to run &sysmacroname !!!;
+			%put WARNING: !!! Set global variable G_PING_ROOTPATH to your PING install path !!!;
+			%goto exit;
+		%end;
+		%else %do;
+        	%let G_PING_SETUPPATH=&G_PING_ROOTPATH./PING; 
+        	%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
+        	%_default_setup_;
+		%end;
+    %end;
 
 	/*%let rc=%file_delete(&eusilc/test/dummy.txt);
 	%put rc=&rc;*/
 	%put !!! &sysmacroname: Not yet implemented !!!;
 
 	%put;
+
+	%exit:
 %mend _example_file_delete;
 
 /** \endcond */

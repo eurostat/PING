@@ -214,11 +214,18 @@ and comparing the values of `c0` and `c1`:
 
 
 %macro _example_ds_count;
-	%if %symexist(G_PING_ROOTPATH) EQ 0 %then %do; 
-		%if %symexist(G_PING_SETUPPATH) EQ 0 %then 	%let G_PING_SETUPPATH=/ec/prod/server/sas/0eusilc/PING; 
-		%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
-		%_default_setup_;
-	%end;
+	%if %symexist(G_PING_SETUPPATH) EQ 0 %then %do; 
+        %if %symexist(G_PING_ROOTPATH) EQ 0 %then %do;	
+			%put WARNING: !!! PING environment not set - Impossible to run &sysmacroname !!!;
+			%put WARNING: !!! Set global variable G_PING_ROOTPATH to your PING install path !!!;
+			%goto exit;
+		%end;
+		%else %do;
+        	%let G_PING_SETUPPATH=&G_PING_ROOTPATH./PING; 
+        	%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
+        	%_default_setup_;
+		%end;
+    %end;
 
 	%local nobs;
 	%_dstest28;
@@ -253,6 +260,8 @@ and comparing the values of `c0` and `c1`:
 
 	/* clean your shit... */
 	%work_clean(_dstest28);
+
+	%exit:
 %mend _example_ds_count;
 
 /* Uncomment for quick testing

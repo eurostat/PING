@@ -344,5 +344,4 @@ http://www.math.yorku.ca/SCS/sasmac/dummy.html
 	%end;  /* %do %while */
 
 	%exit:
-
 %mend var_dummy;

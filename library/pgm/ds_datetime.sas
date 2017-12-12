@@ -160,11 +160,19 @@ Examples:
 	%exit:
 %mend ds_datetime_integer;
 %macro _example_ds_datetime_integer;
-	%if %symexist(G_PING_ROOTPATH) EQ 0 %then %do; 
-		%if %symexist(G_PING_SETUPPATH) EQ 0 %then 	%let G_PING_SETUPPATH=/ec/prod/server/sas/0eusilc/PING; 
-		%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
-		%_default_setup_;
-	%end;
+	%if %symexist(G_PING_SETUPPATH) EQ 0 %then %do; 
+        %if %symexist(G_PING_ROOTPATH) EQ 0 %then %do;	
+			%put WARNING: !!! PING environment not set - Impossible to run &sysmacroname !!!;
+			%put WARNING: !!! Set global variable G_PING_ROOTPATH to your PING install path !!!;
+			%goto exit;
+		%end;
+		%else %do;
+        	%let G_PING_SETUPPATH=&G_PING_ROOTPATH./PING; 
+        	%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
+        	%_default_setup_;
+		%end;
+    %end;
+
 	%put;
 	%local dt_integer;
 	%put (i) dsn vartime and vardate do not exit  ;
@@ -191,10 +199,12 @@ Examples:
    	%ds_datetime_integer(dsn=&dsn,_dt_integer_=dt_integer,currentdate=currentdate, lastup=lastup,lib=WORK);
     %put dt_integer=&dt_integer;
 	%work_clean(_dstest41);
+
+	%exit:
 %mend _example_ds_datetime_integer;
 
 /* Uncomment for quick testing
 options NOSOURCE MRECALL MLOGIC MPRINT NOTES;*/
-%_example_ds_datetime_integer; 
+*%_example_ds_datetime_integer; 
 */
 /* VFORMAT(var)*/

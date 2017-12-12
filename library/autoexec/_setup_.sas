@@ -534,8 +534,11 @@ global variables:
 * Launch "everything" together in one single macro
 */
 %macro _default_setup_;
+%put _setup_env_; 
 	%_setup_env_;
+%put _setup_loc_; 
 	%_setup_loc_(debug=no); /* legacy environment and no test */
+%put _setup_auto_; 
 	%_setup_auto_;
 	%_setup_lib_;
 	%_setup_lab_;

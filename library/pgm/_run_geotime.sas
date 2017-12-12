@@ -156,11 +156,18 @@ then the generic running of this function shall be written as:
 %mend _run_geotime;
 
 %macro _example__run_geotime;
-	%if %symexist(G_PING_ROOTPATH) EQ 0 %then %do; 
-		%if %symexist(G_PING_SETUPPATH) EQ 0 %then 	%let G_PING_SETUPPATH=/ec/prod/server/sas/0eusilc/PING; 
-		%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
-		%_default_setup_;
-	%end;
+	%if %symexist(G_PING_SETUPPATH) EQ 0 %then %do; 
+        %if %symexist(G_PING_ROOTPATH) EQ 0 %then %do;	
+			%put WARNING: !!! PING environment not set - Impossible to run &sysmacroname !!!;
+			%put WARNING: !!! Set global variable G_PING_ROOTPATH to your PING install path !!!;
+			%goto exit;
+		%end;
+		%else %do;
+        	%let G_PING_SETUPPATH=&G_PING_ROOTPATH./PING; 
+        	%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
+        	%_default_setup_;
+		%end;
+    %end;
 	
 	%macro dummy(time, geo, ctry, arg);
 		%put process geo=&geo / time=&time / ctry=&ctry / arg=&arg;
@@ -170,6 +177,7 @@ then the generic running of this function shall be written as:
 	%let geo=AT BE EU28;
 
 	%_run_geotime(&year, &geo, process=dummy, whatever);
+	%exit:
 %mend;
 
 /* Uncomment for quick testing

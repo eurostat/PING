@@ -137,11 +137,18 @@ i.e., the list of variables, their types and lengths will be displayed.
 %mend ds_print;
 
 %macro _example_ds_print;
-	%if %symexist(G_PING_ROOTPATH) EQ 0 %then %do; 
-		%if %symexist(G_PING_SETUPPATH) EQ 0 %then 	%let G_PING_SETUPPATH=/ec/prod/server/sas/0eusilc/PING; 
-		%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
-		%_default_setup_;
-	%end;
+	%if %symexist(G_PING_SETUPPATH) EQ 0 %then %do; 
+        %if %symexist(G_PING_ROOTPATH) EQ 0 %then %do;	
+			%put WARNING: !!! PING environment not set - Impossible to run &sysmacroname !!!;
+			%put WARNING: !!! Set global variable G_PING_ROOTPATH to your PING install path !!!;
+			%goto exit;
+		%end;
+		%else %do;
+        	%let G_PING_SETUPPATH=&G_PING_ROOTPATH./PING; 
+        	%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
+        	%_default_setup_;
+		%end;
+    %end;
 
 	%local dsn;
 	%let dsn=TMP%upcase(&sysmacroname);
@@ -177,6 +184,8 @@ i.e., the list of variables, their types and lengths will be displayed.
 
 	/* clean your shit... */
 	%work_clean(&dsn,_dstest0,_dstest2,_dstest32);
+
+	%exit:
 %mend _example_ds_print;
 
 /* Uncomment for quick testing

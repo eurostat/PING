@@ -958,11 +958,18 @@ datasets.
 
 
 %macro _example_ds_transpose;
-	%if %symexist(G_PING_ROOTPATH) EQ 0 %then %do; 
-		%if %symexist(G_PING_SETUPPATH) EQ 0 %then 	%let G_PING_SETUPPATH=/ec/prod/server/sas/0eusilc/PING; 
-		%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
-		%_default_setup_;
-	%end;
+	%if %symexist(G_PING_SETUPPATH) EQ 0 %then %do; 
+        %if %symexist(G_PING_ROOTPATH) EQ 0 %then %do;	
+			%put WARNING: !!! PING environment not set - Impossible to run &sysmacroname !!!;
+			%put WARNING: !!! Set global variable G_PING_ROOTPATH to your PING install path !!!;
+			%goto exit;
+		%end;
+		%else %do;
+        	%let G_PING_SETUPPATH=&G_PING_ROOTPATH./PING; 
+        	%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
+        	%_default_setup_;
+		%end;
+    %end;
 
 	%local dsn out;
 	%let dsn=_TMP&sysmacroname;
@@ -984,11 +991,11 @@ datasets.
 	%ds_print(&dsn.1);
 
 	/* original: %MultiTranspose(data=&dsn.1, out=out1, vars=sbp wt, by=centre subjectno, pivot=visit); */
-%put test;
-%ds_transpose(&dsn.1, &out.1, var=sbp wt, by=centre subjectno, pivot=visit);
-%put rum;
-%ds_print(&out.1);
-%goto exit;
+	%put test;
+	%ds_transpose(&dsn.1, &out.1, var=sbp wt, by=centre subjectno, pivot=visit);
+	%put rum;
+	%ds_print(&out.1);
+	*%goto exit;
 	/* original: %MultiTranspose(data=&dsn.1, out=out1_1, vars=sbp wt, by=centre subjectno, pivot=visit, dropMissingPivot=0); */ 
 	%ds_transpose(&dsn.1, &out.2, var=sbp wt, by=centre subjectno, pivot=visit, missing=yes);
 	%ds_print(&out.2);
@@ -1001,6 +1008,7 @@ datasets.
 	%ds_transpose(&dsn.1, &out.4, var=sbp wt, by=centre subjectno, copy=gender);
 	%ds_print(&out.4);
 	%work_clean(&dsn.1, &out.1, &out.2, &out.3, &out.4);
+
 	%exit:
 %mend _example_ds_transpose;
 
@@ -1008,6 +1016,6 @@ datasets.
 options NOSOURCE MRECALL MLOGIC MPRINT NOTES;
 %_example_ds_transpose;
 */
-%_example_ds_transpose;
+*%_example_ds_transpose;
 
 /** \endcond */

@@ -153,6 +153,19 @@ Wilson, S.A. (2011): ["The validator: A macro to validate parameters"](http://su
 %mend error_handle;
 
 %macro _example_error_handle;
+	%if %symexist(G_PING_SETUPPATH) EQ 0 %then %do; 
+        %if %symexist(G_PING_ROOTPATH) EQ 0 %then %do;	
+			%put WARNING: !!! PING environment not set - Impossible to run &sysmacroname !!!;
+			%put WARNING: !!! Set global variable G_PING_ROOTPATH to your PING install path !!!;
+			%goto exit;
+		%end;
+		%else %do;
+        	%let G_PING_SETUPPATH=&G_PING_ROOTPATH./PING; 
+        	%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
+        	%_default_setup_;
+		%end;
+    %end;
+
 	%local var macname errcode verb;
 	%let macname=&sysmacroname;
 	%let verb=yes;
@@ -189,6 +202,8 @@ Wilson, S.A. (2011): ["The validator: A macro to validate parameters"](http://su
 		%put ERROR: TEST FAILED - True condition tested: errcode 0;
 
 	%put;
+
+	%exit:
 %mend _example_error_handle;
 
 /* Uncomment for quick testing

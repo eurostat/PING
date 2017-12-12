@@ -164,11 +164,18 @@ is dropped from the dataset. This matters in the cases where `cond` is an expres
 %mend ds_delete;
 
 %macro _example_ds_delete;
-	%if %symexist(G_PING_ROOTPATH) EQ 0 %then %do; 
-		%if %symexist(G_PING_SETUPPATH) EQ 0 %then 	%let G_PING_SETUPPATH=/ec/prod/server/sas/0eusilc/PING; 
-		%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
-		%_default_setup_;
-	%end;
+	%if %symexist(G_PING_SETUPPATH) EQ 0 %then %do; 
+        %if %symexist(G_PING_ROOTPATH) EQ 0 %then %do;	
+			%put WARNING: !!! PING environment not set - Impossible to run &sysmacroname !!!;
+			%put WARNING: !!! Set global variable G_PING_ROOTPATH to your PING install path !!!;
+			%goto exit;
+		%end;
+		%else %do;
+        	%let G_PING_SETUPPATH=&G_PING_ROOTPATH./PING; 
+        	%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
+        	%_default_setup_;
+		%end;
+    %end;
 	
 	%put;
 	%put (i) Drop the variable GEO from dataset _dstest30;
@@ -211,6 +218,8 @@ is dropped from the dataset. This matters in the cases where `cond` is an expres
 	%put;
 
 	%work_clean(_dstest30,_dstest31,_dstest33);
+
+	%exit:
 %mend _example_ds_delete;
 
 /* Uncomment for quick testing

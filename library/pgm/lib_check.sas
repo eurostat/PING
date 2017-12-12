@@ -51,11 +51,18 @@ Johnson, J. (2010): ["OBJECT_EXIST: A macro to check if a specified object exist
 %mend lib_check;
 
 %macro _example_lib_check;
-	%if %symexist(G_PING_ROOTPATH) EQ 0 %then %do; 
-		%if %symexist(G_PING_SETUPPATH) EQ 0 %then 	%let G_PING_SETUPPATH=/ec/prod/server/sas/0eusilc/PING; 
-		%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
-		%_default_setup_;
-	%end;
+	%if %symexist(G_PING_SETUPPATH) EQ 0 %then %do; 
+        %if %symexist(G_PING_ROOTPATH) EQ 0 %then %do;	
+			%put WARNING: !!! PING environment not set - Impossible to run &sysmacroname !!!;
+			%put WARNING: !!! Set global variable G_PING_ROOTPATH to your PING install path !!!;
+			%goto exit;
+		%end;
+		%else %do;
+        	%let G_PING_SETUPPATH=&G_PING_ROOTPATH./PING; 
+        	%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
+        	%_default_setup_;
+		%end;
+    %end;
 
 	/* run and test your macro with these parameters */
 	%put;
@@ -69,6 +76,8 @@ Johnson, J. (2010): ["OBJECT_EXIST: A macro to check if a specified object exist
 	%else 							%put ERROR: TEST FAILED - fake DUMMLIB recognised: errcode 0;
 
 	%put;
+
+	%exit:
 %mend _example_lib_check;
 
 /* Uncomment for quick testing

@@ -340,12 +340,19 @@ itself in the case above.
 %mend ds_append;
 
 %macro _example_ds_append;
-	%if %symexist(G_PING_ROOTPATH) EQ 0 %then %do; 
-		%if %symexist(G_PING_SETUPPATH) EQ 0 %then 	%let G_PING_SETUPPATH=/ec/prod/server/sas/0eusilc/PING; 
-		%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
-		%_default_setup_;
-	%end;
- 
+	%if %symexist(G_PING_SETUPPATH) EQ 0 %then %do; 
+        %if %symexist(G_PING_ROOTPATH) EQ 0 %then %do;	
+			%put WARNING: !!! PING environment not set - Impossible to run &sysmacroname !!!;
+			%put WARNING: !!! Set global variable G_PING_ROOTPATH to your PING install path !!!;
+			%goto exit;
+		%end;
+		%else %do;
+        	%let G_PING_SETUPPATH=&G_PING_ROOTPATH./PING; 
+        	%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
+        	%_default_setup_;
+		%end;
+    %end;
+
 	%work_clean(_dstest25, _dstest26, _dstest31, _dstest32, _dstest33, _dstest37, _dstest38, _dstest39);
 	%local TMP dsn idsn;
 
@@ -432,6 +439,8 @@ itself in the case above.
  	%ds_print(_dstest38, title="Output: APPEND(_dstest38, _dstest39) WITH %bquote(icond=&icond)");
 
 	%work_clean(_dstest25, _dstest26, _dstest27, _dstest31, _dstest32, _dstest33, _dstest37, _dstest38, _dstest39);
+
+	%exit:
 %mend _example_ds_append;
 
 /* Uncomment for quick testing

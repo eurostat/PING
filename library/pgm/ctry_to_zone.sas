@@ -70,7 +70,6 @@ Eurostat: Tutorial on ["Country codes and protocol order"](http://ec.europa.eu/e
 /* credits: grazzja */
 
 %macro ctry_to_zone(ctry			    /* list of countries       								    (REQ) */
-					, dsn			    /* Name of the output table 							    (REQ) */
 					, _zone_=		    /* Name of the output list of zone          			    (REQ) */
 					, time=				/* Year of interest										    (REQ) */
 					, cds_ctryxzone=	/* Configuration dataset storing geographical areas		    (OPT) */
@@ -86,7 +85,7 @@ Eurostat: Tutorial on ["Country codes and protocol order"](http://ec.europa.eu/e
 
 	/* TIME: check */
 	%if %error_handle(ErrorInputParameter, 
-			%par_check(&time, type=INTEGER, range 1995) NE 0, mac=&_mac,		
+			%par_check(&time, type=INTEGER, range = 1995) NE 0, mac=&_mac,		
 			txt=!!! Parameter TIME is of type INTEGER !!!) %then
 		%goto exit;
 	
@@ -136,10 +135,11 @@ Eurostat: Tutorial on ["Country codes and protocol order"](http://ec.europa.eu/e
 			quit;
 
  		%ds_isempty(&_dsn.2, var=ZONE, _ans_=_ans);  
+
     	%if %error_handle(ErrorInputDataset, 
 				&_ans EQ 1, mac=&_mac, 
-				txt=%bquote(!!! Dataset %upcase(&_dsn.2) empty: no country/zone matched !!!)) %then %do
-			%let &_zone_=&lzone; /* abusivo... */
+				txt=%bquote(!!! Dataset %upcase(&_dsn.2) empty: no country/zone matched !!!)) %then %do;
+			%let &_zone_=;
 		    %goto quit;
 		%end;
 
@@ -189,6 +189,7 @@ Eurostat: Tutorial on ["Country codes and protocol order"](http://ec.europa.eu/e
 	%let ctry=DUMMYZONE;      /* country not in &cds_ctryxzone dataset */   
 	%let year=2010;
 	%put (i) for ctry=&ctry and year=&year ...;
+	%put parameters: &ctry, time=&year, _zone_ =val;
 	%ctry_to_zone(&ctry, time=&year, _zone_ =val);
 	%let ozone=;
 	%if &val EQ &ozone  %then 	%put OK: TEST PASSED - Dummy test: returns nothing;
@@ -199,18 +200,18 @@ Eurostat: Tutorial on ["Country codes and protocol order"](http://ec.europa.eu/e
 	%put;
 	%put (ii) for ctry=&ctry and year=&year ...;
 	%ctry_to_zone(&ctry, time=&year, _zone_ =val);
-	%let ozone=EA EA12 EA13 EA16 EA17 EA18 EA19 EEA EEA18 EEA28 EEA30 EU07 EU09 EU10 EU12 EU15 EU25 EU27 EU28;
+	%let ozone=EA EA12 EA13 EA16 EA17 EA18 EA19 EEA EEA18 EEA28 EEA30 EU EU07 EU09 EU10 EU12 EU15 EU25 EU27 EU28;
 	%if &val EQ &ozone %then 	%put OK: TEST PASSED - returns: %bquote(&ozone);
-	%else 						%put ERROR: TEST FAILED - wrong list returned;
+	%else 						%put ERROR: TEST FAILED - wrong list returned: &val;
 
     %let year=2015;
 	%let ctry=BE DE FR IT LU NL DK IE UK EL ES PT AT FI SE CY CZ EE HU LT LV MT PL SI SK BG RO HR;
 	%put;
 	%put (iii) for ctry=&ctry and year=&year ...;
 	%ctry_to_zone(&ctry, time=&year, _zone_ =val);
-	%let ozone=EA EA12 EA13 EA16 EA17 EA18 EA19 EEA EEA18 EEA28 EEA30 EU07 EU09 EU10 EU12 EU15 EU25 EU27 EU28;
+	%let ozone=EA EA12 EA13 EA16 EA17 EA18 EA19 EEA EEA18 EEA28 EEA30 EU EU07 EU09 EU10 EU12 EU15 EU25 EU27 EU28;
 	%if &val EQ &ozone %then 	%put OK: TEST PASSED - returns: %bquote(&ozone);
-	%else 						%put ERROR: TEST FAILED - wrong list returned; 
+	%else 						%put ERROR: TEST FAILED - wrong list returned: &val; 
 
 	%let year=2014;
 	%let ctry=MK;      /* existing country code but not in &cds_ctryxzone dataset */
@@ -218,8 +219,8 @@ Eurostat: Tutorial on ["Country codes and protocol order"](http://ec.europa.eu/e
 	%put;
 	%put (iv) for ctry=&ctry and year=&year ...;
 	%ctry_to_zone(&ctry, time=&year, _zone_ =val);
-	%if %macro_isblank(val) %then 	%put OK: TEST PASSED - returns: %bquote(&ozone);
-	%else 							%put ERROR: TEST FAILED - wrong list returned; 
+	%if %macro_isblank(val) or "&val"="OTH" %then 	%put OK: TEST PASSED - returns: %bquote(&ozone);
+	%else 											%put ERROR: TEST FAILED - wrong list returned: &val; 
  
 	%put;
 %mend _example_ctry_to_zone;
