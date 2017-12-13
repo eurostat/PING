@@ -118,7 +118,7 @@ options mstored sasmstore=maclib ;
 
 %compile_macros ;
 
-
+%let rc = %file_delete("&macro_lib./script.sas") ;
 
 
 
