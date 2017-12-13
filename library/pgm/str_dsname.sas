@@ -39,9 +39,9 @@ of L. Joseph.
 
 /* credits: grazzja, lamarpi */
 
-%macro str_dsname(name		/* Name to be used */
-				, prefix=
-				, lib=
+%macro str_dsname(name		/* Generic name to be used for the new dataset (REQ) */
+				, prefix=	/* Prefix to be added to the name (OPT) */
+				, lib=		/* Library where the input dataset is stored (OPT) */
 				);
 	%local _mac;
 	%let   _mac=&sysmacroname;
@@ -86,11 +86,18 @@ of L. Joseph.
 %mend str_dsname;
 
 %macro _example_str_dsname;
-	%if %symexist(G_PING_ROOTPATH) EQ 0 %then %do; 
-		%if %symexist(G_PING_SETUPPATH) EQ 0 %then 	%let G_PING_SETUPPATH=/ec/prod/server/sas/0eusilc/PING; 
-		%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
-		%_default_setup_;
-	%end;
+	%if %symexist(G_PING_SETUPPATH) EQ 0 %then %do; 
+        %if %symexist(G_PING_ROOTPATH) EQ 0 %then %do;	
+			%put WARNING: !!! PING environment not set - Impossible to run &sysmacroname !!!;
+			%put WARNING: !!! Set global variable G_PING_ROOTPATH to your PING install path !!!;
+			%goto exit;
+		%end;
+		%else %do;
+        	%let G_PING_SETUPPATH=&G_PING_ROOTPATH./PING; 
+        	%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
+        	%_default_setup_;
+		%end;
+    %end;
 	
 	%local dsn name;
 	%let dsn=TMP&sysmacroname;
@@ -118,6 +125,8 @@ of L. Joseph.
 	%else 						%put ERROR: TEST FAILED - Wrong result returned: &name; 
 
 	%work_clean(_&dsn, _&dsn.1, _&dsn.2);
+
+	%exit:
 %mend _example_str_dsname;
 
 /* Uncomment for quick testing

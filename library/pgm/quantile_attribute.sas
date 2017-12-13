@@ -46,8 +46,13 @@ See `%%_example_quantile_attribute` for more examples.
 
 /* credits: grazzja */
 
-%macro quantile_attribute(/*input*/  quantile, cond, 
-							/*output*/ _name_=, _label_=, _case_=, _code_=);
+%macro quantile_attribute(quantile
+						, cond
+						, _name_=
+						, _label_=
+						, _case_=
+						, _code_=
+						);
 						
 	%if %error_handle(ErrorInputParameter, 
 			%macro_isblank(_name_) EQ 1 or %macro_isblank(_label_) EQ 1 or %macro_isblank(_case_) EQ 1,		
@@ -141,11 +146,18 @@ See `%%_example_quantile_attribute` for more examples.
 %mend quantile_attribute;
 
 %macro _example_quantile_attribute;
-	%if %symexist(G_PING_ROOTPATH) EQ 0 %then %do; 
-		%if %symexist(G_PING_SETUPPATH) EQ 0 %then 	%let G_PING_SETUPPATH=/ec/prod/server/sas/0eusilc/PING; 
-		%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
-		%_default_setup_;
-	%end;
+	%if %symexist(G_PING_SETUPPATH) EQ 0 %then %do; 
+        %if %symexist(G_PING_ROOTPATH) EQ 0 %then %do;	
+			%put WARNING: !!! PING environment not set - Impossible to run &sysmacroname !!!;
+			%put WARNING: !!! Set global variable G_PING_ROOTPATH to your PING install path !!!;
+			%goto exit;
+		%end;
+		%else %do;
+        	%let G_PING_SETUPPATH=&G_PING_ROOTPATH./PING; 
+        	%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
+        	%_default_setup_;
+		%end;
+    %end;
 
 	%local name case label code cond;
 	%let cond=%quote(file.inc < OUTW);
@@ -203,7 +215,7 @@ See `%%_example_quantile_attribute` for more examples.
 		%put OK: TEST PASSED - Output code D returned for input quantile &name;
 	%end;
 
-
+	%exit:
 %mend _example_quantile_attribute;
 
 /*

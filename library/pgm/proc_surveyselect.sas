@@ -57,7 +57,16 @@ selection techniques and digital computers"](http://www.jstor.org/stable/2281647
 
 /* credits: lamarpi, grazzja */
 
-%macro proc_surveyselect(idsn, odsn, method, sampsize=, rep=, seed=, strata=, ilib=WORK, olib=WORK);
+%macro proc_surveyselect(idsn
+						, odsn
+						, method
+						, sampsize=
+						, rep=
+						, seed=
+						, strata=
+						, ilib=WORK
+						, olib=WORK
+						);
 
 	/* list methods implemented in the macro */
 	%let available_methods = urs srs ;
@@ -251,11 +260,18 @@ selection techniques and digital computers"](http://www.jstor.org/stable/2281647
 
 
 %macro _example_proc_surveyselect;
-	%if %symexist(G_PING_ROOTPATH) EQ 0 %then %do; 
-		%if %symexist(G_PING_SETUPPATH) EQ 0 %then 	%let G_PING_SETUPPATH=/ec/prod/server/sas/0eusilc/PING; 
-		%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
-		%_default_setup_;
-	%end;
+	%if %symexist(G_PING_SETUPPATH) EQ 0 %then %do; 
+        %if %symexist(G_PING_ROOTPATH) EQ 0 %then %do;	
+			%put WARNING: !!! PING environment not set - Impossible to run &sysmacroname !!!;
+			%put WARNING: !!! Set global variable G_PING_ROOTPATH to your PING install path !!!;
+			%goto exit;
+		%end;
+		%else %do;
+        	%let G_PING_SETUPPATH=&G_PING_ROOTPATH./PING; 
+        	%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
+        	%_default_setup_;
+		%end;
+    %end;
 
 	%local odsn s_size v clist;
 	%let odsn=_TMP&sysmacroname;
@@ -283,11 +299,12 @@ selection techniques and digital computers"](http://www.jstor.org/stable/2281647
 	%proc_surveyselect(_dstest1001, &odsn, SRS, sampsize=alloc_sample, rep=&rep, seed=&seed, strata=strata);
 	%ds_print(&odsn);
 
-
 	/* clean */
 	%work_clean(odsn);
 	%work_clean(_dstest1000);
 	%work_clean(_dstest1001);
+
+	%exit:
 %mend _example_proc_surveyselect;
 
 /* 

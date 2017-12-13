@@ -222,11 +222,18 @@ and retrieves the resulting `name`, `type` and `length` variables.
 
 
 %macro _example_ds_contents;
-	%if %symexist(G_PING_ROOTPATH) EQ 0 %then %do; 
-		%if %symexist(G_PING_SETUPPATH) EQ 0 %then 	%let G_PING_SETUPPATH=/ec/prod/server/sas/0eusilc/PING; 
-		%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
-		%_default_setup_;
-	%end;
+	%if %symexist(G_PING_SETUPPATH) EQ 0 %then %do; 
+        %if %symexist(G_PING_ROOTPATH) EQ 0 %then %do;	
+			%put WARNING: !!! PING environment not set - Impossible to run &sysmacroname !!!;
+			%put WARNING: !!! Set global variable G_PING_ROOTPATH to your PING install path !!!;
+			%goto exit;
+		%end;
+		%else %do;
+        	%let G_PING_SETUPPATH=&G_PING_ROOTPATH./PING; 
+        	%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
+        	%_default_setup_;
+		%end;
+    %end;
 
 	/* inputs: set some local parameters of your own */
 	%local list olist lens olens typs otyps;
@@ -280,6 +287,8 @@ and retrieves the resulting `name`, `type` and `length` variables.
 	%put;
 
 	%work_clean(_dstest1,_dstest5,_dstest35);
+
+	%exit:
 %mend _example_ds_contents;
 
 /* Uncomment for quick testing

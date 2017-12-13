@@ -130,18 +130,18 @@ Licensed under [European Union Public License](https://joinup.ec.europa.eu/commu
 
 /* credits: grazzja, lamarpi */
 
-%macro quantile(var			/* Name of the input variable/list 		(REQ) */
-		,weights = 		/* Name of the weighting variable (OPT)*/
-		, probs=		/* List of probabilities 			(OPT) */
-		, type=			/* Type of interpolation considered 		(OPT) */
+%macro quantile(var		/* Name of the input variable/list 				(REQ) */
+		,weights = 		/* Name of the weighting variable 				(OPT)*/
+		, probs=		/* List of probabilities 						(OPT) */
+		, type=			/* Type of interpolation considered 			(OPT) */
 		, method=		/* Flag used to select the estimation method 	(OPT) */
-		, names=		/* Output name of variable/dataset 		(OPT) */
-		, _quantiles_=		/* Name of the output variable 			(OPT) */
-		, idsn=			/* Name of input dataset 			(OPT) */
-		, ilib=			/* Name of input library 			(OPT) */
-		, odsn=			/* Name of output dataset 			(OPT) */
-		, olib=			/* Name of output library 			(OPT) */
-		, na_rm =		/* Dummy variable 				(OPT) */
+		, names=		/* Output name of variable/dataset 				(OPT) */
+		, _quantiles_=	/* Name of the output variable 					(OPT) */
+		, idsn=			/* Name of input dataset 						(OPT) */
+		, ilib=			/* Name of input library 						(OPT) */
+		, odsn=			/* Name of output dataset 						(OPT) */
+		, olib=			/* Name of output library 						(OPT) */
+		, na_rm =		/* Dummy variable 								(OPT) */
 		);
 	%local _mac;
 	%let _mac=&sysmacroname;
@@ -610,11 +610,18 @@ Licensed under [European Union Public License](https://joinup.ec.europa.eu/commu
 %mend quantile;
 
 %macro _example_quantile;
-	%if %symexist(G_PING_ROOTPATH) EQ 0 and &_FORCE_STANDALONE_ EQ 0 %then %do; 
-		%if %symexist(G_PING_SETUPPATH) EQ 0 %then 	%let G_PING_SETUPPATH=/ec/prod/server/sas/0eusilc/PING; 
-		%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
-		%_default_setup_;
-	%end;
+	%if %symexist(G_PING_SETUPPATH) EQ 0 %then %do; 
+        %if %symexist(G_PING_ROOTPATH) EQ 0 %then %do;	
+			%put WARNING: !!! PING environment not set - Impossible to run &sysmacroname !!!;
+			%put WARNING: !!! Set global variable G_PING_ROOTPATH to your PING install path !!!;
+			%goto exit;
+		%end;
+		%else %do;
+        	%let G_PING_SETUPPATH=&G_PING_ROOTPATH./PING; 
+        	%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
+        	%_default_setup_;
+		%end;
+    %end;
 
 	%local dsn N;
 	%let dsn=TMP&sysmacroname;	
@@ -643,6 +650,8 @@ Licensed under [European Union Public License](https://joinup.ec.europa.eu/commu
 
 	%put;
 	PROC DATASETS lib=WORK nolist; DELETE &dsn; quit;
+
+	%exit:
 %mend _example_quantile;
 
 /* Uncomment for quick testing

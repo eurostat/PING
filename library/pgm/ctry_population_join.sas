@@ -141,10 +141,18 @@ Run macro `%%_example_ctry_population_join`.
 %mend ctry_population_join;
 
 %macro _example_ctry_population_join;
-	%if %symexist(EUSILC) EQ 0 %then %do; 
-		%include "/ec/prod/server/sas/0eusilc/library/autoexec/_setup_.sas";
-		%_test_setup_;
-	%end;
+	%if %symexist(G_PING_SETUPPATH) EQ 0 %then %do; 
+        %if %symexist(G_PING_ROOTPATH) EQ 0 %then %do;	
+			%put WARNING: !!! PING environment not set - Impossible to run &sysmacroname !!!;
+			%put WARNING: !!! Set global variable G_PING_ROOTPATH to your PING install path !!!;
+			%goto exit;
+		%end;
+		%else %do;
+        	%let G_PING_SETUPPATH=&G_PING_ROOTPATH./PING; 
+        	%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
+        	%_default_setup_;
+		%end;
+    %end;
 
 	/* first simple test */
 	%_dstest25;
@@ -202,6 +210,8 @@ Run macro `%%_example_ctry_population_join`.
 	%work_clean(&tab_o);
 
 	%put;
+
+	%exit:
 %mend _example_ctry_population_join;
 
 /* 

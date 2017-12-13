@@ -113,7 +113,7 @@ Wilson, S.A. (2011): ["The validator: A macro to validate parameters"](http://su
 [%macro_isblank](@ref sas_macro_isblank).
 */ /** \cond */ 
 
-/* credits: grazzja, grillma */
+/* credits: grazzja */
 
 %macro par_check(par			/* Input parameter to check 			(REQ) */
 				, type=			/* Type of input parameter to check 	(OPT) */
@@ -323,12 +323,18 @@ Wilson, S.A. (2011): ["The validator: A macro to validate parameters"](http://su
 %mend par_check;
 
 %macro _example_par_check;
-	%if %symexist(G_PING_ROOTPATH) EQ 0 %then %do; 
-		%if %symexist(G_PING_SETUPPATH) EQ 0 %then 	%let G_PING_SETUPPATH=/ec/prod/server/sas/0eusilc/PING; 
-		%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
-		%_default_setup_;
-	%end;
-
+	%if %symexist(G_PING_SETUPPATH) EQ 0 %then %do; 
+        %if %symexist(G_PING_ROOTPATH) EQ 0 %then %do;	
+			%put WARNING: !!! PING environment not set - Impossible to run &sysmacroname !!!;
+			%put WARNING: !!! Set global variable G_PING_ROOTPATH to your PING install path !!!;
+			%goto exit;
+		%end;
+		%else %do;
+        	%let G_PING_SETUPPATH=&G_PING_ROOTPATH./PING; 
+        	%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
+        	%_default_setup_;
+		%end;
+    %end;
 
 	%let par=1;
 	%put;
@@ -509,6 +515,7 @@ Wilson, S.A. (2011): ["The validator: A macro to validate parameters"](http://su
 	%if %par_check(&par, type=CHAR, set=YES NO) EQ 0 %then %put OK: TEST PASSED - Value test succeeds: &par found in (yes/no);
 	%else													%put ERROR: TEST FAILED - Value &par not boolean;
 
+	%exit:
 %mend _example_par_check;
 
 /*

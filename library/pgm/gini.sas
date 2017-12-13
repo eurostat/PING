@@ -221,11 +221,18 @@ that the macro `%%gini` runs the following `DATA` step over already sorted data:
 %mend gini;
 
 %macro _example_gini;
-	%if %symexist(G_PING_ROOTPATH) EQ 0 %then %do; 
-		%if %symexist(G_PING_SETUPPATH) EQ 0 %then 	%let G_PING_SETUPPATH=/ec/prod/server/sas/0eusilc/PING; 
-		%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
-		%_default_setup_;
-	%end;
+	%if %symexist(G_PING_SETUPPATH) EQ 0 %then %do; 
+        %if %symexist(G_PING_ROOTPATH) EQ 0 %then %do;	
+			%put WARNING: !!! PING environment not set - Impossible to run &sysmacroname !!!;
+			%put WARNING: !!! Set global variable G_PING_ROOTPATH to your PING install path !!!;
+			%goto exit;
+		%end;
+		%else %do;
+        	%let G_PING_SETUPPATH=&G_PING_ROOTPATH./PING; 
+        	%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
+        	%_default_setup_;
+		%end;
+    %end;
 
 	data gini0;
 		p="A"; x=1; output;
@@ -331,6 +338,8 @@ that the macro `%%gini` runs the following `DATA` step over already sorted data:
 	%work_clean(gini71_2);	
 	%work_clean(gini21_1);	
 	%work_clean(gini21_2);	
+
+	%exit:
 %mend _example_gini;
 
 /* Uncomment for quick testing

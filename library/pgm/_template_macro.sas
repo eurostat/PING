@@ -68,11 +68,18 @@ Visit the link <http://www.your_macro.html>.
 	 * all environment settings that are generally passed through an autoexec. Therefore,
 	 * it needs to be set here if not earlier. Plus, we make some arbitrary decision here
 	 * about where to look for the setup file */
-	%if %symexist(G_PING_ROOTPATH) EQ 0 %then %do; 
-		%if %symexist(G_PING_SETUPPATH) EQ 0 %then 	%let G_PING_SETUPPATH=/ec/prod/server/sas/0eusilc/PING; 
-		%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
-		%_default_setup_;
-	%end;
+	%if %symexist(G_PING_SETUPPATH) EQ 0 %then %do; 
+        %if %symexist(G_PING_ROOTPATH) EQ 0 %then %do;	
+			%put WARNING: !!! PING environment not set - Impossible to run &sysmacroname !!!;
+			%put WARNING: !!! Set global variable G_PING_ROOTPATH to your PING install path !!!;
+			%goto exit;
+		%end;
+		%else %do;
+        	%let G_PING_SETUPPATH=&G_PING_ROOTPATH./PING; 
+        	%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
+        	%_default_setup_;
+		%end;
+    %end;
 
 	/* inputs: set some local parameters of your own */
 	%local a b e f;
@@ -95,6 +102,7 @@ Visit the link <http://www.your_macro.html>.
 	/* note that in the case of the '_c_' parameter, we passed the name of the macro
 	variable (c) and not its value (&c) */
 	%put display your result: c=&cres;
+	%exit:
 
 %mend _example_your_macro;
 

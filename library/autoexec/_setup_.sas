@@ -403,11 +403,11 @@ global variables:
 	%let G_PING_MODULES=		&G_PING_SETUPPATH/5.5_Modules;
 	%let G_PING_AGGREGATES=		&G_PING_SETUPPATH/5.7_Aggregates;
 	%let G_PING_ANALYSIS=		&G_PING_SETUPPATH/6.3_Analysis;
-	%let G_PING_VISUALISATION=	&G_PING_SETUPPATH/6.3_Visualisation;
 	%let G_PING_ANONYMISATION=	&G_PING_SETUPPATH/6.4_Anonymisation;
-	%let G_PING_SERVICES=		&G_PING_SETUPPATH/7.4_Services;
 	%let G_PING_UPLOAD=			&G_PING_SETUPPATH/7.1_Upload;
+	%let G_PING_VISUALISATION=	&G_PING_SETUPPATH/7.2_Visualisation;
 	%let G_PING_DISSEMINATION=	&G_PING_SETUPPATH/7.3_Dissemination;
+	%let G_PING_SERVICES=		&G_PING_SETUPPATH/7.4_Services;
 
 	%let G_PING_LIBTEST=		&G_PING_SETUPPATH/test; 
 	%let G_PING_LIBTESTPGM=		&G_PING_LIBTEST/pgm;
@@ -534,8 +534,11 @@ global variables:
 * Launch "everything" together in one single macro
 */
 %macro _default_setup_;
+%put _setup_env_; 
 	%_setup_env_;
+%put _setup_loc_; 
 	%_setup_loc_(debug=no); /* legacy environment and no test */
+%put _setup_auto_; 
 	%_setup_auto_;
 	%_setup_lib_;
 	%_setup_lab_;

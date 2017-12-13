@@ -198,11 +198,18 @@ Extract duplicated/unique observations from a given dataset.
 
 
 %macro _example_obs_duplicate;
-	%if %symexist(G_PING_ROOTPATH) EQ 0 %then %do; 
-		%if %symexist(G_PING_SETUPPATH) EQ 0 %then 	%let G_PING_SETUPPATH=/ec/prod/server/sas/0eusilc/PING; 
-		%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
-		%_default_setup_;
-	%end;
+	%if %symexist(G_PING_SETUPPATH) EQ 0 %then %do; 
+        %if %symexist(G_PING_ROOTPATH) EQ 0 %then %do;	
+			%put WARNING: !!! PING environment not set - Impossible to run &sysmacroname !!!;
+			%put WARNING: !!! Set global variable G_PING_ROOTPATH to your PING install path !!!;
+			%goto exit;
+		%end;
+		%else %do;
+        	%let G_PING_SETUPPATH=&G_PING_ROOTPATH./PING; 
+        	%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
+        	%_default_setup_;
+		%end;
+    %end;
 
 	 data test;
 		geo="BE"; time=2015; hhtyp="HH_NDCH"; indic_il="LIP_MD60"; unit="PC_POP"; ivalue=9.6356617344; output;
@@ -242,6 +249,8 @@ Extract duplicated/unique observations from a given dataset.
 	%obs_duplicate(test, dim=geo time hhtyp indic_il, unidsn=unidsn, dupdsn=dupdsn, select=%quote(UNIT="PC"), 
 		ilib=WORK, olib=WORK);
 
+
+	%exit:
 %mend _example_obs_duplicate;
 
 /* Uncomment for quick testing

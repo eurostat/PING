@@ -1,16 +1,21 @@
 /** 
 ## ds_rename {#sas_ds_rename}
-Rename one or more datasets in the same SAS library.
+Rename one or more datasets in the same `SAS` library.
 
 ~~~sas
-	%ds_rename(olddsn, newdsn, lib=WORK);
+	%ds_rename(idsn, odsn=, ilib=WORK, olib=WORK);
 ~~~
 
 ### Arguments
-* `olddsn` : (list of) old name(s) of reference dataset(s);
-* `newdsn` : (list of) new name(s); must be of the same length as `olddsn`;
-* `lib` : (_option_) name of the library where the dataset(s) is (are) stored; default: `lib=WORK`.
+* `idsn` : old name(s) of reference dataset(s);
+* `ilib` : (_option_) name of the library where the old dataset(s) is (are) 
+	stored; default: `ilib=WORK`.
 	
+### Returns
+* `odsn` : new name(s); must be of the same length as `olddsn`;
+* `olib` : (_option_) name of the library where the new dataset(s) will be
+	stored; default: `olib=WORK`.
+
 ### Note
 In short, this macro runs:
 ~~~sas
@@ -78,7 +83,7 @@ In short, this macro runs:
 				"&force" EQ "YES", mac=&_mac,		
 				txt=! Input dataset &odsn already exists - Will be overwritten !, verb=warn) %then 
 			%goto warning;
-		%else %if %error_handle(WarningOutputDataset, 
+		%else %if %error_handle(ErrorOutputDataset, 
 				"&force" EQ "NO", mac=&_mac,		
 				txt=! Input dataset &odsn already exists - Operation will be skipped !, verb=warn) %then 
 			%goto exit;
@@ -111,11 +116,18 @@ In short, this macro runs:
 %mend ds_rename;
 
 %macro _example_ds_rename;
-	%if %symexist(G_PING_ROOTPATH) EQ 0 %then %do; 
-		%if %symexist(G_PING_SETUPPATH) EQ 0 %then 	%let G_PING_SETUPPATH=/ec/prod/server/sas/0eusilc/PING; 
-		%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
-		%_default_setup_;
-	%end;
+	%if %symexist(G_PING_SETUPPATH) EQ 0 %then %do; 
+        %if %symexist(G_PING_ROOTPATH) EQ 0 %then %do;	
+			%put WARNING: !!! PING environment not set - Impossible to run &sysmacroname !!!;
+			%put WARNING: !!! Set global variable G_PING_ROOTPATH to your PING install path !!!;
+			%goto exit;
+		%end;
+		%else %do;
+        	%let G_PING_SETUPPATH=&G_PING_ROOTPATH./PING; 
+        	%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
+        	%_default_setup_;
+		%end;
+    %end;
 
 	%put;
 	%put (i) Create test dataset #1 and rename it;
@@ -128,6 +140,8 @@ In short, this macro runs:
 
 	%put;
 	%work_clean(_dummy1);
+
+	%exit:
 %mend _example_ds_rename;
 
 /* Uncomment for quick testing

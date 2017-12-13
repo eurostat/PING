@@ -36,9 +36,10 @@ environment (defining where to look for macros) using the corresponding keyword 
 		"&G_PING_SETUPPATH/5.5_Extraction/pgm/"
 		"&G_PING_SETUPPATH/5.5_Estimation/pgm/"
 		"&G_PING_SETUPPATH/5.7_Aggregates/pgm/"
+		"&G_PING_SETUPPATH/6.3_Analysis/pgm/"
 		"&G_PING_SETUPPATH/7.1_Upload/pgm/"
+		"&G_PING_SETUPPATH/7.2_Visualisation/pgm/"
 		"&G_PING_SETUPPATH/7.3_Dissemination/pgm/"
-		"&G_PING_SETUPPATH/7.4_Visualisation/pgm/"
 		"&G_PING_SETUPPATH/7.4_Services/pgm/"
 		);
 ~~~

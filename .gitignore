@@ -15,7 +15,7 @@ docs/dox/html
 docs/dox/latex
 
 # library folder 
-library/autoexec/_old_*.sas
+library/autoexec/_old*.sas
 library/autoexec/TMP_SUPPORT.sas
 library/autoexec/_module_.sas
 library/autoexec/_support_.sas
