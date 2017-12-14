@@ -98,7 +98,7 @@ the code is derived.
 [PROC GMAP](http://support.sas.com/documentation/cdl/en/graphref/67881/HTML/default/viewer.htm#n01e0bon6tv6ncn1a7dlrr5fh5tr.htm).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro diagram_venn(idsn
 				, var=

@@ -106,7 +106,7 @@ http://www.math.yorku.ca/SCS/sasmac/dummy.html
 [DUMMY](http://www.datavis.ca/sas/vcd/macros/dummy.sas).
 */ /** \cond */
  
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro var_dummy(idsn    	/* Name of input dataset                  				(REQ) */
     			, var       /* Variable(s) to be dummied              				(REQ) */

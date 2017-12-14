@@ -57,7 +57,7 @@ Childress, S. and Welch, B. (2011): ["Three easy ways around nonexistent or empt
 [%ds_check](@ref sas_ds_check), [%ds_delete](@ref sas_ds_delete), [%var_check](@ref sas_var_check).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro ds_isempty(dsn		/* Input reference dataset 											(REQ) */
 				, var=		/* Name of the variable whose existence in input dataset is checked (REQ) */

@@ -82,7 +82,7 @@ that the macro `%%gini` runs the following `DATA` step over already sorted data:
 [%silc_income_gini](@ref sas_silc_income_gini), [%income_components_gini](@ref sas_income_components_gini).
 */ /** \cond */
 
-/* credits: grazzja, grillma */
+/* credits: gjacopo, marinapippi */
 
 %macro gini(dsn				/* Name of the input dataset 								(REQ) */
 			, x				/* Variable on which the Gini index is computed 			(REQ) */

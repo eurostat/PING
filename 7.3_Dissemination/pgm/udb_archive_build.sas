@@ -5,7 +5,7 @@
 [%udb_file_split](@ref sas_udb_file_split), [%udb_ds_split](@ref sas_ds_file_split).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro udb_archive_build (idir
 						, odir=

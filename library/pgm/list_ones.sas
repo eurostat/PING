@@ -36,7 +36,7 @@ Run macro `%%_example_list_ones` for more examples.
 [%list_append](@ref sas_list_append), [%list_index](@ref sas_list_index).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro list_ones(len 	/* Lenght of output list 					(REQ) */
 				, item= /* Element to replicate in output list 		(OPT) */ 

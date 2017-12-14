@@ -39,7 +39,7 @@ Run macro `%%_example_list_remove` for more examples.
 [%list_append](@ref sas_list_append).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro list_remove(list 	/* List of blank separated items 					(REQ) */
 				, item 		/* (list of) item(s) to remove from the input list 	(REQ) */ 

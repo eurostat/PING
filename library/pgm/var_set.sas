@@ -65,7 +65,7 @@ When `force_set=yes`, the value of existing variable/s may be replaced this way.
 */
 /** \cond */ 
 
-/* credits: grillma */
+/* credits: marinapippi */
 
 %macro var_set(idsn
 			, var=

@@ -37,7 +37,7 @@ Run macro `%%_example_var_compare` for more examples.
 [VFORMAT](http://support.sas.com/documentation/cdl/en/lrdict/64316/HTML/default/viewer.htm#a000245971.htm),
 */ /** \cond */
 
-/* credits: grazzja, grillma */
+/* credits: gjacopo, marinapippi */
 
 %macro var_compare(dsn 
 				, var		/* Nessuno... (REQ) */

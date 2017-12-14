@@ -59,7 +59,7 @@ Run macro `%%_example_ctry_find` for examples.
 [%ds_sample](@ref sas_ds_sample), [%ctry_select](@ref sas_ctry_select).
 */ /** \cond */
 
-/* credits: grazzja, grillma */
+/* credits: gjacopo, marinapippi */
 
 %macro ctry_find(idsn
 				, time

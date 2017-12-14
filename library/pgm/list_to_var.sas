@@ -58,7 +58,7 @@ This message is not an error.
 [%var_to_list](@ref sas_var_to_list), [%clist_to_var](@ref sas_clist_to_var). 
 */ /** \cond */
 
-/* credits: grazzja, grillma */
+/* credits: gjacopo, marinapippi */
 
 %macro list_to_var(varlst	/* Name of the input list of observations to store 	(REQ) */
 				, _var 		/* Name of the variable in the output dataset 		(REQ) */

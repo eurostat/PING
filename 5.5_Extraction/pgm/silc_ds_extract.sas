@@ -10,7 +10,7 @@ STILL ONGOING...
 [%silc_db_select](@ref sas_silc_db_select).
 */ /** \cond */
 
-/* credits: grazzja, grillma */
+/* credits: gjacopo, marinapippi */
 
 %macro silc_ds_extract(silc_lib
 					, list_var

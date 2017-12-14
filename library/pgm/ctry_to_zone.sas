@@ -67,7 +67,7 @@ Eurostat: Tutorial on ["Country codes and protocol order"](http://ec.europa.eu/e
 [%meta_countryxzone](@ref meta_countryxzone).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro ctry_to_zone(ctry			    /* list of countries       								    (REQ) */
 					, _zone_=		    /* Name of the output list of zone          			    (REQ) */

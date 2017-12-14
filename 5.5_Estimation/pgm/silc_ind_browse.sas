@@ -73,7 +73,7 @@ will store in the output html `oreport` file the following table:
 [%par_check](@ref sas_par_check).
 */ /** \cond */
 
-/* credits: grillma */
+/* credits: marinapippi */
 
 %macro silc_ind_browse(ind      /* Name of the input indicator 				               	    	(REQ)*/
 					, lib       /* Input library, where the indicator is stored	                    (REQ)*/

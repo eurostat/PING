@@ -99,7 +99,7 @@ answer `ans` is set.
 [VARNUM](http://support.sas.com/documentation/cdl/en/lrdict/64316/HTML/default/viewer.htm#a000148439.htm).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro var_check(dsn 	/* Input dataset 						(REQ) */
 				, var 	/* Input variable to test 				(REQ) */

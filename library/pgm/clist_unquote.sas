@@ -79,7 +79,7 @@ since then `clist1=clist2`.
 [%UNQUOTE](http://support.sas.com/documentation/cdl/en/mcrolref/61885/HTML/default/viewer.htm#a000543618.htm).
 */ /** \cond */
 
-/* credits: grazzja, lamarpi, grillma */
+/* credits: gjacopo, pierre-lamarche, marinapippi */
 
 %macro clist_unquote(clist 	/* List of items comma-separated by a delimiter and between parentheses (REQ) */
 					, mark=	/* Character/string used to quote items in input lists 					(OPT) */

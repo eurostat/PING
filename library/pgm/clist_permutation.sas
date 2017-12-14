@@ -54,7 +54,7 @@ use `$`, you can reset the global macro variable `G_PING_UNLIKELY_CHAR` (see `_s
 [%ranuni](@ref sas_ranuni), [%list_sequence](@ref sas_list_sequence).
 */ /** \cond */
 
-/* credits: grazzja, lamarpi */
+/* credits: gjacopo, pierre-lamarche */
 
 %macro clist_permutation(par 		/* Positive integer OR list of items comma-separated by a delimiter and between parentheses	(REQ) */
 				 		, _clist_= 	/* Name of the macro variable storing the output permutted list 							(REQ) */

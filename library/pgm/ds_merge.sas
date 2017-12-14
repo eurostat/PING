@@ -100,7 +100,7 @@ something like:
 [%ds_check](@ref sas_ds_check), [%ds_delete](@ref sas_ds_delete), [%ds_sort](@ref sas_ds_sort). 
 */ /** \cond */
 
-/* credits: grazzja, grillma */
+/* credits: gjacopo, marinapippi */
 
 %macro ds_merge(ref    		/*  master/reference dataset                                      (REQ)*/
 			 ,rlib=         /* name of the library where the master dataset `ref` is stored   (OPT)*/

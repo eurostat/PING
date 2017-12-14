@@ -67,7 +67,7 @@ In short, the macro runs the following `PROC SORT` procedure:
 [SORT](http://support.sas.com/documentation/cdl/en/proc/61895/HTML/default/viewer.htm#a000057941.htm).
 */ /** \cond */
 
-/* credits: grillma */
+/* credits: marinapippi */
 
 %macro silc_hsum_of_pvar(yyyy
 						, odsn=

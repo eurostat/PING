@@ -33,7 +33,7 @@ Run macro `%%_example_digits` for more examples.
 finding the maximum value or the number of occurrences of the variables in the table.
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro digits(value /* Numeric value whose digits are returned (REQ) */
 			);

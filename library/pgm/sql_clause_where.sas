@@ -7,7 +7,7 @@ Generate a quoted text that can be interpreted by the `WHERE` clause of a SQL pr
 ~~~
 */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro sql_clause_where(dsn
 						, var

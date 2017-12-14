@@ -86,7 +86,7 @@ Run `%%_example_silc_var_deprivation` for more examples.
 [%ds_check](@ref sas_ds_check), [%macro_isblank](@ref sas_macro_isblank).
 */ /** \cond */
 
-/* credits: grillma */
+/* credits: marinapippi */
 
 %macro silc_ind_deprivation(survey		/* Type of survey								(REQ) */
 							, time	    /* Year  of interest    	                    (REQ) */

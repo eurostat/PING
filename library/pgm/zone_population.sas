@@ -41,7 +41,7 @@ See [%ctry_population](@ref sas_ctry_population) for further description of the 
 [%meta_populationxcountry](@ref meta_populationxcountry), [%meta_countryxzone](@ref meta_countryxzone).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro zone_population(zone				/* Code of a geographical area in the EU 							(REQ) */
 					, time				/* Year of interest													(OPT) */

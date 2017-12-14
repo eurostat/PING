@@ -66,7 +66,7 @@ and [`colon, :`](http://nl.mathworks.com/help/matlab/ref/colon.html) operators i
 [%list_count](@ref sas_list_count).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro list_sequence(len=		/* Lenght of the output generated list 									(OPT) */
 					, start=	/* Starting value of the output generated list 							(OPT) */

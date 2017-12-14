@@ -128,7 +128,7 @@ Copyright (c) 2017, J.Grazzini & P.Lamarche, European Commission
 Licensed under [European Union Public License](https://joinup.ec.europa.eu/community/eupl/og_page/european-union-public-licence-eupl-v11)
 */
 
-/* credits: grazzja, lamarpi */
+/* credits: gjacopo, pierre-lamarche */
 
 %macro quantile(var		/* Name of the input variable/list 				(REQ) */
 		,weights = 		/* Name of the weighting variable 				(OPT)*/

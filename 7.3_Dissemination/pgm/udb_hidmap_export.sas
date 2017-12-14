@@ -22,7 +22,7 @@
 [%ds_contents](@ref sas_ds_contents), [%var_to_list](@ref sas_var_to_list).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro udb_hidmap_export(geo		/* List of extracted countries ISO-codse 	(REQ) */
 						, time		/* List of extracted years 					(REQ) */

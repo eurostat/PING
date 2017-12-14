@@ -27,7 +27,7 @@ The following AWK command:
 [%file_import](@ref sas_file_import), [%udb_db_split](@ref sas_udb_db_split).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro udb_file_split(geo		/* List of extracted countries ISO-codse 	(REQ) */
 					, time	/* List of extracted years 					(REQ) */

@@ -107,7 +107,7 @@ Hamilton, J.(2012): ["Obtaining a list of files in a directory using SAS functio
 */
 /** \cond */ 
 
-/* credits: grazzja, lamarpi */
+/* credits: gjacopo, pierre-lamarche */
 
 %macro file_ls(dir		/* Full path of input directory 											(REQ) */
 			, match=	/* Pattern to search/match with the filename strings 						(OPT) */

@@ -67,7 +67,7 @@ All character or numeric variables having missing values for alll observation in
 ### See also
 */ /** \cond */
 
-/* credits: grillma */
+/* credits: marinapippi */
 
 %macro var_missing_remove(idsn	/* Input dataset 														(REQ) */
 				, odsn 			/* Output dataset 														(REQ) */ 

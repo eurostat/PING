@@ -153,7 +153,7 @@ db, time` and `geo`:
 [%meta_transmissionxyear](@ref meta_transmissionxyear).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 /* Locate the bulk database (pathname and datasets name) corresponding to given survey (cross-sectional, 
 longitudinal or early), a period and/or a country */

@@ -37,7 +37,7 @@ and `time=2004 2005 2010 2012 2013 2014` (list ordered).
 [%_run_geotime](@ref sas__run_geotime).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro _egp_geotime(_time_=
 					, _geo_=

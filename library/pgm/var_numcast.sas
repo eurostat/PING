@@ -67,7 +67,7 @@ Wright, W.L. (2007): ["Creating a format from raw data or a SAS dataset"](http:/
 */
 /** \cond */ 
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro var_numcast(idsn
 				, var

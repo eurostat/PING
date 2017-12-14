@@ -60,7 +60,7 @@ Run macro `%%_example_aggregate_build`.
 [%zone_replace](@ref sas_zone_replace).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro ctry_select(idsn
 				, geo

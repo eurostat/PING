@@ -56,7 +56,7 @@ This message is not an error. See [%list_to_var](@ref sas_list_to_var).
 [%list_to_var](@ref sas_list_to_var), [%var_to_clist](@ref sas_var_to_clist), [%clist_unquote](@ref sas_clist_unquote). 
 */ /** \cond */
 
-/* credits: grazzja, grillma */
+/* credits: gjacopo, marinapippi */
 
 %macro clist_to_var(clist 	/* List of items comma-separated by a delimiter and between parentheses (REQ) */
 					, var 	/* Variable to write the items in 										(REQ) */

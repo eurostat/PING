@@ -60,7 +60,7 @@ In short the macro runs the following `DATA STEP` statements:
 [%ds_contents](@ref sas_ds_contents)
 */ /** \cond */
 
-/* credits: grillma */
+/* credits: marinapippi */
 
 %macro ds_insert(idsn		/* Input dataset 														(REQ) */
 				, odsn= 	/* Output dataset 														(OPT) */ 

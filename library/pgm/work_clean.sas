@@ -26,7 +26,7 @@ while the instruction to clean all the `WORK`ing directory is:
 the whole `WORK`ing directory is deleted).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro work_clean/parmbuff /* List of input datasets to delete from WORK library (OPT) */
 				;

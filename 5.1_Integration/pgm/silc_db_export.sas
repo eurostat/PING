@@ -71,7 +71,7 @@ In our current environment (see `G_PING_ROOTPATH` definition), the following out
 [%ds_export](@ref sas_ds_export), [%meta_transmissionxyear](@ref meta_transmissionxyear).
 **/ 
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro silc_db_export(survey			/* Input type of the survey 											(REQ) */ 
 					, time				/* Input year under consideration 										(REQ) */ 

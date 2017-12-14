@@ -41,7 +41,7 @@ and error is generated.
 [%INDEX](http://support.sas.com/documentation/cdl/en/mcrolref/61885/HTML/default/viewer.htm#a000543562.htm).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro list_index(list 	/* List of blank separated items 								(REQ) */
 				, index	/* (List of) position(s) of elements to extract from the list 	(REQ) */

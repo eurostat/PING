@@ -42,7 +42,7 @@ Carr, D.W. (2008): ["When PROC APPEND may make more sense than the DATA STEP"](h
 [%meta_countryxzone](@ref meta_countryxzone).
 */ /** \cond */
 
-/* credits: grazzja, grillma */
+/* credits: gjacopo, marinapippi */
 
 %macro silc_db_select(time				/* Year of interest										(REQ) */
 					, geo=				/* (List of) geographical area(s)/country(ies)  		(OPT) */

@@ -41,7 +41,7 @@ returns `asexpr=max(a) AS ma, b, min(h) AS mh`.
 [%sql_clause_by](@ref sas_sql_clause_by), [%sql_clause_modify](@ref sas_sql_clause_modify). 
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro sql_clause_as(dsn	/* Input dataset 											(REQ) */
 					, var	/* List of variables to operate the selection on 			(REQ) */

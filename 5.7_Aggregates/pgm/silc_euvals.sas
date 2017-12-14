@@ -57,7 +57,7 @@ legacy `%%EUvals` program.
 [%silc_agg_compute](@ref sas_silc_agg_compute).
 */ /** \cond */
 
-/* credits: grazzja, grillma */
+/* credits: gjacopo, marinapippi */
 
 %macro silc_EUvals(eu				/* ISO-code of a geographical area 					(REQ) */
 					, ms			/* ISO-codes of country part of the EU area 		(REQ) */

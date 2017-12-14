@@ -71,7 +71,7 @@ Hemedinger, C.: [Special automatic macro variables available in SAS Enterprise G
 [%_egp_prompt](@ref sas__egp_prompt).
 */ /** \cond */
 
-/* credits: grazzja, grillma */
+/* credits: gjacopo, marinapippi */
 
 %macro _egp_path(path=			/* Flag defining the type of path to be returned				(OPT) */
 				, dashreplace=	/* Boolean flag used to set to reformat the output string		(OPT) */

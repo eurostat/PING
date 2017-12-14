@@ -15,7 +15,7 @@ comparison operators:
 * supported in WHERE clauses or in PROC SQL
 */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro express_comparison(arg
 						, _exp_=

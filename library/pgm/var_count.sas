@@ -42,7 +42,7 @@ Run macro `%%_example_var_count` for more examples.
 [%ds_count](@ref sas_ds_count), [%var_check](@ref sas_var_check), [%var_info](@ref sas_var_info).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro var_count(dsn
 				, var

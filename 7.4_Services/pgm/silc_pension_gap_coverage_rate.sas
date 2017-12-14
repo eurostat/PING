@@ -61,7 +61,7 @@ and [II](https://webgate.ec.europa.eu/emplcms/social/BlobServlet?docId=14545&lan
 [%silc_pension_population_count](@ref silc_pension_population_count).
 */ /** \cond */
 
-/* credits: grillo, grazzja */
+/* credits: grillo, gjacopo */
 
 %macro silc_pension_gap_coverage_rate(year 	    /* Area of interest 						  	(REQ) */
 							  , odsn        /* Type of calculation (GAP/COVERAGE RATE)   	(REQ) */                                   

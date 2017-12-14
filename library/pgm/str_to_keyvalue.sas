@@ -70,7 +70,7 @@ Run macro `%%_example_str_to_keyvalue` for more examples.
 [%list_append](@ref sas_list_append).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro str_to_keyvalue(list
 					, key=

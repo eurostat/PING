@@ -61,7 +61,7 @@ use `$`, you can reset the global macro variable `G_PING_UNLIKELY_CHAR` (see `_s
 [%clist_unquote](@ref sas_clist_unquote).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro clist_slice(clist 	/* List of items comma-separated by a delimiter and between parentheses (REQ) */
 				, beg=  	/* First item to look for in the list 									(OPT) */

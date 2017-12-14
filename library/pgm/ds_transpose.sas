@@ -109,7 +109,7 @@ datasets.
 [%MAKEWIDE/%MAKELONG](http://www.sascommunity.org/mwiki/images/3/37/Transpose_Macros_MAKEWIDE_and_MAKELONG.sas).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro ds_transpose(idsn		/* Name of the input dataset 									(REQ) */
 					, odsn		/* Name of the output dataset 									(REQ) */
@@ -993,11 +993,11 @@ datasets.
 	/* original: %MultiTranspose(data=&dsn.1, out=out1, vars=sbp wt, by=centre subjectno, pivot=visit); */
 	%put test;
 	%ds_transpose(&dsn.1, &out.1, var=sbp wt, by=centre subjectno, pivot=visit);
-	%put rum;
 	%ds_print(&out.1);
-	*%goto exit;
+
 	/* original: %MultiTranspose(data=&dsn.1, out=out1_1, vars=sbp wt, by=centre subjectno, pivot=visit, dropMissingPivot=0); */ 
 	%ds_transpose(&dsn.1, &out.2, var=sbp wt, by=centre subjectno, pivot=visit, missing=yes);
+	%put ppp;
 	%ds_print(&out.2);
 
 	/* original: %MultiTranspose(data=&dsn.1, out=out1_2, vars=sbp wt, by=centre subjectno, pivot=visit, copy=gender); */ 
@@ -1013,8 +1013,8 @@ datasets.
 %mend _example_ds_transpose;
 
 /* Uncomment for quick testing
-options NOSOURCE MRECALL MLOGIC MPRINT NOTES;
-%_example_ds_transpose;
+options NOSOURCE MRECALL MLOGIC MPRINT NOTES;*/
+*%_example_ds_transpose;
 */
 *%_example_ds_transpose;
 

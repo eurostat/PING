@@ -37,7 +37,7 @@ should not use any instance of `%%macro_put` so as to avoid recursion (like _"un
 de grand trou noir"_). 
 */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro macro_put(macro
 				, debug=

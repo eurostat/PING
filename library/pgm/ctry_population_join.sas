@@ -31,7 +31,7 @@ Run macro `%%_example_ctry_population_join`.
 [%population_compare](@ref sas_population_compare), [%meta_populationxcountry](@ref meta_populationxcountry).
 */ /** \cond */
 
-/* credits: grazzja, grillma */
+/* credits: gjacopo, marinapippi */
 
 %macro ctry_population_join(idsn
 							, ctrydsn

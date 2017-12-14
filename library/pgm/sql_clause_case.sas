@@ -38,7 +38,7 @@ file) to another dumb (unlikely) character of your own.
 [%sql_clause_by](@ref sas_sql_clause_by), [%sql_clause_modify](@ref sas_sql_clause_modify). 
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro sql_clause_case(dsn		/* Input dataset 											(REQ) */
 					, var		/* Variable to apply the operation upon 					(REQ) */

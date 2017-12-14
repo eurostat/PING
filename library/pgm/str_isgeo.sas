@@ -57,7 +57,7 @@ on protocol order and country code.
 [%meta_countryxzone](@ref meta_countryxzone).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro str_isgeo(ctryORzone			/* (List of) string(s) to be checked as a geographical area  		(REQ) */
 				, _ans_=			/* Name of the macro variable storing the output of the test 		(REQ) */

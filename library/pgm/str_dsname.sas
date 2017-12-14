@@ -37,7 +37,7 @@ of L. Joseph.
 [%MultiTranspose][http://www.medicine.mcgill.ca/epidemiology/joseph/pbelisle/multitranspose.html].
 */ /** \cond */
 
-/* credits: grazzja, lamarpi */
+/* credits: gjacopo, pierre-lamarche */
 
 %macro str_dsname(name		/* Generic name to be used for the new dataset (REQ) */
 				, prefix=	/* Prefix to be added to the name (OPT) */

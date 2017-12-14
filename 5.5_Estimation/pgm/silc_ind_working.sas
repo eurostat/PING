@@ -98,7 +98,7 @@ The following rules apply:
 [%ds_copy](@ref sas_ds_copy).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro silc_ind_working(idsn	/* Input dataset 										(REQ) */
 						, odsn	/* Output dataset 										(REQ) */ 

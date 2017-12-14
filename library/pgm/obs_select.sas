@@ -47,7 +47,7 @@ Run `%%_example_obs_select` for more examples.
 [%ds_select](@ref sas_ds_select), [%obs_count](@ref sas_obs_count).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro obs_select(idsn		/* Input reference dataset 								(REQ) */
 				, odsn 		/* Name of output dataset                         		(REQ) */

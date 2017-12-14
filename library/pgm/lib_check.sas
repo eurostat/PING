@@ -32,7 +32,7 @@ Johnson, J. (2010): ["OBJECT_EXIST: A macro to check if a specified object exist
 [%ds_check](@ref sas_ds_check), [%dir_check](@ref sas_dir_check), [%file_check](@ref sas_file_check).
 */ /** \cond */ 
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro lib_check(lib 	/* Input library whose existence is checked (REQ) */
 				, verb= /* Legacy parameter - Ignored 	(OBS) */

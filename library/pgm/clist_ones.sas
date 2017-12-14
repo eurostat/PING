@@ -44,7 +44,7 @@ use `$`, you can reset the global macro variable `G_PING_UNLIKELY_CHAR` (see `_s
 [%list_ones](@ref sas_list_ones), [%list_append](@ref sas_list_append), [%list_index](@ref sas_list_index).
 */ /** \cond */
 
-/* credits: grazzja, grillma */
+/* credits: gjacopo, marinapippi */
 
 %macro clist_ones(len 	/* Lenght of output list 								(REQ) */
 				, item= /* Element to replicate in output list 					(OPT) */ 

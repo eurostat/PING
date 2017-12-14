@@ -50,7 +50,7 @@ Run macro `%%_example_list_permutation` for examples.
 [%ranuni](@ref sas_ranuni), [%list_sequence](@ref sas_list_sequence), [%list_sort](@ref sas_list_sort).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro list_permutation(par 		/* Positive integer OR list of blank separated items 			(REQ) */
 				 		, _list_= 	/* Name of the macro variable storing the output permutted list (REQ) */

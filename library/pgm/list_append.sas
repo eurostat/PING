@@ -67,7 +67,7 @@ Run macro `%%_example_list_append` for more examples.
 [%clist_append](@ref sas_clist_append), [%clist_difference](@ref sas_clist_difference).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro list_append(list1, list2	/* Lists of blank-separated items 							(REQ) */
 				, zip=			/* Boolean flag used to interleave the lists 				(OPT) */

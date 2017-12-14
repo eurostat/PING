@@ -94,7 +94,7 @@ and comparing the values of `c0` and `c1`:
 [%ds_isempty](@ref sas_ds_isempty), [%var_check](@ref sas_var_check).
 */ /** \cond */
 
-/* credits: grazzja, lamarpi */
+/* credits: gjacopo, pierre-lamarche */
 
 %macro ds_count(dsn			/* Input dataset 										(REQ) */
 				, _nobs_=	/* Output number of observations 						(REQ) */

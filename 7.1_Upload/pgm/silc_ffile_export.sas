@@ -54,7 +54,7 @@ been created using the macro [%silc_ind_create](@ref sas_silc_ind_create).
 [%var_to_list](@ref sas_var_to_list).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro silc_ffile_export(idsn		/* Name of the input dataset/indicator to publish 				(REQ) */
 						, geo		/* List of countries ISO-codes or geographical area 			(REQ) */

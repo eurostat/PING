@@ -6,7 +6,7 @@ Generate a quoted text that can be interpreted by the `IF` clause of a SQL proce
 	%sql_clause_if(dsn, var, _if_=, op=, lab=, log=);
 ~~~
 */
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro sql_clause_if(dsn
 						, var

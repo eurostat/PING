@@ -52,7 +52,7 @@ In short, the error code returned when `ext` is not set is the evaluation of:
 [FILEEXIST](http://support.sas.com/documentation/cdl/en/lrdict/64316/HTML/default/viewer.htm#a000210912.htm).
 */ /** \cond */
 
-/* credits: grazzja, grillma */
+/* credits: gjacopo, marinapippi */
 
 %macro file_check(fn	/* Input filename 									(REQ) */
 				, ext= 	/* Name of the extension/format of the input file 	(OPT) */

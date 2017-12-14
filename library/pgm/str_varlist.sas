@@ -66,7 +66,7 @@ which is also equivalent to:
 [%ds_check](@ref sas_ds_check), [%list_append](@ref sas_list_append).
 */ /** \cond */
 
-/* credits: grazzja, lamarpi */
+/* credits: gjacopo, pierre-lamarche */
 
 %macro str_varlist(var		/* String representing a list of dataset/variable pairs (REQ) */
 				, ds=		/* Input reference dataset 								(REQ) */

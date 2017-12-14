@@ -181,7 +181,7 @@ and `test2` as:
 [SELECT statement](http://support.sas.com/documentation/cdl/en/proc/61895/HTML/default/viewer.htm#a002473678.htm).
 */ /** \cond */
 
-/* credits: grazzja, grillma */
+/* credits: gjacopo, marinapippi */
 
 %macro ds_select(idsn			/* Input dataset 														(REQ) */
 				, odsn 			/* Output dataset 														(REQ) */ 

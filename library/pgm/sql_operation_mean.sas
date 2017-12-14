@@ -68,7 +68,7 @@ missing value (`.`).
 [%sql_operation_count](@ref sas_sql_operation_count).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro sql_operation_mean(var=		/* List of original variables to average 				(OPT) */
 						, calcvar=	/* List of previously calculated variables to average	(OPT) */

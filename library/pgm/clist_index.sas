@@ -46,7 +46,7 @@ use `$`, you can reset the global macro variable `G_PING_UNLIKELY_CHAR` (see `_s
 [%INDEX](http://support.sas.com/documentation/cdl/en/mcrolref/61885/HTML/default/viewer.htm#a000543562.htm).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro clist_index(clist 	/* List of items comma-separated by a delimiter and between parentheses (REQ) */
 				, index		/* (List of) position(s) of elements to extract from the list 	(REQ) */

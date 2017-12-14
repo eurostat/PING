@@ -86,7 +86,7 @@ an empty list is returned.
 [%var_info](@ref sas_var_info).
 */ /** \cond */
 
-/* credits: grazzja, grillma */
+/* credits: gjacopo, marinapippi */
 
 %macro var_to_list(dsn		/* Input dataset 												(REQ) */
 				, var 		/* Name of the variable in the input dataset 					(REQ) */ 

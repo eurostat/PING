@@ -53,7 +53,7 @@ Run macro `%%_example_var_info` for more examples.
 [VFORMAT](http://support.sas.com/documentation/cdl/en/lrdict/64316/HTML/default/viewer.htm#a000245971.htm),
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro var_info(dsn
 				, var

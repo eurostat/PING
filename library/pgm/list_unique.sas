@@ -39,7 +39,7 @@ Run macro `%%_example_list_unique` for more examples.
 [%list_append](@ref sas_list_append), [%list_find](@ref sas_list_find), [%list_count](@ref sas_list_count).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro list_unique(list 	/* List of blank separated items 					(REQ) */
 				, casense=	/* Boolean flag set for case sensitive comparison 	(OPT) */

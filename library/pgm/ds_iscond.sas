@@ -82,7 +82,7 @@ Gupta, S. (2006): ["WHERE vs. IF statements: Knowing the difference in how and w
 [%ds_count](@ref sas_ds_count), [%ds_check](@ref sas_ds_check), [%ds_delete](@ref sas_ds_delete), [%ds_select](@ref sas_ds_select).
 */ /** \cond */
 
-/* credits: grazzja, lamarpi */
+/* credits: gjacopo, pierre-lamarche */
 
 %macro ds_iscond(dsn		/* Input reference dataset 										(REQ) */
 				, cond		/* Expression used as a test over all observations 				(REQ) */

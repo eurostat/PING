@@ -102,7 +102,7 @@ ran).
 [SORT](http://support.sas.com/documentation/cdl/en/proc/61895/HTML/default/viewer.htm#a000057941.htm).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro ds_sort(idsn		/* Input reference dataset 									(REQ) */
 			, odsn=		/* Output dataset 											(OPT) */

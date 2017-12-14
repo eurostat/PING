@@ -127,7 +127,7 @@ itself in the case above.
 [APPEND](https://support.sas.com/documentation/cdl/en/proc/61895/HTML/default/viewer.htm#a000070934.htm).
 */ /** \cond */
 
-/* credits: grazzja, grillma */
+/* credits: gjacopo, marinapippi */
 
 %macro ds_append(dsn		/* Input master dataset to be updated					(REQ) */
 				, idsn		/* Input reference dataset(s)          					(REQ) */

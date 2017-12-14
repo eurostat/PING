@@ -78,7 +78,7 @@ is dropped from the dataset. This matters in the cases where `cond` is an expres
 [DROP](http://support.sas.com/documentation/cdl/en/lestmtsref/63323/HTML/default/viewer.htm#n1capr0s7tilbvn1lypdshkgpaip.htm).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro ds_delete(dsn		/* Input reference dataset 								(REQ) */
 				, var=  	/* List of variable(s) to drop from the dataset 		(OPT) */

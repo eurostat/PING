@@ -45,7 +45,7 @@ on other platforms.
 [%SYSEXEC](http://support.sas.com/documentation/cdl/en/mcrolref/61885/HTML/default/viewer.htm#a000171045.htm).
 */ /** \cond */
 
-/* credits: grazzja, lamarpi */
+/* credits: gjacopo, pierre-lamarche */
 
 %macro dir_ls(dir
 			, dsn=
@@ -112,8 +112,8 @@ on other platforms.
 	/* example of output of the command above: 
 	dum1     | dum2 | dum3       | dum4 | dum5    | dum6    | dum7 | dat1 | dat2 | dat3  | fileall
 	---------|------|------------|------|---------|---------|------|------|------|-------|-------------
-	22053274 | 4    | drwxrwsr-x | 13   | grazzja | 0eusilc | 4096 | Sep  | 6    | 17:04 | /ec/prod/server/sas/0eusilc/7.3_Dissemination/data/actualised/Cross2004-2014
-	22053297 | 4    | drwxrwsr-x | 2    | grazzja | 0eusilc | 4096 | Sep  | 6    | 17:05 | /ec/prod/server/sas/0eusilc/7.3_Dissemination/data/actualised/Cross2004-2014/C-2014
+	22053274 | 4    | drwxrwsr-x | 13   | gjacopo | 0eusilc | 4096 | Sep  | 6    | 17:04 | /ec/prod/server/sas/0eusilc/7.3_Dissemination/data/actualised/Cross2004-2014
+	22053297 | 4    | drwxrwsr-x | 2    | gjacopo | 0eusilc | 4096 | Sep  | 6    | 17:05 | /ec/prod/server/sas/0eusilc/7.3_Dissemination/data/actualised/Cross2004-2014/C-2014
 	....
 	*/
 

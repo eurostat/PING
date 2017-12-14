@@ -63,7 +63,7 @@ the following equality holds: `%list_index(&rlist, &ind) = &olist`.
 [FIND](http://support.sas.com/documentation/cdl/en/lrdict/64316/HTML/default/viewer.htm#a002267763.htm).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro list_replace(list 		/* List of blank separated items 					(REQ) */
 					, old 		/* (List of) element(s) to replace in input list 	(REQ) */ 

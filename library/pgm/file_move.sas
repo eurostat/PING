@@ -25,7 +25,7 @@ Run macro `%%_example_file_move` for examples.
 [%file_check](@ref sas_file_check), [%file_name](@ref sas_file_name).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro file_move(ifn
 				, ofn=

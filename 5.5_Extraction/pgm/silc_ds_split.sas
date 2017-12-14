@@ -27,7 +27,7 @@ year.
 [%var_to_list](@ref sas_var_to_list).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro silc_ds_split(geo				/* List of desired countries ISO-codse 			(REQ) */
 					, time			/* List of desired years 						(REQ) */

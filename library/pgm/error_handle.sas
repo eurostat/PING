@@ -89,7 +89,7 @@ Wilson, S.A. (2011): ["The validator: A macro to validate parameters"](http://su
 [%macro_isblank](@ref sas_macro_isblank).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro error_handle(i_errcode 	/* String defining an error code 											(REQ) */
 					, i_cond 	/* Condition/expressed evaluated to test whether there is an error or not 	(REQ) */

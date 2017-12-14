@@ -135,7 +135,7 @@ Run macro `%%_example_ds_alter` for more examples.
 [ALTER TABLE](http://support.sas.com/documentation/cdl/en/sqlproc/69049/HTML/default/viewer.htm#n1ckvfae6xf2tyn1nrivm6egpr8b.htm).
 */ /** \cond */
 
-/* credits: grillma, grazzja */
+/* credits: marinapippi, gjacopo */
 
 %macro ds_alter (dsn  	    	/* Input dataset 										    (REQ) */
 				, add=   	    /* List of variables to add                                 (OPT) */                        

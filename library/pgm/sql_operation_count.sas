@@ -72,7 +72,7 @@ missing value (`.`).
 [%sql_operation_sum](@ref sas_sql_operation_sum), [%ds_count](@ref sas_ds_count).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro sql_operation_count(var=		/* List of original variables to count 				(OPT) */
 						, calcvar=	/* List of previously calculated variables to count (OPT) */

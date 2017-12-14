@@ -48,7 +48,7 @@ Droogendyk, H. (2009): ["Which SASAUTOS macros are available to my SAS session?"
 [%list_sasautos][http://www.stratia.ca/papers/list_sasautos.sas].
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro macro_list(work=no 	/* Boolean flag set to list WORK.SASMACR entries 	(OPT) */
 				, dsn=		/* Ouput dataset 									(OPT) */

@@ -83,7 +83,7 @@ while they also evaluate:
 [%SUPERQ](http://support.sas.com/documentation/cdl/en/mcrolref/61885/HTML/default/viewer.htm#a000206633.htm).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro macro_isblank(____macro_isblank_parameter 	/* Input variable name to test 				(REQ) */
 					, verb=no						/* Boolean flag to defined the verbose mode (OPT) */

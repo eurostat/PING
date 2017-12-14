@@ -34,7 +34,7 @@ In the case the dataset exists but is empty (no observation), its structure will
 i.e., the list of variables, their types and lengths will be displayed.
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro ds_print(dsn			/* Input reference dataset 					(REQ) */
 				, lib=		/* Name of the input library 				(OPT) */

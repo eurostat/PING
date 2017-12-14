@@ -93,7 +93,7 @@ In practice, the table looks like this:
 [%meta_variablexindicator](@ref meta_variablexindicator), [%silc_db_select](@ref sas_silc_db_select).
 */ /** \cond */
 
-/* credits: grillma, grazzja */
+/* credits: marinapippi, gjacopo */
 
 %macro silc_ind_info(ind       		/* Name of the input indicator 				               							(REQ)*/
 					, _svy_=		/* Macro variable storing the name of the survey 									(OPT)*/

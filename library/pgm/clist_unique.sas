@@ -44,7 +44,7 @@ use `$`, you can reset the global macro variable `G_PING_UNLIKELY_CHAR` (see `_s
 [%clist_append](@ref sas_clist_append), [%clist_unquote](@ref sas_clist_unquote).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro clist_unique(clist 			/* List of items comma-separated by a delimiter and between parentheses (REQ) */
 					, casense=no	/* Boolean flag set for case sensitive comparison 						(OPT) */

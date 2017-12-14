@@ -36,7 +36,7 @@ Run macro `%%_example_datetime_current`.
 
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro datetime_current(stamp= 	/* Flag setting time stamp to second, hour, day or year only 	(OPT) */
 					, sep=		/* Separator used between day and time 							(OPT) */

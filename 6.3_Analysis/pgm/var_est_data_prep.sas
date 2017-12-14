@@ -41,7 +41,7 @@ Run for instance:
 [%var_est_data_prep_cond](@ref sas_var_est_data_prep_cond).
 */ /** \cond */
 
-/* credits: meszama */
+/* credits: mmatyi */
 
 %macro var_est_data_prep (idsn = 
 						, cty_var= 

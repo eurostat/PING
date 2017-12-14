@@ -75,7 +75,7 @@ In short, this macro runs the following DATA step:
 [RAND](http://support.sas.com/documentation/cdl/en/lefunctionsref/63354/HTML/default/viewer.htm#p0fpeei0opypg8n1b06qe4r040lv.htm).
 */ /** \cond */ 
 
-/* credits: lamarpi, grazzja */
+/* credits: pierre-lamarche, gjacopo */
 
 %macro ranuni(dsn			/* Reference dataset 										(REQ) */					 
 			, sampsize		/* Size of the sample, i.e. desired number of observations 	(REQ) */

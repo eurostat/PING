@@ -60,7 +60,7 @@ Examples:
 */ 
 /** \cond */
 
-/* credits: grillma */
+/* credits: marinapippi */
 
 %macro ds_datetime_integer( dsn=  	    	 /* Input dataset 	        		(REQ) */
                            	, vartime=       /* input variable    				(REQ) */

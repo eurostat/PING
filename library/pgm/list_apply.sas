@@ -37,7 +37,7 @@ It is not checked that the values in the origin variable are unique.
 [%ds_select](@ref sas_ds_select).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro list_apply(list 			/* List of blank-separated items 								(REQ) */
         		, _applst_= 	/* Name of the macro variable storing the output list 			(REQ) */

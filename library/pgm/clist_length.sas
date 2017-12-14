@@ -45,7 +45,7 @@ use `$`, you can reset the global macro variable `G_PING_UNLIKELY_CHAR` (see `_s
 [%list_length](@ref sas_list_length), [%clist_unquote](@ref sas_clist_unquote).
 */ /** \cond */
 
-/* credits: grazzja, lamarpi */
+/* credits: gjacopo, pierre-lamarche */
 
 %macro clist_length(clist 	/* List of items comma-separated by a delimiter and between parentheses (REQ) */
 					, mark=	/* Character/string used to quote items in input lists 					(OPT) */

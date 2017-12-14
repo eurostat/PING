@@ -44,7 +44,7 @@ autocall libraries.
 [SYSMACEXIST](http://support.sas.com/documentation/cdl/en/mcrolref/62978/HTML/default/viewer.htm#n0xwysoo8i2j3kn13ls4thkn3xbp.htm).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro macro_exist(macroname
 				, _ans_=

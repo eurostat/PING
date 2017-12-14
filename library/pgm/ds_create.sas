@@ -72,7 +72,7 @@ a typical example of configuration table dataset.
 [%meta_indicator_contents](@ref meta_indicator_contents).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro ds_create(odsn			/* Name of final output dataset 						(REQ) */
 				, idsn=			/* Dataset of common variables		(OPT) */

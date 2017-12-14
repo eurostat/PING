@@ -33,7 +33,7 @@ Run `%%_example_ds_nvars` for more examples.
 */
 /** \cond */ 
 
-/* credits: grazzja, grillma */
+/* credits: gjacopo, marinapippi */
 
 %macro ds_nvars(dsn 		/* Input dataset 				(REQ) */
 				, lib=		/* Name of the input library	(OPT) */

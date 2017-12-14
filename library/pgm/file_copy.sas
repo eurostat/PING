@@ -21,7 +21,7 @@ Run macro `%%_example_file_copy` for examples.
 [%file_move](@ref sas_file_move).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro file_copy(ifn	/* Full path of input filename 	(REQ) */
 				, ofn	/* Full path of output filename (REQ) */

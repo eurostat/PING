@@ -75,7 +75,7 @@ roughly equivalent to running:
 [%BQUOTE](http://support.sas.com/documentation/cdl/en/mcrolref/61885/HTML/default/viewer.htm#z3514bquote.htm).
 */ /** \cond */
 
-/* credits: grazzja, grillma, lamarpi */
+/* credits: gjacopo, marinapippi, pierre-lamarche */
 
 %macro list_quote(list 	/* List of blank separated items 							(REQ) */
 				, mark=	/* Character/string used to quote items in input list 		(OPT) */

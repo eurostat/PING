@@ -89,7 +89,7 @@ Original source code (no license, no disclaimer) is available at
 [IMPORT](http://support.sas.com/documentation/cdl/en/proc/61895/HTML/default/viewer.htm#a000308090.htm).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 	
 %macro file_import(ifn			/* Input filename 															(REQ) */
 				, idir=			/* Full path of input directory 											(OPT) */

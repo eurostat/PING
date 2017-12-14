@@ -32,7 +32,7 @@ In short, this macro runs:
 [%ds_change](@ref sas_ds_change).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro ds_rename(idsn		/* (List of) old name(s) of datasets 					(REQ) */
 				, odsn=	/* (List of) new name(s) of datasets 					(REQ) */

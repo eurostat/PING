@@ -17,7 +17,7 @@ Add variable(s) to a dataset.
 [%ano_ds_select](@ref sas_ano_ds_select), [%ano_var_mask](@ref sas_ano_var_mask).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro ano_var_add/parmbuff;
 	%local _mac;

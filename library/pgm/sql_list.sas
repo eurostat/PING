@@ -51,7 +51,7 @@ when `list` is of type `CHAR`, otherwise, when `list` if of type `NUMERIC`:
 [%list_quote](@ref sas_list_quote).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro sql_list(list	/* List of items to transform into a SQL query list (REQ) */
 				, type=	/* Type to force for the items in the list 			(OPT) */

@@ -66,7 +66,7 @@ Original source code (no license, no disclaimer) is available at
 [%sql_operation_count](@ref sas_sql_operation_count).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro sql_operation_any(var=		/* List of original variables to test 				(OPT) */
 						, calcvar=	/* List of previously calculated variables to test 	(OPT) */

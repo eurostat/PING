@@ -39,7 +39,7 @@ returns `modexpr=d FORMAT=$20. LENGTH=20 LABEL='d2', e FORMAT=10.2 LENGTH=8 LABE
 [MODIFY](https://support.sas.com/documentation/cdl/en/lestmtsref/63323/HTML/default/viewer.htm#n0g9jfr4x5hgsfn17gtma5547lt1.htm).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro sql_clause_modify(dsn	/* Input dataset 											(REQ) */
 					, var		/* List of variables to operate the selection on 			(REQ) */

@@ -58,7 +58,7 @@ input dataset `idsn` are renamed.
 [%ds_order](@ref sas_ds_order).
 */ /** \cond */ 
 
-/* credits: grazzja, grillma */
+/* credits: gjacopo, marinapippi */
 
 %macro var_rename(idsn
 				, var=

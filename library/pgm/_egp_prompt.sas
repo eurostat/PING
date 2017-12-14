@@ -40,7 +40,7 @@ from <a href="mailto:Olivier.DE-GRYSE@ext.ec.europa.eu">O.De Gryse</a> (SAS supp
 [%_egp_geotime](@ref sas__egp_geotime), [%_egp_path](@ref sas__egp_path).
 */ /** \cond */
 
-/* credits: okbisa, grazzja */
+/* credits: okbisa, gjacopo */
 
 %macro _egp_prompt(prompt_name=	/* Name of the prompt 									(OPT) */
 				, ptype=		/* Type of the prompt 									(OPT) */

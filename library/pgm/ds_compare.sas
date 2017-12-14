@@ -82,7 +82,7 @@ and retrieves the resulting `name`, `type` and `length` variables.
 [CONTENTS](http://support.sas.com/documentation/cdl/en/proc/61895/HTML/default/viewer.htm#a000085766.htm).
 */ /** \cond */ 
 
-/* credits: grillma */
+/* credits: marinapippi */
 
 %macro ds_compare(dsn1		/* Input reference dataset 				(REQ) */
                 , dsn2		/* Input reference dataset 				(REQ) */

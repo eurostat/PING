@@ -64,7 +64,7 @@ Run macro `%%_example_list_slice` for more examples.
 [%list_remove](@ref sas_list_remove),  [%list_append](@ref sas_list_append).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro list_slice(list 	/* list  blank-separated items 						(REQ) */
 				, beg=  /* First item to look for in the list 				(OPT) */

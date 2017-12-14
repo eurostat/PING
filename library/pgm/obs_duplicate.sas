@@ -34,7 +34,7 @@ Extract duplicated/unique observations from a given dataset.
 [SELECT ](http://support.sas.com/documentation/cdl/en/proc/61895/HTML/default/viewer.htm#a002473678.htm).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro obs_duplicate(idsn		/* Input dataset 															(REQ) */
 					, dim=		/* Dimensions taken into account when identifying identical observations	(OPT) */

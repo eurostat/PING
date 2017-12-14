@@ -1,7 +1,7 @@
 /* TODO ANO_DS_SELECT
 */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro ano_ds_select(geo		/* Input list of country(ies) ISO-code						(REQ) */
 					, time		/* Year of interest 										(REQ) */

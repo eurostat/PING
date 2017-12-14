@@ -53,7 +53,7 @@ The procedure above can be ran equivalently using the following command:
 [%obs_select](@ref sas_obs_select), [%ds_select](@ref sas_ds_select).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro ano_obs_select(geo		/* Input list of country(ies) ISO-code						(REQ) */
 					, time		/* Year of interest 										(REQ) */

@@ -47,7 +47,7 @@ Run macro `%%_example_list_find` for more examples.
 [FINDW](http://support.sas.com/documentation/cdl/en/lrdict/64316/HTML/default/viewer.htm#a002978282.htm).
 */ /** \cond */
 
-/* credits: grazzja, grillma, lamarpi */
+/* credits: gjacopo, marinapippi, pierre-lamarche */
 
 %macro list_find(list 		/* List of blank separated items 							(REQ) */
 				, item 		/* Element whose positions in input list are retrieved		(REQ) */ 

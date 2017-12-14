@@ -44,7 +44,7 @@ returns the attributes:
 See `%%_example_quantile_attribute` for more examples.
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro quantile_attribute(quantile
 						, cond

@@ -24,7 +24,7 @@ Create a macro variable for each distinct value of a given variable in a dataset
 [%var_to_list](@ref sas_var_to_list).
 */ /** \cond */
 
-/* credits: grazzja, grillma */
+/* credits: gjacopo, marinapippi */
 
 %macro var_to_distinct(dsn
 				, var

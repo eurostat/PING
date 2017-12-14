@@ -26,7 +26,7 @@ In short, this macro runs:
 [CHANGE](http://support.sas.com/documentation/cdl/en/proc/61895/HTML/default/viewer.htm#a000247645.htm).
 */ /** \cond */
 
-/* credits: grazzja, grillma */
+/* credits: gjacopo, marinapippi */
 
 %macro ds_change(olddsn		/* (List of) old name(s) of datasets 					(REQ) */
 				, newdsn	/* (List of) new name(s) of datasets 					(REQ) */

@@ -67,7 +67,7 @@ Run macro `%%_example_ctry_define`.
 [%ctry_in_zone](@ref sas_ctry_in_zone), [%var_to_clist](@ref sas_var_to_clist).
 */ 
 
-/* credits: grazzja, grillma */
+/* credits: gjacopo, marinapippi */
 
 %macro ctry_define(zone				/* Code of a geographical area in the EU 							(REQ) */
 				, year				/* Considered year 													(OPT) */

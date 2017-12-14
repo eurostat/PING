@@ -34,7 +34,7 @@ Run macro `%%_example_list_count` for more examples.
 [%list_length](@ref sas_list_length).
 */ /** \cond */
 
-/* credits: grazzja, lamarpi */
+/* credits: gjacopo, pierre-lamarche */
 
 %macro list_count(list 		/* List of blank separated items 								(REQ) */
 				, item 		/* Element to count the occurrence of appearance in input list 	(REQ) */ 

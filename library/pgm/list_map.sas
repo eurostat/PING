@@ -54,7 +54,7 @@ It is not checked that the values in the origin variable are unique.
 [%ds_select](@ref sas_ds_select).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro list_map(map 		/* Input reference mapping table 								(REQ) */
         		, list 		/* List of blank-separated items 								(REQ) */

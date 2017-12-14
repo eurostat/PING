@@ -77,7 +77,7 @@ Launching the example below is (in short) equivalent to running the following in
 [%diagram_venn](@ref sas_diagram_venn), [%silc_arope_press_infographics](@ref sas_silc_arope_press_infographics).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro silc_arope_plot_venn(year		/* Year of interest 			(REQ) */
 						, geo=		/* Area of interest 			(OPT) */

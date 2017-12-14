@@ -47,7 +47,7 @@ This is actually operating the following:
 [%ano_var_mask](@ref sas_ano_var_mask).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro ano_var_round(geo		/* Input list of country(ies) ISO-code									(REQ) */
 					, iudb 		/* Input bulk dataset 													(REQ) */

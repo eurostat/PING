@@ -72,7 +72,7 @@ returns `ans=0`...
 [FINDW](http://support.sas.com/documentation/cdl/en/lrdict/64316/HTML/default/viewer.htm#a002978282.htm).
 */ /** \cond */
 
-/* credits: grazzja, lamarpi */
+/* credits: gjacopo, pierre-lamarche */
 
 %macro list_compare(list1, list2	/* Lists of blank-separated items 							(REQ) */
 				  	, casense=	/* Boolean flag set for case sensitive comparison 			(OPT) */

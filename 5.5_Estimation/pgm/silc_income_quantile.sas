@@ -87,7 +87,7 @@ where `nquant` depends on `by`:
 [SORT](http://support.sas.com/documentation/cdl/en/proc/61895/HTML/default/viewer.htm#a000057941.htm).
 */ /** \cond */
 
-/* credits: grillma */
+/* credits: marinapippi */
 
 %macro silc_income_quantile(idsn   /* input dataset    		       (REQ)*/
 			 	, var         /* income  variable  		       (REQ)*/

@@ -47,7 +47,7 @@ Run macro `%%_example_population_compare` for more examples.
 [%ctry_population_compare](@ref sas_ctry_population_compare)
 */ /** \cond */
 
-/* credits: grazzja, grillma */
+/* credits: gjacopo, marinapippi */
 
 %macro population_compare(__pop_glob	/* Global cumulated population 									(REQ) */
 						, __pop_part	/* Partial cumulated population 								(REQ) */

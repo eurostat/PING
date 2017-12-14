@@ -86,7 +86,7 @@ reported only once in the output list iif `unique=yes` and `casense=yes`.
 [FINDW](http://support.sas.com/documentation/cdl/en/lrdict/64316/HTML/default/viewer.htm#a002978282.htm).
 */ /** \cond */
 
-/* credits: grazzja, grillma */
+/* credits: gjacopo, marinapippi */
 
 %macro list_intersection(list1, list2	/* Lists of blank-separated items 					(REQ) */
 						, casense=		/* Boolean flag set for case sensitive comparison 	(OPT) */

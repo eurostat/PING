@@ -62,7 +62,7 @@ for any year from 2003 on (_e.g._, what used to be `CCWGH60`).
 [%population_compare](@ref sas_population_compare), [%meta_populationxcountry](@ref meta_populationxcountry).
 */ /** \cond */
 
-/* credits: grazzja, grillma */
+/* credits: gjacopo, marinapippi */
 
 %macro ctry_population_compare(ctry_glob	/* Input formatted list of global country ISO-codes  			(REQ) */
 							, ctry_part		/* Ibid for partial country ISO-codes  							(REQ) */

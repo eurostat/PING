@@ -44,7 +44,7 @@ Run macro `%%_example_zone_replace` for more examples.
 [%ctry_in_zone](@ref sas_ctry_in_zone), [%meta_countryxzone](@ref meta_countryxzone).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro zone_replace(__geo			/* (List of) string(s) to be checked as a geographical area/country (REQ) */
 					, time=			/* Year of interest													(OPT) */

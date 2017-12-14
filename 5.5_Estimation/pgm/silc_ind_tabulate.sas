@@ -2,7 +2,7 @@
 ## silc_ind_tabulate {#sas_silc_ind_tabulate}
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro silc_ind_tabulate(idsn
 						, var

@@ -95,7 +95,7 @@ either variablse `var` or dimensions `dim` must exist in the configuration file.
 [%ds_create](@ref sas_ds_create).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro silc_ind_create(dsn				/* Name of final output dataset 											(REQ) */
 						, var=			/* Names of the variables used as breadowns for the indicator				(OPT) */

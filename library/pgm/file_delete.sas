@@ -22,7 +22,7 @@ Run macro `%%_example_file_delete` for examples.
 [%file_move](@ref sas_file_move).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro file_delete(fn	/* Input filename 	(REQ) */
 				);

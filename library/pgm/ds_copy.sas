@@ -59,7 +59,7 @@ while the command `%ds_copy(idsn, odsn, mirror=LIKE, ilib=ilib, olib=olib)` is e
 [%ds_select](@ref sas_ds_select).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro ds_copy(idsn			/* Input dataset 							(REQ) */
 			, odsn 			/* Output dataset 							(REQ) */ 

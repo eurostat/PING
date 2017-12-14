@@ -49,7 +49,7 @@ use `$`, you can reset the global macro variable `G_PING_UNLIKELY_CHAR` (see `_s
 [%clist_append](@ref sas_clist_append), [%clist_difference](@ref sas_clist_difference), [%clist_unquote](@ref sas_clist_unquote), [%list_quote](@ref sas_list_quote).
 */ /** \cond */
 
-/* credits: grazzja, grillma */
+/* credits: gjacopo, marinapippi */
 
 %macro clist_append(clist1, clist2	/* Lists of items comma-separated by a delimiter and between parentheses 	(REQ) */
 					, zip=no		/* Boolean flag used to interleave the lists 								(OPT) */

@@ -40,7 +40,7 @@ the directory. Therefore, even when a directory is created thanks to the option
 [DOPEN](http://support.sas.com/documentation/cdl/en/lrdict/64316/HTML/default/viewer.htm#a000209538.htm).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro dir_check(dir	/* Name of input directory whose existence is checked 		(REQ) */
 				, mkdir=/* Boolean flag set to force the creation of the directory 	(OPT) */

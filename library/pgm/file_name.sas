@@ -49,7 +49,7 @@ a simple basename is passed, an empty directory path is returned.
 [%file_check](@ref sas_file_check).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro file_name(path		/* Full path of a file 						(REQ) */
 				, res=file	/* Flag used to specify the output returned	(OPT) */

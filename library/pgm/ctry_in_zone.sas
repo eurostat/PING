@@ -55,7 +55,7 @@ Note that when using the default settings, a table `META_COUNTRYxZONE` must exis
 [%meta_countryxzone](@ref meta_countryxzone).
 */ /** \cond */
 
-/* credits: grazzja, grillma */
+/* credits: gjacopo, marinapippi */
 
 %macro ctry_in_zone(ctry				/* Country ISO code												(REQ) */
 					, zone				/* Code of a geographical area in the EU 						(REQ) */

@@ -36,7 +36,7 @@ to be ran as:
 [CallMacr](http://www.sascommunity.org/wiki/Macro_CallMacr).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro macro_execute/parmbuff;
 	%local _mac;

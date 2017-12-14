@@ -113,7 +113,7 @@ Wilson, S.A. (2011): ["The validator: A macro to validate parameters"](http://su
 [%macro_isblank](@ref sas_macro_isblank).
 */ /** \cond */ 
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro par_check(par			/* Input parameter to check 			(REQ) */
 				, type=			/* Type of input parameter to check 	(OPT) */

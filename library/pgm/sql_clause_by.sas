@@ -33,7 +33,7 @@ returns `exprby=a, b, h` since variable `z` is not present in `_dstest6`.
 [%sql_clause_where](@ref sas_sql_clause_where).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro sql_clause_by(dsn		/* Input dataset 											(REQ) */
 					, var		/* List of variables to operate the selection on 			(REQ) */

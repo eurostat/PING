@@ -2,7 +2,7 @@
 * Build basic equally-spaced (in number of years) sequences of dates 
 */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro ano_date_range(time	/* Date of the survey 						(REQ) */
 					, nyears=	/* Maximum length of the designed range		(REQ) */

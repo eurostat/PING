@@ -138,7 +138,7 @@ See [%ctry_in_zone](@ref sas_ctry_in_zone) for further description of this table
 [%meta_countryxzone](@ref meta_countryxzone).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro zone_to_ctry(zone				/* Code of a geographical area in the EU 										(REQ) */
 					, time=				/* Year of interest																(OPT) */

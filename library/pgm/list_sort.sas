@@ -42,7 +42,7 @@ In short, this macro runs, in the case `order=asc`, the following operations:
 [%list_to_var](@ref sas_list_to_var), [%var_to_list](@ref sas_var_to_list).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro list_sort(list		/* Input list of numeric values 			(REQ) */
 				, _list_=	/* Output ordered list 						(REQ) */

@@ -27,7 +27,7 @@
 [%ds_select](@ref sas_ds_select).
 */ /** \cond */
  
-/* credits: grillma */
+/* credits: marinapippi */
 
 %macro ds_split(idsn
 				, var=

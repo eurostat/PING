@@ -86,7 +86,7 @@ and retrieves the resulting `name`, `type` and `length` variables.
 [CONTENTS](http://support.sas.com/documentation/cdl/en/proc/61895/HTML/default/viewer.htm#a000085766.htm).
 */ /** \cond */ 
 
-/* credits: grazzja, grillma */
+/* credits: gjacopo, marinapippi */
 
 %macro ds_contents(dsn		/* Input reference dataset 															(REQ) */
 				, _varlst_=	/* Name of the output macro variable storing the list of variables' names 			(REQ) */

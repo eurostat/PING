@@ -55,7 +55,7 @@ running:
 [%var_check](@ref sas_var_check), [%ds_contents](@ref sas_ds_contents), [%ds_check](@ref sas_ds_check).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro str_isvar(dsn		/* Input reference dataset 										(REQ) */
 				, var		/* List of variables to select from the input dataset 			(REQ) */

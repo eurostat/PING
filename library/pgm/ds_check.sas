@@ -78,7 +78,7 @@ is set.
 [EXIST](http://support.sas.com/documentation/cdl/en/lrdict/64316/HTML/default/viewer.htm#a000210903.htm).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro ds_check(dsn 		/* Input dataset 					(REQ) */
 				, _dslst_= 	/* Output list of updated datasets  (REQ) */

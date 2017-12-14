@@ -55,7 +55,7 @@ selection techniques and digital computers"](http://www.jstor.org/stable/2281647
 [SURVEYSELECT](https://support.sas.com/documentation/cdl/en/statug/63033/HTML/default/viewer.htm#surveyselect_toc.htm).
 */ /** \cond */
 
-/* credits: lamarpi, grazzja */
+/* credits: pierre-lamarche, gjacopo */
 
 %macro proc_surveyselect(idsn
 						, odsn

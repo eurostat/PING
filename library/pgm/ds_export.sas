@@ -62,7 +62,7 @@ also check this [webpage](http://stats.idre.ucla.edu/other/mult-pkg/faq/how-do-i
 [EXPORT](http://support.sas.com/documentation/cdl/en/proc/61895/HTML/default/a000393174.htm).
 */ /** \cond */
 
-/* credits: grazzja, lamarpi, grillma */
+/* credits: gjacopo, pierre-lamarche, marinapippi */
 
 %macro ds_export(idsn		/* Input reference dataset 							(REQ) */
 				, ofn=		/* Name of the output filename						(OPT) */
@@ -236,14 +236,10 @@ also check this [webpage](http://stats.idre.ucla.edu/other/mult-pkg/faq/how-do-i
 
 	/* reset the debug as it was (if it ever was set) */
 	%let G_PING_DEBUG=&olddebug;
+	%work_clean(_dstest36);
 
 	%put;
-
-	%work_clean(_dstest36);
-	PROC DATASETS lib=&ilib nolist; 
-		delete _dstest36; 
-	quit; 
-
+	
 	%exit:
 %mend _example_ds_export;
 

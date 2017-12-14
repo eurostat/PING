@@ -50,7 +50,7 @@ This is actually operating the following:
 [%ano_var_round](@ref ano_var_round).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro ano_var_mask(geo			/* Input list of country(ies) ISO-code								(REQ) */
 					, iudb		/* Input bulk dataset 												(REQ) */

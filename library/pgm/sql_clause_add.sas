@@ -38,7 +38,7 @@ in `_dstest6`.
 [%sql_clause_by](@ref sas_sql_clause_by), [%sql_clause_where](@ref sas_sql_clause_where).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro sql_clause_add(dsn		/* Input dataset 											(REQ) */
 					, var		/* List of variables to add to the input dataset 			(REQ) */

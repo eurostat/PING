@@ -95,7 +95,7 @@ derives from.
 [%list_quote](@ref sas_list_quote), [%ds_split](@ref sas_ds_split).
 */ /** \cond */
 
-/* credits: grazzja, grillma */
+/* credits: gjacopo, marinapippi */
 
 %macro var_to_clist(dsn			/* Input dataset 														(REQ) */
 				, var 			/* Name of the variable in the input dataset 							(REQ) */ 

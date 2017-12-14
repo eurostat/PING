@@ -40,7 +40,7 @@ Run macro `%%_example_ctry_population` for more examples.
 [%zone_population](@ref sas_zone_population), [%meta_populationxcountry](@ref meta_populationxcountry).
 */ /** \cond */
 
-/* credits: grazzja, grillma */
+/* credits: gjacopo, marinapippi */
 
 %macro ctry_population(ctry_list	/* List of country ISO codes										(REQ) */
 					, time 			/* Year of interest													(REQ) */

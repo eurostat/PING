@@ -103,7 +103,7 @@ indicator from the so-called `rdb` library:
 [%ds_contents](@ref sas_ds_contents).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro silc_agg_compute(geo				/* Name of the geographical area considered for aggregation 		(REQ) */
 						, time			/* Year of interest  												(REQ) */

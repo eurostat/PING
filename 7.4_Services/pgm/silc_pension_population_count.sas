@@ -72,7 +72,7 @@ The status of a personed is evaluated as:
 [%silc_pension_gap_coverage_rate](@ref sas_silc_pension_gap_coverage_rate).
 */ /** \cond */
 
-/* credits: grazzja, grillma */
+/* credits: gjacopo, marinapippi */
 
 %macro silc_pension_population_count(geo			/* Citizenship/country of interest 	(REQ) */
 								, year		/* Year of interest 				(REQ) */

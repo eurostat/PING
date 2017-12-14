@@ -112,7 +112,7 @@ as long as the output dataset `odsn` differs from `idsn`, so that a duplicated d
 [%var_rename](@ref sas_var_rename).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro ds_order(idsn
 				, odsn= 

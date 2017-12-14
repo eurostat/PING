@@ -105,7 +105,7 @@ Smiley, C.A. (1999): ["A fast format macro – How to quickly create a format by s
 [%list_append](@ref sas_list_append), [PROC FORMAT](http://support.sas.com/documentation/cdl/en/proc/61895/HTML/default/viewer.htm#a002473464.htm).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro label_zip(start 		/* Lower bound of a category/range of a label 					(REQ) */
 				, end		/* Upper bound of a category/range of a label 					(REQ) */

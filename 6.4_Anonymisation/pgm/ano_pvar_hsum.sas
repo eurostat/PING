@@ -1,7 +1,7 @@
 /* TODO ANP_PVAR_HSUM
 */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro ano_pvar_hsum(geo		/* Countries to operate the calculation										(REQ) */
 					, time		/* Date of the survey 														(REQ) */

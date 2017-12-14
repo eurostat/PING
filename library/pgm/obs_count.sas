@@ -70,7 +70,7 @@ Gupta, S. (2006): ["WHERE vs. IF statements: Knowing the difference in how and w
 [%ds_select](@ref sas_ds_select).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro obs_count(dsn		/* Input reference dataset 										(REQ) */
 				, _ans_=	/* Name of the macro variable storing the result of the test 	(REQ) */

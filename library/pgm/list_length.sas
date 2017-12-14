@@ -46,7 +46,7 @@ one could also use (in the case `sep=%%quote( )`):
 [COUNTW](http://support.sas.com/documentation/cdl/en/lrdict/64316/HTML/default/viewer.htm#a002977495.htm).
 */ /** \cond */
 
-/* credits: grazzja, lamarpi, grillma */
+/* credits: gjacopo, pierre-lamarche, marinapippi */
 
 %macro list_length(list /* List of blank separated items 			(REQ) */
 				, sep=	/* Character/string used as list separator 	(OPT) */
