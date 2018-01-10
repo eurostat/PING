@@ -6,11 +6,11 @@ processes in production environments*.
 `PING` implementation started in April 2016 and it is still ongoing.
 Its main contributors are:  
 <ul>
-<li> <a href="mailto:jacopo.grazzini@ec.europa.ec">Jacopo Grazzini</a> </li>
-<li> <a href="mailto:marina.grillo@arhs-developments.com">Marina Grillo</a> </li>
-<li> <a href="mailto:pierre.lamarche@ec.europa.eu">Pierre Lamarche</a> </li>
-<li> <a href="mailto:matyas.meszaros@ec.europa.eu">Matyas Meszaros</a> </li>
-<li> <a href="mailto:veronica.nica@ext.ec.europa.ec">Veronica Nica</a> </li>
+<li> <a href="mailto:jacopo.grazzini@ec.europa.ec">Jacopo Grazzini</a> (<a href="https://github.com/gjacopo">gjacopo</a>) </li>
+<li> <a href="mailto:marina.grillo@arhs-developments.com">Marina Grillo</a> (<a href="https://github.com/marinapippi">marinapippi</a>) </li>
+<li> <a href="mailto:pierre.lamarche@ec.europa.eu">Pierre Lamarche</a> (<a href="https://github.com/pierre-lamarche">pierre-lamarche</a>) </li>
+<li> <a href="mailto:matyas.meszaros@ec.europa.eu">Matyas Meszaros</a> (<a href="https://github.com/mmatyi">mmatyi</a>) </li>
+<li> <a href="mailto:veronica.nica@ext.ec.europa.ec">Veronica Nica</a> (<a href="https://github.com/Nica87">Nica87</a>) </li>
 <li> ... </li>
 </ul>
 

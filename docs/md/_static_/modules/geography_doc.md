@@ -8,6 +8,7 @@ Contents:
 - @subpage sas_ctry_population_compare
 - @subpage sas_ctry_find
 - @subpage sas_ctry_select
+- @subpage sas_obs_geocopy
 - @subpage sas_population_compare
 - @subpage sas_ctry_population_join
 - @subpage sas_str_isgeo
