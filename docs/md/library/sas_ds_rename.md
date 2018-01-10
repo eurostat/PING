@@ -1,15 +1,20 @@
 ## ds_rename {#sas_ds_rename}
-Rename one or more datasets in the same SAS library.
+Rename one or more datasets in the same `SAS` library.
 
 ~~~sas
-	%ds_rename(olddsn, newdsn, lib=WORK);
+	%ds_rename(idsn, odsn=, ilib=WORK, olib=WORK);
 ~~~
 
 ### Arguments
-* `olddsn` : (list of) old name(s) of reference dataset(s);
-* `newdsn` : (list of) new name(s); must be of the same length as `olddsn`;
-* `lib` : (_option_) name of the library where the dataset(s) is (are) stored; default: `lib=WORK`.
+* `idsn` : old name(s) of reference dataset(s);
+* `ilib` : (_option_) name of the library where the old dataset(s) is (are) 
+	stored; default: `ilib=WORK`.
 	
+### Returns
+* `odsn` : new name(s); must be of the same length as `olddsn`;
+* `olib` : (_option_) name of the library where the new dataset(s) will be
+	stored; default: `olib=WORK`.
+
 ### Note
 In short, this macro runs:
 ~~~sas

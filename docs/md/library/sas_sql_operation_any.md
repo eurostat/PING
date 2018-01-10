@@ -37,7 +37,6 @@ Then it is only necessary to run the following SQL procedure:
 	  FROM dsn1;
 	quit; 
 ~~~
-
 so as to create the following table `dsn2`:
  absa | conda | condabsa 
 -----:|------:|---------:
@@ -63,4 +62,4 @@ Original source code (no license, no disclaimer) is available at
 
 ### See also
 [%sql_operation_mean](@ref sas_sql_operation_mean), [%sql_operation_sum](@ref sas_sql_operation_sum), 
-[%sql_operation_count](@ref sas_sql_operation_count), [%ds_iscond](@ref sas_ds_iscond).
+[%sql_operation_count](@ref sas_sql_operation_count).

@@ -7,10 +7,10 @@ each observation in a SQL procedure.
 ~~~
 
 ### Arguments
-* `var` : (_option_) variable(s) for which the mean will be returned; the variable(s) listed in
-	`var` must be already present (_i.e._, originally coded in the processed table);
-* `calcvar` : (_option_) ibid, however the variable(s) listed in `calcvar` refer to previously calculated 
-	variables (_e.g._ , within the same `SELECT` statement).
+* `var` : (_option_) variable(s) for which the mean will be returned; the variable(s) 
+	listed in `var` must be already present (_i.e._, originally coded in the processed table);
+* `calcvar` : (_option_) ibid, however the variable(s) listed in `calcvar` refer to previously 
+	calculated variables (_e.g._ , within the same `SELECT` statement).
 
 ### Returns
 `expr` : expression for calculating the arithmetic mean of a series of variables, to be used 

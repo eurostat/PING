@@ -8,17 +8,17 @@ Sum P varibale by row and  columns
 ### Arguments
 * `yyyy` : reference year;  
 * `odsn` : a output dataset;
-* `ds`   : type of input dataset ;
+* `ds`   : type of input dataset;
 * `var`  : name of variable on which the sum is calculated;
-* `by`   : list of variables used for GROUP BY condition in SQL statement; by default: empty, _i.e._ `PB010 PB020 PHID` is used;
+* `by`   : list of variables used for GROUP BY condition in SQL statement; by default: empty, _i.e._ `PB010 PB020 PHID` 
+	is used;
 * `ilib` : (_option_) name of the input library; by default: empty, _i.e._ `pdb` is used;
   
 ### Returns
 * `odsn` : (_option_) name of the output dataset (in `WORK` library);by default: empty, _i.e._ `hsum` is used;
 * `ovar` :  sum variable ;by default: empty, _i.e._ `hsum` is used;
 * `rvar` :  sumrow P  variables ;by default: empty, _i.e._ `Ptot` is used;
-* `olib` : (_option_) name of the output library; by default: empty, _i.e._ `WORK` is used;
-	is used.
+* `olib` : (_option_) name of the output library; by default: empty, _i.e._ `WORK` is used.
 
 ### Examples
 Let us consider the test dataset #45:
@@ -44,8 +44,8 @@ DB020 | DB010 |   RB030  |EQ_INC20 | RB050a | QUINTILE |    QUANTILE
  
 Run macro `%%_example_income_quantile` for more examples.
 
-### Notes
-1. In short, the macro runs the following `PROC SORT` procedure:
+### Note
+In short, the macro runs the following `PROC SORT` procedure:
 
 ~~~sas
 	PROC SQL noprint;

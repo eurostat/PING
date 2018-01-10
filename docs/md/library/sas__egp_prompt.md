@@ -2,11 +2,14 @@
 Re-create the list of choice(s) from the (multiple) choice(s) prompt in the client SAS EG project
 (similar to SAS EG version prior to 4.1).
 
+~~~sas
 	%_egp_prompt(prompt_name=, ptype=, penclose=, pmultipl=, psepar=, verb=no);
+~~~
 
 ### Arguments
 * `prompt_name` : name of the prompt;                                                              
-* `ptype` : (_option_) type of the prompt, _i.e._ `CHAR`, `INTEGER`, `NUMERIC`, `DATE`, etc...;                                
+* `ptype` : (_option_) type of the prompt, _i.e._ `STRING` (or `CHAR`), `INTEGER`, `NUMERIC`
+	(or `FLOAT`), `DATE`, etc...;                                
 * `penclose` : (_option_) boolean flag (`yes/no`) set if the 'Enclosed values with quotes' 
 	was selected in SAS/EG 4.1;                     
 * `pmultipl` : (_option_) boolean flag (`yes/no`) if the prompt is a 'Multiple choices' prompt;                                          

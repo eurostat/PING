@@ -37,4 +37,5 @@ Run `%%_example_silc_db_select` for examples.
 Carr, D.W. (2008): ["When PROC APPEND may make more sense than the DATA STEP"](http://www2.sas.com/proceedings/forum2008/085-2008.pdf).
 
 ### See also
-[%silc_ds_extract](@ref sas_silc_ds_extract), [%meta_countryxzone](@ref meta_countryxzone).
+[%silc_ds_extract](@ref sas_silc_ds_extract),
+[%meta_countryxzone](@ref meta_countryxzone).

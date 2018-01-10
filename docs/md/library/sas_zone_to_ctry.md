@@ -6,7 +6,7 @@ Return a list and/or a table composed of countries (geo) belonging to a given ge
 ~~~
 
 ### Arguments
-* `zone` : code of the zone, _e.g._, EU28, EA19, etc...;
+* `zone` : code of a geographical zone, _e.g._, EU28, EA19, etc...;
 * `time` : (_option_) selected year; if empty, all the countries that belong or once belonged 
 	to the area are returned; default: not set;
 * `cds_ctryxzone` : (_option_) configuration file storing the description of geographical areas; by default,

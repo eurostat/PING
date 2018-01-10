@@ -2,7 +2,9 @@
 Create a working copy of a given indicator, possibly including already calculated values for other 
 countries during the same year.
 
+~~~sas
 	%silc_ind_working(idsn, odsn, time=, geo=, ilib=);
+~~~
 
 ### Arguments
 * `idsn` : an input dataset reference;
@@ -20,8 +22,10 @@ countries during the same year.
 When dealing with EU-SILC datasets and considering the already existing indicator `LI01` as an input
 source dataset, you can run the commands:
 
+~~~sas
 	libname rdb "&G_PING_C_RDB";
 	%silc_ind_working(LI01, dsn, ilib=rdb);
+~~~
 
 so as to create, in `WORK` library, the dataset `dsn` that is initialised with the following table: 
 | geo | time | indic_il  | hhtyp       | currency | ivalue       | iflag | unrel | lastup  | lastuser |
@@ -31,7 +35,9 @@ hence, `dsn` is shaped like `LI01`.
 
 If instead, your run (still using the same indicator as a source table):
 
+~~~sas
 	%silc_ind_working(LI01, dsn, geo=AT BE EU28, time=2015, ilib=rdb);
+~~~
 
 the dataset `dsn` created in `WORK` library will this time look like this:
 geo | time | indic_il  | hhtyp       | currency | ivalue       | iflag | unrel | lastup  | lastuser
@@ -51,33 +57,41 @@ The following rules apply:
 	* when none of `geo` and `time` parameters are passed, the structure of the table (_i.e._, its fields)
 	are simply reproduced in `odsn`:
 
+~~~sas
 	    PROC SQL;
 		   CREATE TABLE WORK.&odsn like &ilib..&idsn; 
 	    quit; 
+~~~
 	* when `geo` parameter is passed but not `time`, all countries not represented in `geo` are retrieved
 	for all years present in the dataset:
 
+~~~sas
 	    PROC SQL;
 			CREATE TABLE WORK.&odsn  AS
 			SELECT * FROM &ilib..&idsn 
 			WHERE geo not in %list_quote(&geo);
 	    quit; 
+~~~
 	* when `time` parameter is passed but not `geo`, all countries are retrieved for the given 
 	year `time`:
 
+~~~sas
         PROC SQL;
 		    CREATE TABLE WORK.&odsn  AS
 		    SELECT * FROM &ilib..&idsn 
 		    WHERE time = &time;
 	    quit; 
+~~~
 	* when both parameters `geo` and `time` are passed, all countries not represented in `geo` are retrieved 
 	for the given year `time`.
 
+~~~sas
 	    PROC SQL;
 			CREATE TABLE WORK.&odsn  AS
 			SELECT * FROM &ilib..&idsn 
 			WHERE geo not in %list_quote(&geo) and time = &time;
 	    quit; 
+~~~
 
 ### See also
 [%ds_copy](@ref sas_ds_copy).

@@ -2,7 +2,9 @@
 This macro retrieves either the name of the client SAS EG project (without its extension) 
 it is launched in or the path of where it is located.
 
+~~~sas
 	%let p=%_egp_path(path=base, dashreplace=no, parent=no);
+~~~
   
 ### Arguments
 * `path` : (_option_) flag set to `base/path/drive` when respectively the 
@@ -27,24 +29,29 @@ it is launched in or the path of where it is located.
 Imagine the name of the program running this function is `test-01.egp` and is located in 
 the directory `Z:\main\test`, then:
 
+~~~sas
 	%let p=%_egp_path(path=base);
-
+~~~
 returns: `p=test-01`.
 
+~~~sas
 	%let p=%_egp_path(path=base, dashreplace=yes);
-
+~~~
 returns: `p=test01`.
 
+~~~sas
 	%let p=%_egp_path(path=path); 
-
+~~~
 returns: `p=Z:/main/test`
 
+~~~sas
 	%let p=%_egp_path(path=drive); 
-	
+~~~	
 returns: `p=/main/test`.
 
+~~~sas
 	%let p=%_egp_path(path=path, parent=yes); 
-	
+~~~	
 returns: `p=Z:/main`.
 
 Run macro `%%_example__egp_path` for examples.

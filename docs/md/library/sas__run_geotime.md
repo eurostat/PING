@@ -1,7 +1,9 @@
 ## _run_geotime {#sas__run_geotime}
 Run a given macro for every single year and zone of any given periods and geographical areas.
 
+~~~sas
 	%_run_geotime(time, geo, timeloop=yes, geoloop=yes, process=, macro_arguments...);
+~~~
 
 ### Arguments
 * `time` : (list of) period(s)/year(s) considered for calculation; 
@@ -27,6 +29,7 @@ Run a given macro for every single year and zone of any given periods and geogra
 1. In short, this macro essentially runs a loop over considered period/geographical areas,
 _e.g._:
 
+~~~sas
 	%do _iy=1 %to %list_length(&time);		
 	    %let _yyyy=%scan(&time, &_iy);
 		%do _ig=1 %to %list_length(&geo); 
@@ -35,16 +38,20 @@ _e.g._:
 		    %macro_execute(&process, &_yyyy, &_geo, &_ctry, &arguments);
 		%end;
 	%end; 
+~~~
 2. In the case the macro `%&process` takes both positional and keyword arguments, then the above 
 keyword argument `process=` to `%_run_geotime` macro shall be inserted after the positional 
 arguments of `%&process` in the list `macro_arguments`. Say it otherwise, let us say that a 
 given macro `%_process` is used as follows:
 
+~~~sas
 	%_process(year, geo, ctries, a, b, c=, d=);
+~~~
 then the generic running of this function shall be written as:
 
+~~~sas
 	%_run_geotime(time, geo, a, b, process=_process, c=, d=);
+~~~
 
 ### See also
-[%macro_execute](@ref sas_macro_execute), [%_process_geotime](@ref sas__process_geotime), 
-[%str_to_keyvalue](@ref sas_str_to_keyvalue).
+[%macro_execute](@ref sas_macro_execute), [%str_to_keyvalue](@ref sas_str_to_keyvalue).

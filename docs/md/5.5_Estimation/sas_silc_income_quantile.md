@@ -65,7 +65,7 @@ DB020 | DB010 |   RB030  |EQ_INC20 | RB050a | QUINTILE |    QUANTILE
 Run macro `%%_example_silc_income_quantile` for more examples.
 
 ### Notes
-1. In short, the macro runs the following `PROC SORT` procedure:
+In short, the macro runs the following `PROC SORT` procedure:
 
 ~~~sas
 	PROC UNIVARIATE data=&ilib..&idsn noprint;
@@ -74,8 +74,11 @@ Run macro `%%_example_silc_income_quantile` for more examples.
 		 weight &weight; 
 	     output out=WORK.&_idsn pctlpre=P_ pctlpts=&nquant to 100 by &nquant;
 	RUN; 
-where depend on &by:
-      nquant=%sysevalf(100/&by)
+~~~
+where `nquant` depends on `by`:
+
+~~~sas
+	nquant=%sysevalf(100/&by)
 ~~~
 
 ### See also

@@ -40,7 +40,9 @@ returns: `conc=("1","A","2","B","3","C")`.
 Run macro `%%_example_clist_append` for more examples.
 
 ### Note
-The macro will not return exactly what you want if the symbol £ appears somewhere in the list.
+The macro will not return exactly what you want if the symbol `$` appears somewhere in the list. If you need to
+use `$`, you can reset the global macro variable `G_PING_UNLIKELY_CHAR` (see `_setup_` file) to another dumb 
+(unlikely) character of your own.
 
 ### See also
 [%clist_append](@ref sas_clist_append), [%clist_difference](@ref sas_clist_difference), [%clist_unquote](@ref sas_clist_unquote), [%list_quote](@ref sas_list_quote).

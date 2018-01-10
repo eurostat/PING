@@ -2,7 +2,9 @@
 Create the ordered lists of countries and periods from the multiple choices prompt in the client 
 SAS EG project (similar to SAS EG version prior to 4.1).
 
+~~~sas
 	%_egp_geotime(_time_=, _geo_=, pmultipl=yes);
+~~~
 
 ### Arguments
 * `_geo_` : name of the variable associated to the `geo` prompt, _i.e._ the one returned
@@ -23,8 +25,9 @@ Given the following prompt (with multiple selections) and the corresponding sele
 where the names of the prompt have been set respectively (from top to bottom, highlighted in red) 
 to `geo` and `time`, the call:
 
+~~~sas
 	%_egp_geotime(_time_=time, _geo_=geo, pmultipl=yes);
-
+~~~
 will return: `geo=BE CY AT EU28` (`DUMMY` not selected and `EU28` put at the end of the list)
 and `time=2004 2005 2010 2012 2013 2014` (list ordered).
 
