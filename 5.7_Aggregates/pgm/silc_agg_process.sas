@@ -18,8 +18,8 @@ from past years.
 	of a given aggregate into another one; it will take the form `((ogeo1=igeo1) (ogeo1=ogeo2) ...)`
 	where all observations `igeo1` are copied (while preserved) to `ogeo1` in the output table,
 	ibid for `igeo2` and `ogeo2`, _etc_...; note that the outermost parentheses `(...)` are not
-	necessary; default: `geo2geo` is empty, _i.e._ no copy is operated; see [%geo_copy](@ref sas_geo_copy)
-	for more details;
+	necessary; default: `geo2geo` is empty, _i.e._ no copy is operated; see 
+	[%obs_geocopy](@ref sas_obs_geocopy) for more details;
 * `max_yback` : (_option_) number of years used for imputation of missing data; it tells how 
 	to look backward in time, _i.e._ consider the `max_yback` years prior to the estimated 
 	year; see [%silc_agg_compute](@ref sas_silc_agg_compute) for further details; default: 
@@ -154,7 +154,7 @@ for further details on effective computation.
 
 ### See also
 [%silc_agg_compute](@ref sas_silc_agg_compute), [%silc_EUvals](@ref sas_silc_euvals), 
-[%geo_copy](@ref sas_geo_copy), [%ctry_select](@ref sas_ctry_select), 
+[%obs_geocopy](@ref sas_obs_geocopy), [%ctry_select](@ref sas_ctry_select), 
 [%zone_to_ctry](@ref sas_zone_to_ctry), [%var_to_list](@ref sas_var_to_list).
 */ /** \cond */
 
@@ -528,7 +528,7 @@ for further details on effective computation.
 						SET &olib..&__ind(WHERE=(not(&L_TIME=&__year and &L_GEO="&__ogeo"))); 
 					run;
 					/* copy all observations of __IGEO (see below) into __OGEO */
-					%geo_copy(&__ind, /*__igeo*/%scan(&__geo2geo, 2, %str(=)), &__ogeo, 
+					%obs_geocopy(&__ind, /*__igeo*/%scan(&__geo2geo, 2, %str(=)), &__ogeo, 
 						time=&__year, lib=&olib, replace=YES);
 				%end;
 			%end;
