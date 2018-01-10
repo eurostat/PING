@@ -227,12 +227,20 @@ will store in the output html `oreport` file the following table:
 %mend silc_ind_browse;
 
 %macro _example_silc_ind_browse;
-
-	%if %symexist(G_PING_ROOTPATH) EQ 0 %then %do; 
-		%if %symexist(G_PING_SETUPPATH) EQ 0 %then 	%let G_PING_SETUPPATH=/ec/prod/server/sas/0eusilc/PING; 
-		%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
-		%_default_setup_;
-	%end;
+	%if %symexist(G_PING_SETUPPATH) EQ 0 %then %do; 
+        %if %symexist(G_PING_ROOTPATH) EQ 0 %then %do;	
+			%put WARNING: !!! PING environment not set - Impossible to run &sysmacroname !!!;
+			%put WARNING: !!! Set global variable G_PING_ROOTPATH to your PING install path !!!;
+			%goto exit;
+		%end;
+		%else %do;
+			%let G_PING_PROJECT=	0EUSILC;
+        	%let G_PING_SETUPPATH=&G_PING_ROOTPATH./PING; 
+			%let G_PING_DATABASE=	/ec/prod/server/sas/0eusilc;
+        	%include "&G_PING_SETUPPATH/library/autoexec/_eusilc_setup_.sas";
+        	%_default_setup_;
+		%end;
+    %end;
 
 	%put (i) Indicator does not exist in the library;
     %let ind=DUMMY;
@@ -249,7 +257,8 @@ will store in the output html `oreport` file the following table:
 	%let lib=LIBCRDB2;
    	%silc_ind_browse(&ind,&lib);
  
- %mend _example_silc_ind_browse;
+	%exit:
+%mend _example_silc_ind_browse;
 
 /* Uncomment for quick testing
 options NOSOURCE MRECALL MLOGIC MPRINT NOTES; */
