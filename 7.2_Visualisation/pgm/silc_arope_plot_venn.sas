@@ -312,8 +312,7 @@ Launching the example below is (in short) equivalent to running the following in
 	%let components=ARP DEP LWI;
 	%let _label=	(%list_quote(&components)); 	/* ("at risk of poverty", "severely materially deprived", "low work intensity") */
 	%let _hover=	(%list_quote(&LABEL_AROPE));	/* note the importance of the order: 1 2 3 12 23 13 123 */
-%put &_label;
-%put &_hover;
+
 	/* population concerned:
 	* 	R_NDEP_NLOW : at risk of poverty but not severely materially deprived and not living in a household with low work intensity 
 	* 	NR_DEP_NLOW : not at risk of poverty but severely materially deprived and not living in a household with low work intensity 
