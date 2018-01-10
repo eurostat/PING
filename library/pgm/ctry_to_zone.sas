@@ -106,28 +106,28 @@ Eurostat: Tutorial on ["Country codes and protocol order"](http://ec.europa.eu/e
 
 	%local _ans		/* temporary answer variable */
 		   _dsn
-		    LABGEO
+		    l_GEO
 		   _METHOD_;    /* dummy flag */
 	/* initialise some of those variables */
 	%let _METHOD_=BEST;
 	%let _dsn=TMP_%upcase(&sysmacroname);
 
 	/* set the default geo variable */
-	%if %symexist(G_PING_LAB_GEO) %then 		%let LABGEO=&G_PING_LAB_GEO;
-	%else										%let LABGEO=geo;
+	%if %symexist(G_PING_LAB_GEO) %then 		%let l_GEO=&G_PING_LAB_GEO;
+	%else										%let l_GEO=geo;
 
 	%if &_METHOD_=BEST %then %do;
 
        PROC TRANSPOSE data=&clib..&cds_ctryxzone out=&_dsn.1 
 			name=ZONE
 			prefix=TIME_;
-			by &LABGEO;
+			by &l_GEO;
 		run;
 
         PROC SQL noprint;
 			CREATE TABLE  &_dsn.2  as SELECT distinct ZONE
 			FROM &_dsn.1 
-			WHERE &LABGEO in %sql_list(&ctry) 
+			WHERE &l_GEO in %sql_list(&ctry) 
 			%if not %macro_isblank(time) and "&time"^="." %then %do;
 				and (TIME_2>&time and  TIME_1<=&time)
 			%end;
@@ -164,7 +164,7 @@ Eurostat: Tutorial on ["Country codes and protocol order"](http://ec.europa.eu/e
 		%do _i=1 %to %list_length(&zone);
 			%let _zone=%scan(&zone, &_i);
 			%do _k=1 %to %list_length(&ctry);
-				%ctry_in_zone(%scan(&ctry, &_k), &_zone, _ans_=_ans, time=&time, var=&LABGEO, cds_ctryxzone=&cds_ctryxzone, clib=&clib);
+				%ctry_in_zone(%scan(&ctry, &_k), &_zone, _ans_=_ans, time=&time, var=&l_GEO, cds_ctryxzone=&cds_ctryxzone, clib=&clib);
 				%if &_ans=1 and %list_find(&lzone, &_zone) <=0 %then %do;
 					%let lzone=&lzone &_zone;
 				%end;

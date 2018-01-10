@@ -75,6 +75,7 @@ one could also use (in the case `sep=%%quote( )`):
 	%let _len=1;
 
 	%do %while (%quote(%scan(&list, &_len, &sep)) ne %quote());
+	/*%do %while (%quote(%scan(%quote(&list), &_len, &sep)) ne %quote());*/
 		/* note the use of %quote: this is necessary when dealing with items like -3.55 (example iv below) */
 		%let _len=%eval(&_len+1);
 	%end;

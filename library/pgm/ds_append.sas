@@ -157,9 +157,9 @@ itself in the case above.
 	/* DSN/LIB: check/set */
 	%if %macro_isblank(lib)	%then 	%let lib=WORK;
 	%if %error_handle(ErrorInputDataset, 
-		%ds_check(&dsn, lib=&lib) EQ 1, mac=&_mac,		
-		txt=!!! Master dataset %upcase(&dsn) not found !!!) %then
-	%goto exit;
+			%ds_check(&dsn, lib=&lib) EQ 1, mac=&_mac,		
+			txt=!!! Master dataset %upcase(&dsn) not found !!!) %then
+		%goto exit;
 
 	/* IDSN/ILIB: check/set */
 	%if %macro_isblank(ilib) %then 	%let ilib=WORK;
