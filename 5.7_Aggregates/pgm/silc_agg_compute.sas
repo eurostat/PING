@@ -6,32 +6,32 @@ _(iii)_ during a given year, possibly imputing data for missing countries from p
 ~~~sas
 	%silc_agg_compute(geo, time, idsn, odsn, ctrylst=,
 				max_yback=0, thr_min=0.7, thr_cum=0, agg_only=yes, force_Nwgh=NO, 
-				ilib=WORK, olib=WORK, pdsn=META_POPULATIONxCOUNTRY, plib=&G_PING_LIBCFG);
+				ilib=WORK, olib=WORK, pdsn=META_POPULATIONxCOUNTRY, plib=G_PING_LIBCFG);
 ~~~
 
 ### Arguments
 * `geo` : a given geographical area, _e.g._ EU28, EA, ...;
 * `time` : year of interest;
 * `idsn` : name of the dataset storing the indicator for which an aggregated value is 
-	estimated over the `&geo` area and during the `&time` year;
+	estimated over the `geo` area and during the `time` year;
 * `ctrylst` : (_option_) list of (blank-separated, no quote) strings representing the 
-	ISO-codes of all the countries supposed to belong to `&geo`; when not provided, it is 
-	automatically determined from `&geo` and `&time` (see macro [%zone_to_ctry](@ref sas_zone_to_ctry));
+	ISO-codes of all the countries supposed to belong to `geo`; when not provided, it is 
+	automatically determined from `geo` and `time` (see macro [%zone_to_ctry](@ref sas_zone_to_ctry));
 * `max_yback` : (_option_) number of years used for imputation of missing data; it tells how 
-	to look backward in time, _i.e._ consider the `&max_yback` years prior to the estimated; 
+	to look backward in time, _i.e._ consider the `max_yback` years prior to the estimated; 
 	default: `max_yback=0`, _i.e._ only data available for current year shall be considered; 
 	`max_yback` can also be set to `_ALL_` so as to take all available data from the input 
 	dataset, whatever the year considered: in that case, the other argument(s) normally used 
 	for building the list of countries (see below: `thr_min`) are ignored; default: 
 	`max_yback=0` (_i.e._, only current year);
 * `thr_min` : (_option_) value (in range [0,1]) of the threshold used to test whether 
-	currently (_i.e._ for the year `&time` under investigation):
-		available population [&time] / global population [&time] >= `&thr_min` ? 
+	currently (_i.e._ for the year `time` under investigation):
+		available population [time] / global population [time] >= `thr_min` ? 
 	default: `thr_min=0.7`, _i.e._ the available population should be at least 70% of the 
 	global population of the `geo` area; 
 * `thr_cum`: (_option_) value (in range [0,1]) of the threshold used to test the cumulated 
 	available population, _i.e._ whether: 
-		available population [&time-&maxyback,&time] / global population [&time] >= `&thr_cum` ? 
+		available population [&time-&maxyback,time] / global population [time] >= `thr_cum` ? 
 	default: `thr_cum=0`, _i.e._ there is no further test on the cumulated population once 
 	the `thr_min` test on currently available population is passed; 
 * `grpdim` : (_option_) list (blank separated, no comma) of dimensions used by the indicator; 
@@ -52,12 +52,12 @@ _(iii)_ during a given year, possibly imputing data for missing countries from p
 * `pdsn` : (_option_) name of the dataset storing total populations per country; default: 
 	`META_POPULATIONxCOUNTRY`;
 * `plib` : (_option_) name of the library storing the population dataset `pdsn`; default: `plib` 
-	is associated to the folder `&G_PING_LIBCFG` folder commonly used to store this file; 
+	is associated to the folder `G_PING_LIBCFG` folder commonly used to store this file; 
 * `ilib` : (_option_) input dataset library; default (not passed or ' '): `ilib=WORK`.
 
 ### Returns
 * `odsn` : (generic) name of the output datasets; two tables are actually created: the table 
-	`&odsn` will store all the calculations with the aggregated indicator; 
+	`odsn` will store all the calculations with the aggregated indicator; 
 * `CTRY_&odsn` : this table will also store, for each country, the year of extraction of data 
 	for the calculation of aggregates in year `time` will also be created; for instance for a 
 	given calculated at `time=2015`, where BG data are missing until 2013, CY data until 2014, 
@@ -82,7 +82,7 @@ _(iii)_ during a given year, possibly imputing data for missing countries from p
 Run macro `%%_example_silc_agg_compute`.
 
 ### Notes
-1. The computed aggregate is not inserted into the input dataset `&idsn` but in the output `&odsn` 
+1. The computed aggregate is not inserted into the input dataset `idsn` but in the output `odsn` 
 dataset passed as an argument. If you want to actually update the input dataset, you will need to
 explicitely call for it. For instance, say you want to calculate the 2016 EU28 aggregate of `PEPS01` 
 indicator from the so-called `rdb` library:
@@ -95,7 +95,7 @@ indicator from the so-called `rdb` library:
 	run;
 	%work_clean(PEPS01);
 ~~~
-2. For that reason, the datasets `&idsn` and `&odsn` must be different!
+2. For that reason, the datasets `idsn` and `odsn` must be different!
 
 ### References
 1. World Bank [aggregation rules](http://data.worldbank.org/about/data-overview/methodologies).
@@ -191,7 +191,7 @@ indicator from the so-called `rdb` library:
 		%let __ctrylst=&ctrylst;
 	%let nctrylst_desired=%list_length(&__ctrylst);
 
-	/* FORCE_NWGH: set default  */
+	/* FORCE_NWGH: set default/check */
 	%if %macro_isblank(force_Nwgh) %then		%let force_Nwgh=NO; 
 	%else 										%let force_Nwgh=%upcase(&force_Nwgh); 
 
@@ -213,7 +213,7 @@ indicator from the so-called `rdb` library:
 			txt=%quote(!!! Wrong input threshold value for THR_CUM - Must be in  [0,1] !!!)) %then 
 		%goto exit;
 
-	/* MAX_YBACK: set default */
+	/* MAX_YBACK: set default/check */
 	%if %macro_isblank(max_yback) %then				%let max_yback=0;
 
 	%if %error_handle(ErrorInputParameter, 

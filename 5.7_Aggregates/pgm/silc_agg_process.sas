@@ -11,30 +11,31 @@ from past years.
 
 ### Arguments
 * `indicators` : list of indicators, _i.e._ names of the datasets that store the indicators; 
-	aggregates will be estimated over the `&aggregates` areas and during the `&years` period;
+	aggregates will be estimated over the `aggregates` areas and during the `years` period;
 * `aggregates` : list of geographical areas, _e.g._ EU28, EA, ...;
 * `years` : list of year(s) of interest;
 * `geo2geo` : (_option_) list of correspondance rule that will enable you to copy the observations
 	of a given aggregate into another one; it will take the form `((ogeo1=igeo1) (ogeo1=ogeo2) ...)`
 	where all observations `igeo1` are copied (while preserved) to `ogeo1` in the output table,
 	ibid for `igeo2` and `ogeo2`, _etc_...; note that the outermost parentheses `(...)` are not
-	necessary; default: `geo2geo` is empty, _i.e._ no copy is operated;
+	necessary; default: `geo2geo` is empty, _i.e._ no copy is operated; see [%geo_copy](@ref sas_geo_copy)
+	for more details;
 * `max_yback` : (_option_) number of years used for imputation of missing data; it tells how 
-	to look backward in time, _i.e._ consider the `&max_yback` years prior to the estimated 
+	to look backward in time, _i.e._ consider the `max_yback` years prior to the estimated 
 	year; see [%silc_agg_compute](@ref sas_silc_agg_compute) for further details; default: 
 	`max_yback=0`; 
 * `thr_min` : (_option_) value (in range [0,1]) of (lower acceptable) the threshold used to 
 	compare currently available population to global population; see 
 	[%silc_agg_compute](@ref sas_silc_agg_compute) for further details; default: `thr_min=0.7`; 
 * `thr_cum`: (_option_) value (in range [0,1]) of the (lower acceptable) threshold used to 
-	compare the cumulated available population over `&max_yback` years to global population; 
+	compare the cumulated available population over `max_yback` years to global population; 
 	see [%silc_agg_compute](@ref sas_silc_agg_compute); default: `thr_cum=0`; 
 * `ilib` : (_option_) input dataset library; default (not passed or ' '): `ilib=WORK`;
 * `olib` : (_option_) input dataset library; default (not passed or ' '): `olib=WORK`.
 
 ### Returns
-For each input indicators in `&indicators`, update the corresponding table in `&ilib` with all 
-aggregated values and store it (with the same name) in `&olib`. 
+For each input indicators in `indicators`, update the corresponding table in `ilib` with all 
+aggregated values and store it (with the same name) in `olib`. 
 
 ### Example
 Considering the following `PEPS01` indicator table:
@@ -153,7 +154,7 @@ for further details on effective computation.
 
 ### See also
 [%silc_agg_compute](@ref sas_silc_agg_compute), [%silc_EUvals](@ref sas_silc_euvals), 
-[%obs_geo2geo](@ref sas_obs_geo2geo), [%ctry_select](@ref sas_ctry_select), 
+[%geo_copy](@ref sas_geo_copy), [%ctry_select](@ref sas_ctry_select), 
 [%zone_to_ctry](@ref sas_zone_to_ctry), [%var_to_list](@ref sas_var_to_list).
 */ /** \cond */
 
@@ -527,7 +528,7 @@ for further details on effective computation.
 						SET &olib..&__ind(WHERE=(not(&L_TIME=&__year and &L_GEO="&__ogeo"))); 
 					run;
 					/* copy all observations of __IGEO (see below) into __OGEO */
-					%obs_geo2geo(&__ind, /*__igeo*/%scan(&__geo2geo, 2, %str(=)), &__ogeo, 
+					%geo_copy(&__ind, /*__igeo*/%scan(&__geo2geo, 2, %str(=)), &__ogeo, 
 						time=&__year, lib=&olib, replace=YES);
 				%end;
 			%end;
