@@ -12,8 +12,8 @@ in the "old-fashioned" way.
 * `eu` : ISO-code of the aggregate area (_e.g._, `EU28`);
 * `ms` : list of country(ies) ISO-codes corresponding to (_i.e._, included in)  the 
 	`eu` area;
-* `mode` : flag (char) setting the mode of data output; it can be `UPDATE` (_e.g., for
-	primary RDB indicators) or `INSERT` (for a secondary RDB2 indicators);
+* `mode` : flag (char) setting the mode of data output; it can be `UPDATE` (_e.g._, for
+	primary RDB indicators) or `INSERT` (for secondary RDB2 indicators);
 * `_yyyy` : year of interest;
 * `_tab` : name of the input indicator (and the corresponding table as well);
 * `_thres` : threshold (in range [0,1]) used to compare ratio of available population

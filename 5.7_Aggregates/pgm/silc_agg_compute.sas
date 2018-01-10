@@ -1,12 +1,12 @@
 /**  
 ## silc_agg_compute {#sas_silc_agg_compute}
-Legacy _"EUVALS"_-based code that calculates the EU aggregates of any indicator, whenever
-data are available or not, in the "old-fashioned" way. 
+Legacy _"EUVALS"_-based code that calculates _(i)_ the EU aggregate of _(ii)_ an indicator 
+_(iii)_ during a given year, possibly imputing data for missing countries from past years. 
 
 ~~~sas
 	%silc_agg_compute(geo, time, idsn, odsn, ctrylst=,
-					max_yback=0, thr_min=0.7, thr_cum=0, pdsn=CCWGH60, agg_only=yes, 
-					force_Nwgh=NO, ilib=WORK, olib=WORK, plib=idb_rdb);
+				max_yback=0, thr_min=0.7, thr_cum=0, agg_only=yes, force_Nwgh=NO, 
+				ilib=WORK, olib=WORK, pdsn=META_POPULATIONxCOUNTRY, plib=&G_PING_LIBCFG);
 ~~~
 
 ### Arguments
@@ -15,23 +15,24 @@ data are available or not, in the "old-fashioned" way.
 * `idsn` : name of the dataset storing the indicator for which an aggregated value is 
 	estimated over the `&geo` area and during the `&time` year;
 * `ctrylst` : (_option_) list of (blank-separated, no quote) strings representing the 
-	ISO-codes of all the countries supposed to belong to `&geo`; when not provided, it 
-	is automatically determined from `&geo` and `&time` (see macro [%zone_to_ctry](@ref sas_zone_to_ctry));
-* `max_yback` : (_option_) look backward in time, _i.e._ consider the `&max_yback` years 
-	prior to the considered year; default: `max_yback=0`, _i.e._ only data available for 
-	current year shall be considered; `max_yback` can also be set to `_ALL_` so as to take 
-	all available data from the input dataset, whatever the year considered: in that case, 
-	the other argument(s) normally used for building the list of countries (see below: 
-	`thr_min`) are ignored; default: `max_yback=0` (_i.e._, only current year);
+	ISO-codes of all the countries supposed to belong to `&geo`; when not provided, it is 
+	automatically determined from `&geo` and `&time` (see macro [%zone_to_ctry](@ref sas_zone_to_ctry));
+* `max_yback` : (_option_) number of years used for imputation of missing data; it tells how 
+	to look backward in time, _i.e._ consider the `&max_yback` years prior to the estimated; 
+	default: `max_yback=0`, _i.e._ only data available for current year shall be considered; 
+	`max_yback` can also be set to `_ALL_` so as to take all available data from the input 
+	dataset, whatever the year considered: in that case, the other argument(s) normally used 
+	for building the list of countries (see below: `thr_min`) are ignored; default: 
+	`max_yback=0` (_i.e._, only current year);
 * `thr_min` : (_option_) value (in range [0,1]) of the threshold used to test whether 
-	currently (_i.e._ for the year `time` under investigation):
-		available population [time] / global population [time] >= `&thr_min` ? 
-	default:  `thr_min=0.7`, _i.e._ the available population should be at least 70% of the 
+	currently (_i.e._ for the year `&time` under investigation):
+		available population [&time] / global population [&time] >= `&thr_min` ? 
+	default: `thr_min=0.7`, _i.e._ the available population should be at least 70% of the 
 	global population of the `geo` area; 
 * `thr_cum`: (_option_) value (in range [0,1]) of the threshold used to test the cumulated 
 	available population, _i.e._ whether: 
-		available population [time-maxyback,time] / global population [time] >= `&thr_cum` ? 
-	default:  `thr_cum=0`, _i.e._ there is no further test on the cumulated population once 
+		available population [&time-&maxyback,&time] / global population [&time] >= `&thr_cum` ? 
+	default: `thr_cum=0`, _i.e._ there is no further test on the cumulated population once 
 	the `thr_min` test on currently available population is passed; 
 * `grpdim` : (_option_) list (blank separated, no comma) of dimensions used by the indicator; 
 	if not set (default), it is retrieved automatically from the input table using 
@@ -42,23 +43,25 @@ data are available or not, in the "old-fashioned" way.
 	the output table `odsn` (see below); default: `agg_only=yes`, _i.e._ only the aggregate 
 	will be stored in `odsn`;
 * `flag` : (_option_) who knows...?
+* `mode` : (_option_) flag (char) setting the mode of data output; it is either `UPDATE` (_e.g._, 
+	for primary RDB indicators, default) or `INSERT` (_e.g._, for secondary RDB2 indicators);
 * `force_Nwgh` : (_option_) additional boolean flag (`yes/no`) set when an additional
 	variable `nwgh` (representing the weighted sample) is present in the output
 	dataset; used in `EUvals` , where this option is not foreseen in the original `EUvals` 
 	implementation; default: `force_Nwgh=no`;
 * `pdsn` : (_option_) name of the dataset storing total populations per country; default: 
-	`CCWGH60` (_"EUVALS"_ legacy);
+	`META_POPULATIONxCOUNTRY`;
 * `plib` : (_option_) name of the library storing the population dataset `pdsn`; default: `plib` 
-	is associated to the folder `&EUSILC/IDB_RDB` folder commonly used to store this file; 
+	is associated to the folder `&G_PING_LIBCFG` folder commonly used to store this file; 
 * `ilib` : (_option_) input dataset library; default (not passed or ' '): `ilib=WORK`.
 
 ### Returns
 * `odsn` : (generic) name of the output datasets; two tables are actually created: the table 
-	`&odsn` will store all the calculations with the aggregated indicator; a table named 
-	`CTRY_&odsn` will also store, for each country, the year of extraction of data for the 
-	calculation of aggregates in year `time` will also be created; for instance for a given 
-	calculated at `time=2015`, where BG data are missing till 2013, CY data till 2014, DE data 
-	till 2012, ES till 2014, etc..., this table will look like:
+	`&odsn` will store all the calculations with the aggregated indicator; 
+* `CTRY_&odsn` : this table will also store, for each country, the year of extraction of data 
+	for the calculation of aggregates in year `time` will also be created; for instance for a 
+	given calculated at `time=2015`, where BG data are missing until 2013, CY data until 2014, 
+	DE data until 2012, ES until 2014, etc..., this table will look like:
 		 geo | time
 		-----|------
 		  AT | 2015
@@ -94,13 +97,14 @@ indicator from the so-called `rdb` library:
 ~~~
 2. For that reason, the datasets `&idsn` and `&odsn` must be different!
 
-### Reference
+### References
 1. World Bank [aggregation rules](http://data.worldbank.org/about/data-overview/methodologies).
+2. Eurostat [geography glossary](http://ec.europa.eu/eurostat/statistics-explained/index.php/Category:Geography_glossary).
 
 ### See also
-[%silc_EUvals](@ref sas_silc_euvals), [%ctry_select](@ref sas_ctry_select), 
-[%zone_to_ctry](@ref sas_zone_to_ctry), [%var_to_list](@ref sas_var_to_list),
-[%ds_contents](@ref sas_ds_contents).
+[%silc_EUvals](@ref sas_silc_euvals), [%silc_agg_process](@ref sas_silc_agg_process), 
+[%ctry_select](@ref sas_ctry_select), [%zone_to_ctry](@ref sas_zone_to_ctry), 
+[%var_to_list](@ref sas_var_to_list), [%ds_contents](@ref sas_ds_contents).
 */ /** \cond */
 
 /* credits: gjacopo */
@@ -117,7 +121,7 @@ indicator from the so-called `rdb` library:
 						, pdsn=			/* Name of the directory storing the population file 				(OPT) */
 						, agg_only=		/* Boolean flag (0/1) set to keep only aggregates in the output   	(OPT) */
 						, flag=			/* Dummy (?) flag								 					(OPT) */
-						, mode=
+						, mode=			/* Flag used to set the method used to update or insert new data 	(OPT) */
 						, force_Nwgh=   /* Boolean flag (0/1) set to add the variable nwgh   				(OPT) */
 						, ilib=			/* Name of the input library 										(OPT) */
 						, plib=			/* Name of the population library 									(OPT) */
@@ -131,8 +135,7 @@ indicator from the so-called `rdb` library:
 	/**                                 checkings/settings                             **/
 	/************************************************************************************/
 
-	%local DEBUG VERBOSE 
-		IDB_RDB;
+	%local DEBUG VERBOSE;
 
 	%if %macro_isblank(DEBUG) %then %do;
 		%if %symexist(G_PING_DEBUG) %then 	%let DEBUG=&G_PING_DEBUG;
@@ -142,11 +145,6 @@ indicator from the so-called `rdb` library:
 	%if %macro_isblank(VERBOSE) %then %do;
 		%if %symexist(G_PING_VERBOSE) %then 	%let VERBOSE=&G_PING_VERBOSE;
 		%else 									%let VERBOSE=0;
-	%end;
-
-	%if %macro_isblank(IDB_RDB) %then %do;
-		%if %symexist(G_PING_IDBRDB) %then 		%let IDB_RDB=&G_PING_IDBRDB;
-		%else 									%let IDB_RDB=&EUSILC/IDB_RDB;
 	%end;
 
 	/* IDSN/ILIB: check */
@@ -232,11 +230,21 @@ indicator from the so-called `rdb` library:
 	%end;
 
 	/* PDSN/PLIB: check/set */
-	%if %macro_isblank(pdsn) %then 		%let pdsn=CCWGH60; /* default population file */
+	%if %macro_isblank(pdsn) %then 		%let pdsn=meta_populationxcountry; /* default population file */
 	%if %macro_isblank(plib) %then %do;
-		libname _libtmp "&IDB_RDB"/*"&EUSILC/IDB_RDB"*/;
-		%let plib=_libtmp;
+		%let plib=&G_PING_LIBCFG;
 	%end;
+	/* if we were fully "EUvals_ legacy" compliant, we would set instead: 
+	%if %macro_isblank(pdsn) %then 			%let pdsn=CCWGH60;
+	%if %macro_isblank(plib) %then %do;
+		%if %symexist(G_PING_IDBRDB) %then %do;
+			libname _libtmp "&G_PING_IDBRDB";
+		%end;
+		%else %do;
+			libname _libtmp "&EUSILC/IDB_RDB";
+		%end;
+		%let plib=_libtmp;
+	%end;*/
 
 	%if %error_handle(ErrorInputDataset, 
 			%ds_check(&pdsn, lib=&plib) NE 0, mac=&_mac,		
@@ -268,6 +276,27 @@ indicator from the so-called `rdb` library:
 	/**                                 actual computation                             **/
 	/************************************************************************************/
 
+	%local _isPopulationFileTemp;
+	%let _isPopulationFileTemp=NO;
+
+	/* we also ensure the compatibility with SILC_EUSILC macro */
+	%if %var_check(&pdsn, DB020, lib=&plib) NE 0 %then %do; /* DB020 not found in the population file */
+		/* look at least for the GEO variable */
+		%if %error_handle(ErrorInputDataset, 
+				%var_check(&pdsn, GEO, lib=&plib) NE 0 /*i.e. not found ! */, mac=&_mac,	
+				txt=%quote(!!! Geo variable DB020 not found in population dataset &pdsn !!!)) %then 
+			%goto exit;
+		%else %do; /* GEO was found: we rename it into DB020, and also create a new population file */
+			DATA WORK.__CCWGH60/*%datetime_current*/(RENAME=(GEO=DB020));
+				SET &plib..&pdsn;
+			run;
+			/* we will use in the rest of the program the new population (temporary) dataset */
+			%let pdsn=__CCWGH60/*%datetime_current*/;
+			%let plib=WORK;
+			%let _isPopulationFileTemp=YES;
+		%end;
+	%end;
+
 	%if &VERBOSE=1 or %eval(&DEBUG>1) %then %do;
 		%put;
 		%put --------------------------------------------------------------------------;
@@ -293,9 +322,10 @@ indicator from the so-called `rdb` library:
 	%let pop_infl=;
 	%let run_agg=;
 	%let pop_part=;
-	%ctry_select(&idsn, &__ctrylst, &time, &_tmp, max_yback=&max_yback, thr_min=&thr_min,
-				_pop_infl_=pop_infl, _run_agg_=run_agg, _pop_part_=pop_part,
-				ilib=&ilib);
+	/* note that the test on THR_CUM is introduced later, in macro SILC_EUVALS */
+	%ctry_select(&idsn, &__ctrylst, &time, &_tmp, ilib=&ilib, 
+				max_yback=&max_yback, thr_min=&thr_min, /* thr_cum=&thr_cum, */
+				_pop_infl_=pop_infl, _run_agg_=run_agg, _pop_part_=pop_part);
 
 	/* check that the "quorum" is reached */
 	%if %error_handle(ErrorInputParameter, 
@@ -356,10 +386,13 @@ indicator from the so-called `rdb` library:
 		%put --------------------------------------------------------------------------;
 	%end;
 
+	/* update the table to be treated by SILC_EUVALS */
 	DATA &olib..&odsn;
 		SET &olib..&odsn;
 		&L_TIME=&time; /* set to one same year, the one we request */
 	run;
+	/* this is notably the reason why THR_CUM is introduced at a later stage, when calling
+	* SILC_EUVALS and not already when calling CTRY_SELECT */
 
 	/**********************************************************************************/
 	/** porcheria																	 **/
@@ -460,16 +493,28 @@ indicator from the so-called `rdb` library:
 	%if %sysfunc(libref(_libtmp)) EQ 0 %then %do;
 		libname _libtmp clear;
 	%end;
+	%if "&_isPopulationFileTemp"="YES" %then %do;
+		%work_clean(&pdsn); 
+	%end;
 
 	%exit:
 %mend silc_agg_compute;
 
 %macro _example_silc_agg_compute;
-	%if %symexist(G_PING_ROOTPATH) EQ 0 %then %do; 
-		%if %symexist(G_PING_SETUPPATH) EQ 0 %then 	%let G_PING_SETUPPATH=/ec/prod/server/PING; 
-		%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
-		%_default_setup_;
-	%end;
+	%if %symexist(G_PING_SETUPPATH) EQ 0 %then %do; 
+        %if %symexist(G_PING_ROOTPATH) EQ 0 %then %do;	
+			%put WARNING: !!! PING environment not set - Impossible to run &sysmacroname !!!;
+			%put WARNING: !!! Set global variable G_PING_ROOTPATH to your PING install path !!!;
+			%goto exit;
+		%end;
+		%else %do;
+			%let G_PING_PROJECT=	0EUSILC;
+        	%let G_PING_SETUPPATH=&G_PING_ROOTPATH./PING; 
+			%let G_PING_DATABASE=	/ec/prod/server/sas/0eusilc;
+        	%include "&G_PING_SETUPPATH/library/autoexec/_eusilc_setup_.sas";
+        	%_default_setup_;
+		%end;
+    %end;
 
 	%local ivalue ovalue 
 		max_yback;
@@ -544,6 +589,8 @@ indicator from the so-called `rdb` library:
 	%let G_PING_DEBUG=&oldDEBUG;
 
 	/* %work_clean(dumb, dumber, dumb_nwgh, dumber_nwgh); */
+
+	%exit:
 %mend _example_silc_agg_compute;
 
 /* Uncomment for quick testing
