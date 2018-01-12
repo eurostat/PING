@@ -1,9 +1,11 @@
 /** 
-## silc_arope_plot_venn {#silc_sas_arope_plot_venn}
+## silc_arope_plot_venn {#sas_silc_arope_plot_venn}
 Create a 3-way (non-proportional) Venn diagram of _AROPE_ and its components. 
 
+~~~sas
 	%silc_arope_plot_venn(year, geo=, ind=, idir=, ilib=, ofn=, odir=, unit=, title=, 
 					age=, sex=, wstatus=, quantile=, hhtyp=, isced11=, citizen=, c_birth=, tenure=);
+~~~
 
 ### Arguments
 * `year` : a (single) year of interest;

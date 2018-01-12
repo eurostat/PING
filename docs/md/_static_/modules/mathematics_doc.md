@@ -3,15 +3,13 @@
 Contents:
 
 - @subpage sas_digits
+- @subpage sas_gini
 
 @defgroup Math
 @addtogroup Math
-@copydoc digits
+@copydoc sas_digits
 @{
 @}
 @copydoc sas_gini
-@{
-@}
-@copydoc sas_ranuni
 @{
 @}

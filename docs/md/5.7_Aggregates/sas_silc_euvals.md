@@ -53,4 +53,4 @@ actual operation running.
 legacy `%%EUvals` program. 
 
 ### See also
-[%silc_agg_compute](@ref sas_silc_agg_compute).
+[%silc_agg_process](@ref sas_silc_agg_process), [%silc_agg_compute](@ref sas_silc_agg_compute).

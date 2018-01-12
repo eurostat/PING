@@ -153,5 +153,6 @@ for further details on effective computation.
 
 ### See also
 [%silc_agg_compute](@ref sas_silc_agg_compute), [%silc_EUvals](@ref sas_silc_euvals), 
-[%obs_geocopy](@ref sas_obs_geocopy), [%ctry_select](@ref sas_ctry_select), 
-[%zone_to_ctry](@ref sas_zone_to_ctry), [%var_to_list](@ref sas_var_to_list).
+[%silc_agg_list](@ref sas_silc_agg_list), [%obs_geocopy](@ref sas_obs_geocopy), 
+[%ctry_select](@ref sas_ctry_select), [%zone_to_ctry](@ref sas_zone_to_ctry), 
+[%var_to_list](@ref sas_var_to_list).

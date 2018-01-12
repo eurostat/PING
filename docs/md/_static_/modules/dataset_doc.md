@@ -16,9 +16,7 @@ Contents:
 - @subpage sas_ds_delete
 - @subpage sas_ds_export
 - @subpage sas_ds_insert
-- @subpage sas_ds_iscond
 - @subpage sas_ds_isempty
-- @subpage sas_ds_join
 - @subpage sas_ds_merge
 - @subpage sas_ds_nvars
 - @subpage sas_ds_order
@@ -29,7 +27,6 @@ Contents:
 - @subpage sas_ds_sort
 - @subpage sas_ds_split
 - @subpage sas_ds_transpose
-- @subpage sas_ds_var_compare
 - @subpage sas_ds_working
 - @subpage sas_file_import
 - @subpage sas_lib_check
@@ -52,7 +49,6 @@ Contents:
 - @subpage sas_var_to_clist
 - @subpage sas_var_to_distinct
 - @subpage sas_var_to_list
-- @subpage sas_var_remove
 - @subpage sas_var_rename
 - @subpage sas_var_set
 - @subpage sas_work_clean

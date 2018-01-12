@@ -102,5 +102,6 @@ indicator from the so-called `rdb` library:
 
 ### See also
 [%silc_EUvals](@ref sas_silc_euvals), [%silc_agg_process](@ref sas_silc_agg_process), 
-[%ctry_select](@ref sas_ctry_select), [%zone_to_ctry](@ref sas_zone_to_ctry), 
-[%var_to_list](@ref sas_var_to_list), [%ds_contents](@ref sas_ds_contents).
+[%silc_agg_list](@ref sas_silc_agg_list), [%ctry_select](@ref sas_ctry_select), 
+[%zone_to_ctry](@ref sas_zone_to_ctry), [%var_to_list](@ref sas_var_to_list), 
+[%ds_contents](@ref sas_ds_contents).

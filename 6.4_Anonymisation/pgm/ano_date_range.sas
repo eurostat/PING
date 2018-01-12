@@ -1,6 +1,11 @@
-/* TODO ANO_DATE_RANGE
-* Build basic equally-spaced (in number of years) sequences of dates 
-*/
+/** 
+## ano_date_range {#sas_ano_date_range}
+Create a range of date.
+
+~~~sas
+	%ano_date_range(time, nyears=, bin_step=, bin_ref=, order=);
+~~~
+*/ /** \cond */
 
 /* credits: gjacopo */
 

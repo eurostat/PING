@@ -50,7 +50,8 @@ The procedure above can be ran equivalently using the following command:
 ~~~
 
 ### See also
-[%obs_select](@ref sas_obs_select), [%ds_select](@ref sas_ds_select).
+[%obs_select](@ref sas_obs_select), [%ano_ds_select](@ref ano_ds_select), 
+[%ds_select](@ref sas_ds_select).
 */ /** \cond */
 
 /* credits: gjacopo */

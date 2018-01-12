@@ -1,4 +1,4 @@
-## silc_ind_deprivation {#sas_silc_var_deprivation}
+## silc_ind_deprivation {#sas_silc_ind_deprivation}
 Compute common EU-SILC material deprivation indicators for longitudinal dataset. 
 
 ~~~sas

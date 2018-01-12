@@ -1,11 +1,11 @@
-R quantile {#r_quantile}
+## R quantile {#r_quantile}
 Compute empirical quantiles of sample data (_e.g._ survey data) corresponding to selected
 probabilities. Include the 9 methods described by (Hyndman and Fan, 1996) + the one by
 (Cunnane, 1978) + the one by (Filiben, 1975).
 
-
-q <- quantile(x, probs, na_rm = False, type = 7, method='DIRECT', limit=(0,1))
-
+~~~r
+	q <- quantile(x, probs, na_rm = False, type = 7, method='DIRECT', limit=(0,1))
+~~~
 
 Arguments
 * `x` : a numeric vector or a value (character or integer) providing with the sample

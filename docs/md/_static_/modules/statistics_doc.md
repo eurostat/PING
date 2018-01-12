@@ -2,16 +2,18 @@
 
 Contents:
 
-- @subpage sas_gini
-- @subpage quantile_doc
+- @subpage quantile
 - @subpage sas_quantile_attribute
 - @subpage sas_ranuni
 
 @defgroup Stats
 @addtogroup Stats
-@copydoc sas_ranuni
+@copydoc quantile
 @{
 @}
-@copydoc sas_gini
+@copydoc sas_quantile_attribute
+@{
+@}
+@copydoc sas_ranuni
 @{
 @}

@@ -18,7 +18,42 @@ Contents:
 
 @defgroup Geo
 @addtogroup Geo
-@copydoc sas_ctry_define
 @copydoc sas_ctry_in_zone
+@{
+@}
+@copydoc sas_ctry_to_zone
+@{
+@}
+@copydoc sas_ctry_population
+@{
+@}
+@copydoc sas_ctry_population_compare
+@{
+@}
+@copydoc sas_ctry_find
+@{
+@}
+@copydoc sas_ctry_select
+@{
+@}
+@copydoc sas_obs_geocopy
+@{
+@}
+@copydoc sas_population_compare
+@{
+@}
+@copydoc sas_ctry_population_join
+@{
+@}
+@copydoc sas_str_isgeo
+@{
+@}
+@copydoc sas_zone_population
+@{
+@}
+@copydoc sas_zone_replace
+@{
+@}
+@copydoc sas_zone_to_ctry
 @{
 @}

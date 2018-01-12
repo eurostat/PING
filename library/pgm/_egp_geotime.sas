@@ -47,6 +47,10 @@ and `time=2004 2005 2010 2012 2013 2014` (list ordered).
 	%let _mac=&sysmacroname; 
 	%macro_put(&_mac); 
 
+	/************************************************************************************/
+	/**                                 checkings/settings                             **/
+	/************************************************************************************/
+
 	%local SEP;
 	%let SEP=%quote();
 
@@ -56,9 +60,13 @@ and `time=2004 2005 2010 2012 2013 2014` (list ordered).
 		%goto exit;
 
 	%if %error_handle(ErrorInputParameter,
-			%macro_isblank(_geo_) EQ 1 and %macro_isblank(_time_), mac=&_mac,
+			%macro_isblank(_geo_) EQ 1 and %macro_isblank(_time_) EQ 1, mac=&_mac,
 			txt=%quote(!!! At least one of the parameters _GEO_ or _TIME_ needs to be set !!!)) %then
 		%goto exit;
+
+	/************************************************************************************/
+	/**                                 actual computation                             **/
+	/************************************************************************************/
 
 	%if not %macro_isblank(_geo_) %then %do;
 		/* retrieve the list of geos */

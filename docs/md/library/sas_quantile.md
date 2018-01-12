@@ -1,8 +1,10 @@
 ## SAS quantile {#sas_quantile}
 Compute empirical quantiles of a variable with sample data corresponding to given probabilities. 
 	
+~~~sas
 	%quantile(var, weights=, probs=, _quantiles_=, names=, type=7, method=DIRECT,  
 		idsn=, odsn=, ilib=WORK, olib=WORK, na_rm = YES);
+~~~
 
 ### Arguments
 * `var` : data whose sample quantiles are estimated; this can be either:

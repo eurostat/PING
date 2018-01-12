@@ -158,6 +158,15 @@ global variables:
 		/* Name of the weight variable; 
 		* default: WEIGHT */
 		G_PING_LAB_WEIGHT
+		/* Name of the code variable; 
+		* default: CODE */
+		G_PING_LAB_CODE
+		/* Name of the library variable; 
+		* default: LIB */
+		G_PING_LAB_LIB
+		/* Name of the survey variable; 
+		* default: SURVEY */
+		G_PING_LAB_SURVEY
 		;
 /* note: all these variables can be set to default values by running the macro _default_setup_lab_ below */
 		
@@ -523,6 +532,10 @@ global variables:
 	%let G_PING_LAB_TOTWGH=	ntotwgh;
 	%let G_PING_LAB_IFLAG=	iflag;
 	%let G_PING_LAB_WEIGHT= weight;
+
+	%let G_PING_LAB_CODE=	code;
+	%let G_PING_LAB_LIB=	lib;
+	%let G_PING_LAB_SURVEY= survey;
 
 	%let G_PING_LEN_GEO=15;
 	%let G_PING_LEN_TIME=4;

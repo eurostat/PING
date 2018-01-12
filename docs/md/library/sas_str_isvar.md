@@ -50,5 +50,5 @@ running:
 3. When none of the string elements in `var` matches a variable in `dsn`, an empty list is set. 
 
 ### See also
-[%str_dsvar](@ref sas_str_dsvar), [%str_isds](@ref sas_str_isds), [%str_isgeo](@ref sas_str_isgeo), 
-[%var_check](@ref sas_var_check), [%ds_contents](@ref sas_ds_contents), [%ds_check](@ref sas_ds_check).
+[%str_isgeo](@ref sas_str_isgeo), [%ds_contents](@ref sas_ds_contents), 
+[%var_check](@ref sas_var_check), [%ds_check](@ref sas_ds_check).
