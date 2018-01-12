@@ -38,7 +38,7 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "d0/d04/group___geo.html",
-"de/dba/group___dataset.html"
+"de/d95/sas_var_to_list.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

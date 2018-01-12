@@ -86,27 +86,26 @@ $(document).ready(function(){initNavTree('d0/de5/sas_silc_hsum_of_pvar.html','..
 <div class="title">silc_hsum_of_pvar </div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p>Sum P varibale by row and columns</p>
-<div class="fragment"><div class="line">%silc_hsum_of_pvar(yyyy, odsn=,ds=,var=,rvar=,ovar=,by=,lib=pdb, olib=WORK);</div></div><!-- fragment --><h3>Arguments</h3>
+<div class="textblock"><p>Sum personal (P) variable(s) over households (<em>i.e.</em>, by row and columns).</p>
+<div class="fragment"><div class="line">%silc_hsum_of_pvar(yyyy, odsn=, ids=, var=, rvar=, ovar=, by=, lib=pdb, olib=WORK);</div></div><!-- fragment --><h3>Arguments</h3>
 <ul>
 <li><code>yyyy</code> : reference year;</li>
-<li><code>odsn</code> : a output dataset;</li>
-<li><code>ds</code> : type of input dataset;</li>
+<li><code>ids</code> : (<em>option</em>) type of input dataset; default: <code>ids=P</code>;</li>
 <li><code>var</code> : name of variable on which the sum is calculated;</li>
-<li><code>by</code> : list of variables used for GROUP BY condition in SQL statement; by default: empty, <em>i.e.</em> <code>PB010 PB020 PHID</code> is used;</li>
-<li><code>ilib</code> : (<em>option</em>) name of the input library; by default: empty, <em>i.e.</em> <code>pdb</code> is used;</li>
+<li><code>by</code> : list of variables used for GROUP BY condition in SQL statement; by default: <code>by=PB010 PB020 PHID</code> is used;</li>
+<li><code>ilib</code> : (<em>option</em>) name of the input library; by default: <code>ilib=pdb</code>.</li>
 </ul>
 <h3>Returns</h3>
 <ul>
-<li><code>odsn</code> : (<em>option</em>) name of the output dataset (in <code>WORK</code> library);by default: empty, <em>i.e.</em> <code>hsum</code> is used;</li>
-<li><code>ovar</code> : sum variable ;by default: empty, <em>i.e.</em> <code>hsum</code> is used;</li>
-<li><code>rvar</code> : sumrow P variables ;by default: empty, <em>i.e.</em> <code>Ptot</code> is used;</li>
-<li><code>olib</code> : (<em>option</em>) name of the output library; by default: empty, <em>i.e.</em> <code>WORK</code> is used.</li>
+<li><code>odsn</code> : (<em>option</em>) name of the output dataset (in <code>WORK</code> library); by default: <code>odsn=HSUM</code>;</li>
+<li><code>ovar</code> : (<em>option</em>) sum variable; by default: <code>ovar=hsum</code>;</li>
+<li><code>rvar</code> : (<em>option</em>) sumrow P variables ;by default: <code>rvar=Ptot</code>;</li>
+<li><code>olib</code> : (<em>option</em>) name of the output library; by default: <code>olib=WORK</code>.</li>
 </ul>
 <h3>Examples</h3>
 <p>Let us consider the test dataset #45: DB020 | DB010 | RB030 |EQ_INC20 | RB050a :-&mdash;:|:--&mdash;:|-------&mdash;:-----&mdash;:|------&mdash; BE | 2015 | 3310 | 10 | 10 BE | 2015 | 3311 | 10 | 10 BE | 2015 | 3312 | 10 | 10 BE | 2015 | 4434 | 20 | 20</p>
 <p>and run the macro:</p>
-<div class="fragment"><div class="line">%silc_hsum_of_pvar();</div></div><!-- fragment --><p> which updates QUANTILE with the following table: </p><table class="doxtable">
+<div class="fragment"><div class="line">%silc_hsum_of_pvar;</div></div><!-- fragment --><p> which updates QUANTILE with the following table: </p><table class="doxtable">
 <tr>
 <th align="center">DB020 </th><th align="center">DB010 </th><th align="center">RB030 </th><th align="center">EQ_INC20 </th><th align="center">RB050a </th><th align="center">QUINTILE </th><th align="center">QUANTILE  </th></tr>
 <tr>
@@ -116,7 +115,7 @@ $(document).ready(function(){initNavTree('d0/de5/sas_silc_hsum_of_pvar.html','..
 </table>
 <p>Run macro <code>%_example_income_quantile</code> for more examples.</p>
 <h3>Note</h3>
-<p>In short, the macro runs the following <code>PROC SORT</code> procedure:</p>
+<p>In short, the macro runs the following <code>PROC SQL</code> procedure:</p>
 <div class="fragment"><div class="line">PROC SQL noprint;</div><div class="line">    CREATE TABLE &amp;olib..&amp;_dsn AS </div><div class="line">    SELECT</div><div class="line">        input.*,            </div><div class="line">        %if %macro_isblank(Pvar) EQ 0 %then %do;</div><div class="line">             sum(&amp;_Pvar,0) as Ptot,</div><div class="line">        %end;</div><div class="line">        sum(calculated Ptot) as &amp;ovar</div><div class="line">    FROM Ppdb.&amp;Pds as input </div><div class="line">    GROUP BY &amp;_by;</div><div class="line"> QUIT;</div></div><!-- fragment --><h3>See also</h3>
 <p><a class="el" href="../../d5/d7e/sas_ds_isempty.html">%ds_isempty</a>, <a class="el" href="../../db/da7/sas_lib_check.html">%lib_check</a>, <a class="el" href="../../d3/d64/sas_var_check.html">%var_check</a>, <a href="http://support.sas.com/documentation/cdl/en/proc/61895/HTML/default/viewer.htm#a000057941.htm">SORT</a>. </p>
 </div></div><!-- contents -->
@@ -125,7 +124,7 @@ $(document).ready(function(){initNavTree('d0/de5/sas_silc_hsum_of_pvar.html','..
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
     <li class="navelem"><a class="el" href="../../d9/d9a/_estimation.html">5.5 Estimation</a></li>
-    <li class="footer">Generated on Fri Jan 12 2018 11:50:14 for PING by
+    <li class="footer">Generated on Fri Jan 12 2018 18:46:03 for PING by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="../../doxygen.png" alt="doxygen"/></a> 1.8.13 </li>
   </ul>
