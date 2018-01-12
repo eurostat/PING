@@ -2,7 +2,6 @@ var searchData=
 [
   ['configuration',['Configuration',['../d9/d6c/group___configuration.html',1,'']]],
   ['coding_3a_20tips_20and_20techniques',['Coding: tips and techniques',['../db/d1e/mainpage_programming.html',1,'index']]],
-  ['calc_5faggregate',['calc_aggregate',['../dc/d40/sas_calc_aggregate.html',1,'']]],
   ['clist_5fappend',['clist_append',['../db/df7/sas_clist_append.html',1,'library_struct']]],
   ['clist_5fcompare',['clist_compare',['../db/de9/sas_clist_compare.html',1,'library_struct']]],
   ['clist_5fdifference',['clist_difference',['../d4/dae/sas_clist_difference.html',1,'library_struct']]],

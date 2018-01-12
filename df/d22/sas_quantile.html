@@ -86,9 +86,8 @@ $(document).ready(function(){initNavTree('df/d22/sas_quantile.html','../../');})
 <div class="title">SAS quantile </div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p>Compute empirical quantiles of a variable with sample data corresponding to given probabilities. </p><pre class="fragment">%quantile(var, weights=, probs=, _quantiles_=, names=, type=7, method=DIRECT,  
-    idsn=, odsn=, ilib=WORK, olib=WORK, na_rm = YES);
-</pre><h3>Arguments</h3>
+<div class="textblock"><p>Compute empirical quantiles of a variable with sample data corresponding to given probabilities.</p>
+<div class="fragment"><div class="line">%quantile(var, weights=, probs=, _quantiles_=, names=, type=7, method=DIRECT,  </div><div class="line">    idsn=, odsn=, ilib=WORK, olib=WORK, na_rm = YES);</div></div><!-- fragment --><h3>Arguments</h3>
 <ul>
 <li><code>var</code> : data whose sample quantiles are estimated; this can be either:<ul>
 <li>the name of the variable in a dataset storing the data; in that case, the parameter <code>idsn</code> (see below) should be set;</li>
@@ -147,8 +146,8 @@ default: <code>type=7</code> (likewise R <code>quantile</code>);</li>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a class="el" href="../../d6/d70/quantile.html">quantile</a></li>
-    <li class="footer">Generated on Fri Jan 12 2018 09:16:00 for PING by
+    <li class="navelem"><a class="el" href="../../d8/d12/library_stats.html">Statistical operations</a></li><li class="navelem"><a class="el" href="../../d6/d70/quantile.html">quantile</a></li>
+    <li class="footer">Generated on Fri Jan 12 2018 11:50:18 for PING by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="../../doxygen.png" alt="doxygen"/></a> 1.8.13 </li>
   </ul>

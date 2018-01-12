@@ -9,16 +9,6 @@ var NAVTREE =
     [ "Testing", "d2/d93/mainpage_testing.html", null ],
     [ "License", "d7/df0/mainpage_license.html", null ],
     [ "References", "db/db3/mainpage_references.html", null ],
-    [ "silc_ind_deprivation", "db/d26/sas_silc_var_deprivation.html", null ],
-    [ "aggregate_build", "d0/d0d/sas_aggregate_build.html", null ],
-    [ "aggregate_flag", "d3/d28/sas_aggregate_flag.html", null ],
-    [ "aggregate_unit", "db/db6/sas_aggregate_unit.html", null ],
-    [ "aggregate_update", "dc/dfb/sas_aggregate_update.html", null ],
-    [ "aggregate_weight", "d3/d38/sas_aggregate_weight.html", null ],
-    [ "calc_aggregate", "dc/d40/sas_calc_aggregate.html", null ],
-    [ "rule_aggregate", "de/d3c/sas_rule_aggregate.html", null ],
-    [ "silc_arope_plot_venn", "dd/d77/silc_sas_arope_plot_venn.html", null ],
-    [ "quantile", "d6/d70/quantile.html", "d6/d70/quantile" ],
     [ "Dataset manipulation", "d4/d6f/library_dataset.html", "d4/d6f/library_dataset" ],
     [ "File system operations", "d9/da8/library_fsys.html", "d9/da8/library_fsys" ],
     [ "Format manipulation", "d0/d6a/library_format.html", "d0/d6a/library_format" ],
@@ -41,13 +31,6 @@ var NAVTREE =
     [ "7.4 Visualisation", "de/dcd/_visualisation.html", "de/dcd/_visualisation" ],
     [ "7.4 Dissemination", "d4/d64/_dissemination.html", "d4/d64/_dissemination" ],
     [ "7.4 Services", "d7/d8c/_services.html", "d7/d8c/_services" ],
-    [ "r_quantile", "d7/d91/md_docs_md_library_r_quantile.html", null ],
-    [ "sas__template_macro", "d2/d48/md_docs_md_library_sas__template_macro.html", null ],
-    [ "sas_ctry_define", "d8/d4e/md_docs_md_library_sas_ctry_define.html", null ],
-    [ "sas_ds_iscond", "da/de0/md_docs_md_library_sas_ds_iscond.html", null ],
-    [ "sas_ds_var_compare", "d5/d51/md_docs_md_library_sas_ds_var_compare.html", null ],
-    [ "sas_libformat_update", "dd/dd9/md_docs_md_library_sas_libformat_update.html", null ],
-    [ "sas_list_sasautos", "d8/d45/md_docs_md_library_sas_list_sasautos.html", null ],
     [ "Modules", "modules.html", "modules" ]
   ] ]
 ];
@@ -55,7 +38,7 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "d0/d04/group___geo.html",
-"de/d2d/sas_silc_ffile_export.html"
+"de/dba/group___dataset.html"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

@@ -86,12 +86,28 @@ $(document).ready(function(){initNavTree('d5/d98/group___math.html','../../');})
 <div class="title">Math</div>  </div>
 </div><!--header-->
 <div class="contents">
+<p>Return the number of digits necessary to represent a NUMERIC value.</p>
+<div class="fragment"><div class="line">%let digs=%digits(value);</div></div><!-- fragment --><h3>Argument</h3>
+<p><code>value</code> : input numeric value to represent.</p>
+<h3>Returns</h3>
+<p><code>digs</code> : the number of digits (in base 10) necessary to represent the number <code>value</code>.</p>
+<h3>Examples</h3>
+<p>The simple runs:</p>
+<div class="fragment"><div class="line">%let dig1=%digits(10);</div><div class="line">%let dig2=%digits(999.4);</div></div><!-- fragment --><p> return <code>dig1=2</code> and <code>dig2=3</code> respectively.</p>
+<p>Run macro <code>%_example_digits</code> for more examples.</p>
+<h3>Notes</h3>
+<ol type="1">
+<li>In short, the macro simply returns:</li>
+</ol>
+<div class="fragment"><div class="line">%sysevalf(%sysfunc(floor(%sysfunc(log(&amp;value))/%sysfunc(log(10)) + 1)));</div></div><!-- fragment --><ol type="1">
+<li>This macro can be useful to encode and/or (re)format variables in a table, <em>e.g.</em> by finding the maximum value or the number of occurrences of the variables in the table. </li>
+</ol>
 </div><!-- contents -->
 </div><!-- doc-content -->
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="footer">Generated on Fri Jan 12 2018 09:16:02 for PING by
+    <li class="footer">Generated on Fri Jan 12 2018 11:50:20 for PING by
     <a href="http://www.doxygen.org/index.html">
     <img class="footer" src="../../doxygen.png" alt="doxygen"/></a> 1.8.13 </li>
   </ul>

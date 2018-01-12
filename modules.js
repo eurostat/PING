@@ -1,9 +1,6 @@
 var modules =
 [
-    [ "Dataset", "de/dba/group___dataset.html", [
-      [ "your_macro", "d2/d48/md_docs_md_library_sas__template_macro.html#sas_your_macro", null ],
-      [ "ds_iscond", "da/de0/md_docs_md_library_sas_ds_iscond.html#sas_ds_iscond", null ]
-    ] ],
+    [ "Dataset", "de/dba/group___dataset.html", null ],
     [ "Filesystem", "da/d3d/group___filesystem.html", null ],
     [ "Format", "de/d08/group___format.html", null ],
     [ "Geo", "d0/d04/group___geo.html", null ],
