@@ -5,7 +5,7 @@ indicator over _(iii)_ as many years, as desired, possibly imputing data for mis
 from past years. 
 
 ~~~sas
-	%silc_agg_process(indicators, aggregates, years, geo2geo=, 
+	%silc_agg_process(indicators, aggregates, years, geo2geo=, ex_ctry=,
 			max_yback=0, thr_min=0.7, thr_cum=0, ilib=WORK, olib=WORK);
 ~~~
 
@@ -20,6 +20,12 @@ from past years.
 	ibid for `igeo2` and `ogeo2`, _etc_...; note that the outermost parentheses `(...)` are not
 	necessary; default: `geo2geo` is empty, _i.e._ no copy is operated; see 
 	[%obs_geocopy](@ref sas_obs_geocopy) for more details;
+* `ex_ctry` : (_option_)list of ISO-codes of countries that are explicitely excluded from 
+	calculations; typically, Liechtenstein will be excluded from EFTA aggregate calculations of 
+	EU-SILC indicators using: `ex_ctry=LI`; default: `ex_ctry` is empty, _i.e._ whatever list of 
+	countries is retrieved from the metadata on population per country (see 
+	[%silc_agg_compute](@ref sas_silc_agg_compute) for more details), it will be used in the
+	aggregate estimation;
 * `max_yback` : (_option_) number of years used for imputation of missing data; it tells how 
 	to look backward in time, _i.e._ consider the `max_yback` years prior to the estimated 
 	year; see [%silc_agg_compute](@ref sas_silc_agg_compute) for further details; default: 
@@ -160,17 +166,18 @@ for further details on effective computation.
 
 /* credits: gjacopo */
 
-%macro silc_agg_process(indicators		/* List of indicators/datasets to aggregate 					(REQ) */
-						, aggregates	/* List of geographical areas' codes 							(REQ) */
-						, years			/* List of years (period) of interest 							(REQ) */
-						, geo2geo=		/* List of source/destination aggregate pairs to be copied 		(OPT) */
-						, max_yback=	/* Number of years to explore 									(OPT) */
-						, thr_min=		/* Threshold on currently available population  				(OPT) */
-						, thr_cum=		/* Threshold on cumulated available population  				(OPT) */
+%macro silc_agg_process(indicators		/* List of indicators/datasets to aggregate 						(REQ) */
+						, aggregates	/* List of geographical areas' codes 								(REQ) */
+						, years			/* List of years (period) of interest 								(REQ) */
+						, geo2geo=		/* List of source/destination aggregate pairs to be copied 			(OPT) */
+						, max_yback=	/* Number of years to explore 										(OPT) */
+						, thr_min=		/* Threshold on currently available population  					(OPT) */
+						, thr_cum=		/* Threshold on cumulated available population  					(OPT) */
 						/* , pdsn=			/* name of the directory storing the population file 			(OPT) */
 						/* , plib=			/* name of the population library 								(OPT) */
-						, ilib=			/* Input library where source indicators are stored 			(OPT) */
-						, olib=			/* Output library where aggregated indicators will be saved 	(OPT) */
+						, ex_ctry=		/* ISO-codes of countries explicitely excluded from calculations	(OPT) */
+						, ilib=			/* Input library where source indicators are stored 				(OPT) */
+						, olib=			/* Output library where aggregated indicators will be saved 		(OPT) */
 						);
 	%local _mac;
 	%let _mac=&sysmacroname;
@@ -244,11 +251,11 @@ for further details on effective computation.
 	/**                                 actual computation                             **/
 	/************************************************************************************/
 
-	%local L_TIME L_GEO; /* pair of (TIME,GEO) labels used in the datasets */
-	%if %symexist(G_PING_LAB_TIME) %then 			%let L_TIME=&G_PING_LAB_TIME;
-	%else											%let L_TIME=TIME;
-	%if %symexist(G_PING_LAB_GEO) %then 			%let L_GEO=&G_PING_LAB_GEO;
-	%else											%let L_GEO=GEO;
+	%local l_TIME l_GEO; /* pair of (TIME,GEO) labels used in the datasets */
+	%if %symexist(G_PING_LAB_TIME) %then 			%let l_TIME=&G_PING_LAB_TIME;
+	%else											%let l_TIME=TIME;
+	%if %symexist(G_PING_LAB_GEO) %then 			%let l_GEO=&G_PING_LAB_GEO;
+	%else											%let l_GEO=GEO;
 
 	%local __ans					/* dummy boolean flag used to test dataset existence */
 		 __allAreas					/* list of all aggregate areas to compute and/or copy (not just AGGREGATES) */
@@ -359,6 +366,10 @@ for further details on effective computation.
 			%zone_to_ctry(&__agg, time=&__year, _ctrylst_=_ctryInAgg&__agg);
 			/* for instance, for __AGG=EU28, this will result in:
 			* _CTRYINAGGEU28 = AT BE BG CY CZ DE DK EE ES FI FR EL HU IE IT LT LU LV MT NL PL PT RO SE SI SK UK HR */
+
+			%if not %macro_isblank(ex_ctry) %then %do;
+				%let _ctryInAgg&__agg=%list_difference(&&_ctryInAgg&__agg, &ex_ctry);
+			%end;
 			
 			/* we keep a single list containing (merging) all countries listed under any of the aggregate 
 			* areas passed in AGGREGATES */
@@ -414,8 +425,8 @@ for further details on effective computation.
 			* is, all those in the range [__YEAR-MAX_YBACK, __YEAR]) and all the countries composing 
 			* the different ("overlapped") aggregate areas in AGGREGATES */
 			DATA WORK.&_indTMPin._&__ind._&__year./*%datetime_current()*/;
-				SET &ilib..&__ind(WHERE=(&L_TIME>=%eval(&__year-&max_yback) and &L_TIME <=&__year 
-					and &L_GEO in %sql_list(&__allCtries))); 
+				SET &ilib..&__ind(WHERE=(&l_TIME>=%eval(&__year-&max_yback) and &l_TIME <=&__year 
+					and &l_GEO in %sql_list(&__allCtries))); 
 			run; /* i.e., one extraction per _YEAR, per _INDicator and for all AGGREGATES */
 
 			%let __ans=;
@@ -496,7 +507,7 @@ for further details on effective computation.
 				/* update the output table with the newly estimated aggregated value stored in the
 				* output table */
 				DATA &olib..&__ind;
-					SET &olib..&__ind(WHERE=(not(&L_TIME=&__year and &L_GEO="&__agg")))
+					SET &olib..&__ind(WHERE=(not(&l_TIME=&__year and &l_GEO="&__agg")))
 						WORK.&_indTMPout._&__ind._&__year/*%datetime_current()*/; 
 				run;
 				%let _anythingHasBeenAdded=YES;
@@ -525,7 +536,7 @@ for further details on effective computation.
 					%let __ogeo=%scan(&__geo2geo, 1, %str(=));
 					/* clean the output dataset in case __OGEO is already present */
 					DATA &olib.&__ind;
-						SET &olib..&__ind(WHERE=(not(&L_TIME=&__year and &L_GEO="&__ogeo"))); 
+						SET &olib..&__ind(WHERE=(not(&l_TIME=&__year and &l_GEO="&__ogeo"))); 
 					run;
 					/* copy all observations of __IGEO (see below) into __OGEO */
 					%obs_geocopy(&__ind, /*__igeo*/%scan(&__geo2geo, 2, %str(=)), &__ogeo, 

@@ -518,9 +518,6 @@ This actually runs the aggregate estimation */
 	%if &yyyy < 2004 %then %do;
 		%silc_EUvals(EU, 		&EU15, &globargs); 
 	%end;
-	%else %if &yyyy = 2004 %then %do;
-		%silc_EUvals(EU, 		&EU25, &globargs);
-	%end;
 	%else %if &yyyy <= 2006 %then %do;
 		%silc_EUvals(EU, 		&EU25, &globargs);
 	%end;
