@@ -22,8 +22,8 @@ library/autoexec/_support_.sas
 library/autoexec/_support_macros_.sas
 library/autoexec/_configuration_.sas
 library/autoexec/cfg_SAS_PING.sas
-library/autoexec/_eusilc_*.sas
-library/autoexec/_eusilc?_*.sas
+library/autoexec/_silc_*.sas
+library/autoexec/_silc?_*.sas
 library/autoexec/.cfg_*.sas
 library/catalog
 library/catalog/*
