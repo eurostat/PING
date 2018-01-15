@@ -395,23 +395,30 @@ for further details on effective computation.
 				%put --------------------------------------------------------------------------;
 			%end;
 
-			/* check the existence of the indicator dataset (note that this kind of checks is actually
-			* also perfomed in SILC_AGG_COMPUTE macro) */
+			/* check the existence of the indicator dataset so as to avoid any further processing
+			* (note that this kind of checks is actually also perfomed in SILC_AGG_COMPUTE macro) */
+			%let __ans=;
+			%ds_isempty(&__ind, _ans_=__ans, lib=&ilib);
+
 			%if %error_handle(WarningInputParameter, 
-					%ds_check(&__ind, lib=&ilib) NE 0, mac=&_mac,		
+					&__ans NE 0, mac=&_mac,		
 					txt=! No input dataset named &__ind found in library &ilib !, verb=warn) %then
 				%goto next_indicator; /* skip, do not really exit */
 
 			/* in case the output dataset does not exist already, create it as an empty dataset: do it
 			* once only for each indicator __IND (i.e. the first time we enter the loop on years, when
 			* __YY=1) */
-			%if &__YY EQ 1 and NOT %error_handle(WarningOutputDataset, 
-					%ds_check(&__ind, lib=&olib) EQ 0, mac=&_mac,		
+			%let __ans=;
+			%ds_isempty(&__ind, _ans_=__ans, lib=&olib);
+
+			%if NOT %error_handle(WarningOutputDataset, 
+					&__ans EQ 0, mac=&_mac,		
 					txt=! Output dataset &__ind exists in library &ilib - Data will be appended !, verb=warn) %then %do;
 				/* create an empty output dataset */
-				DATA &olib..&__ind;
-					STOP; 
-				run;
+				PROC SQL noprint;
+					CREATE TABLE &olib..&__ind LIKE &ilib..&__ind; 
+				quit;
+				/* we could use %ds_copy with MIRROR=LIKE */
 				%let _outputHasBeenCreated=YES;
 			%end;
 
@@ -435,7 +442,7 @@ for further details on effective computation.
 			%if %error_handle(WarningInputDataset, 
 					&__ans EQ 1, mac=&_mac,		
 					txt=! No data found in dataset &ilib..&__ind - Skip this year !, verb=warn) %then
-				%goto next_year;
+				%goto next_indicator;
 
 			%if &VERBOSE=1 or %eval(&DEBUG>1) %then %do;
 				%put;
@@ -485,8 +492,9 @@ for further details on effective computation.
 								, force_Nwgh=	NO
 								/* , pdsn=			&pdsn */	
 								/* , plib=			&plib */
-								, ilib=			&ilib
-								, olib=			WORK);
+								, ilib=			WORK
+								, olib=			WORK
+								, code=			&__ind);
 
 				/* check whether an output dataset has been created or not; in particular, the actual
 				* calculation may have been skipped in macro SILC_AGG_COMPUTE in the case there is not 
@@ -514,11 +522,11 @@ for further details on effective computation.
 				%let _anythingHasBeenAdded=YES;
 
 				/* always clean your shit, in particular temporary datasets */
-				%work_clean(CTRY_&_indTMPin._&__ind._&__year, /* implicitly created in SILC_AGG_COMPUTE */ 
-							CTRY_&_indTMPin._&__ind._&__year); 
+				%work_clean(CTRY_&_indTMPout._&__ind._&__year, /* implicitly created in SILC_AGG_COMPUTE */ 
+							&_indTMPout._&__ind._&__year); 
 
 				%next_aggregate:
-			%end;
+			%end; /* end loop on aggregates... */
 
 			/* still clean a bit... */
 			%work_clean(&_indTMPin._&__ind._&__year./*%datetime_current()*/); 
@@ -536,7 +544,7 @@ for further details on effective computation.
 					%let __geo2geo=%scan(&geo2geo, &__g2g);
 					%let __ogeo=%scan(&__geo2geo, 1, %str(=));
 					/* clean the output dataset in case __OGEO is already present */
-					DATA &olib.&__ind;
+					DATA &olib..&__ind;
 						SET &olib..&__ind(WHERE=(not(&l_TIME=&__year and &l_GEO="&__ogeo"))); 
 					run;
 					/* copy all observations of __IGEO (see below) into __OGEO */
@@ -879,7 +887,7 @@ for further details on effective computation.
 		%end;
 	%end;
 
-	%work_clean(xPeps01, xPeps02, oPeps01Agg, oPeps02Agg, dumb);
+	%work_clean(xPeps01, xPeps02, oPeps01Agg, oPeps02Agg, dumb, dumb1, dumb2);
 
 	%exit:
 %mend _example_silc_agg_process;
@@ -888,6 +896,5 @@ for further details on effective computation.
 options NOSOURCE MRECALL MLOGIC MPRINT NOTES;
 %_example_silc_agg_process;
 */
-%_example_silc_agg_process;
 
 /** \endcond */
