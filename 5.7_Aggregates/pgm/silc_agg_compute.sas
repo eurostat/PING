@@ -1,7 +1,7 @@
 /**  
 ## silc_agg_compute {#sas_silc_agg_compute}
-Legacy _"EUVALS"_-based code that calculates _(i)_ the EU aggregate of _(ii)_ an indicator 
-_(iii)_ during a given year, possibly imputing data for missing countries from past years. 
+Legacy "EUVALS"-based code that calculates (i) the EU aggregate of (ii) an indicator 
+(iii) during a given year, possibly imputing data for missing countries from past years. 
 
 ~~~sas
 	%silc_agg_compute(geo, time, idsn, odsn, ctrylst=,

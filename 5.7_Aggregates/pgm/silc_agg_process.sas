@@ -1,7 +1,7 @@
 /**  
 ## silc_agg_process {#sas_silc_agg_process}
-Legacy _"EUVALS"_-based code that calculates: _(i)_ as many EU aggregates of _(ii)_ as many 
-indicator over _(iii)_ as many years, as desired, possibly imputing data for missing countries 
+Legacy "EUVALS"-based code that calculates: (i) as many EU aggregates of (ii) as many 
+indicators over (iii) as many years, as desired, possibly imputing data for missing countries 
 from past years. 
 
 ~~~sas
