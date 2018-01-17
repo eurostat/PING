@@ -136,22 +136,6 @@ Extract duplicated/unique observations from a given dataset.
 		BY &dim;
 	run;
 
-	%if %macro_isblank(select) %then %do;
-		/* unique values */
-		DATA &olib..&unidsn;
-			SET &_dsn; 
-			BY &dim;
-			IF first.&_dim_last=0 OR last.&_dim_last=0;
-		run;
-		/* duplicates */
-		DATA &olib..&dupdsn;
-			SET &_dsn; 
-			BY &dim;
-			IF first.&_dim_last=1 AND last.&_dim_last=1;
-		run;
-		%goto exit;
-	%end;
-
 	/* create table with FIRST/LAST variables */
 	DATA &_dsn;
 		SET &_dsn;
@@ -171,7 +155,7 @@ Extract duplicated/unique observations from a given dataset.
 			FROM &_dsn
 			WHERE (first_&_dim_last=1 and last_&_dim_last=1) 
 				%if not %macro_isblank(select) %then %do;
-					OR &select
+					AND &select
 				%end;
 				;
 		run;
@@ -185,7 +169,7 @@ Extract duplicated/unique observations from a given dataset.
 			FROM &_dsn
 			WHERE (first_&_dim_last=0 or last_&_dim_last=0) 
 				%if not %macro_isblank(select) %then %do;
-					AND not(&select)
+					AND &select
 				%end;
 				;
 		run;
@@ -245,6 +229,9 @@ Extract duplicated/unique observations from a given dataset.
 		geo="EA19"; time=2015; hhtyp="A1"; indic_il="LIP_MD60"; unit="PC_POP"; ivalue=18.382338974; output;
 		geo="EA19"; time=2015; hhtyp="A1_DCH"; indic_il="LIP_MD60"; unit="PC"; ivalue=28.173894694; output;
 	run;
+
+	%obs_duplicate(test, dim=geo time hhtyp indic_il, unidsn=unidsn, dupdsn=dupdsn, 
+		ilib=WORK, olib=WORK);
 
 	%obs_duplicate(test, dim=geo time hhtyp indic_il, unidsn=unidsn, dupdsn=dupdsn, select=%quote(UNIT="PC"), 
 		ilib=WORK, olib=WORK);
