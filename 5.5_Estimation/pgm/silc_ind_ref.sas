@@ -230,7 +230,6 @@ See `%%_example_silc_ind_ref` for more examples.
 	%let list=;
 	%silc_ind_ref( TEST2, ind=PEPS01 E_MDDD11, _ref_=list, replace=YES);
 	%let olist=EDB RDB;
-%put list=&list============;
 	%if %list_difference(&list, &olist) EQ  %then 			
 		%put OK: TEST PASSED - Reference libraries associated to indicators PEPS01 E_MDDD11: &olist;
 	%else 						
@@ -243,6 +242,5 @@ See `%%_example_silc_ind_ref` for more examples.
 options NOSOURCE MRECALL MLOGIC MPRINT NOTES;
 %_example_silc_ind_ref;
 */
-%_example_silc_ind_ref;
 
 /** \endcond */
