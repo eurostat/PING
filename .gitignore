@@ -91,3 +91,10 @@ library/pgm/TODO_*
 
 # 7.4_Visualisation folder
 # ok
+.Rproj.user
+.Rhistory
+.DS_Store
+PING.Rproj
+.gitignore
+.metadata
+.metadata/*
