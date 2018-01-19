@@ -135,7 +135,7 @@ Wilson, S.A. (2011): ["The validator: A macro to validate parameters"](http://su
 	%let _ans=; 
 
 	%local _type 
-		_k 
+		_k _s
 		_par 
 		SEP 
 		_len 
@@ -254,11 +254,25 @@ Wilson, S.A. (2011): ["The validator: A macro to validate parameters"](http://su
 		/* test the set of possible values */
 		%if not %macro_isblank(set) %then %do;
 			/* check whether _par corresponds to any of the considered values */
-			%if %sysfunc(findw(&set, &_par)) > 0 %then %do; 
-				%let _ans=&_ans.&SEP.0; /* value found => accepted */
-				%goto next;
+			%if "&_type"="CHAR" %then %do; 
+				%if %sysfunc(findw(&set, &_par)) > 0 %then %do; 
+					/* note that the test using FINDW will not work with numeric: for instance, 0 and 0.0
+					* will differ! */
+					%let _ans=&_ans.&SEP.0; /* value found => accepted */
+					%goto next;
+				%end;
 			%end;
-			%else %if "&_type"="CHAR" /* we did not find the char ... */
+			%else %if "&_type"="NUMERIC" %then %do;
+				%do _s=1 %to %list_length(set);
+					/* note the use of %quote( ) below: this is to ensure that decimal numbers are scanned correctly */
+					%if %sysevalf(&_par = %scan(&set, &_s, %quote( ))) %then %do; 
+						%let _ans=&_ans.&SEP.0; /* value found => accepted */
+						%goto next;
+					%end;
+				%end;
+			%end;
+			/* if we reached that point...*/
+			%if "&_type"="CHAR" /* we did not find the char ... */
 					or ("&_type"="NUMERIC" and %macro_isblank(range) and %macro_isblank(norange)) /* nothing more to test ... */
 				%then %do;
 				%let _ans=&_ans.&SEP.&WrongValuesError;	
@@ -522,3 +536,5 @@ Wilson, S.A. (2011): ["The validator: A macro to validate parameters"](http://su
 options NOSOURCE MRECALL MLOGIC MPRINT NOTES;
 %_example_par_check;
 */
+
+/** \endcond */

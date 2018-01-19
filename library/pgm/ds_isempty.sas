@@ -87,36 +87,36 @@ Childress, S. and Welch, B. (2011): ["Three easy ways around nonexistent or empt
 	/************************************************************************************/
 
 	%local _dsn	/* temporary dataset */
-		__ans	/* output result */
-		_rc		/* file identifier */
-		_dsid	/* dataset identifier */
-		_nobs;	/* total number of observations */
+		____ans	/* output result */
+		____rc		/* file identifier */
+		____dsid	/* dataset identifier */
+		____nobs;	/* total number of observations */
 	/* set default answer */
-	%let __ans=1;
+	%let ____ans=1;
 
 	%if /*%ds_check(&dsn, lib=&lib)*/not %sysfunc(exist(&lib..&dsn)) %then %do;
-		%let ans=-1;
-		%goto quit;
+		%let ____ans=-1;
+		%goto exit;
 	%end;
 
 	/* retrieve the number of observations */
-	%let _dsid = %sysfunc( open(&lib..&dsn) );
-	%let _nobs = %sysfunc( attrn(&_dsid, nobs) );
+	%let ____dsid = %sysfunc( open(&lib..&dsn) );
+	%let ____nobs = %sysfunc( attrn(&____dsid, nobs) );
 
-	%if &_nobs=0 %then %do;
-		%let __ans=1; 
+	%if &____nobs=0 %then %do;
+		%let ____ans=1; 
 		%goto quit;
 	%end;
 
-	%if &_nobs^=0 and %macro_isblank(var) %then %do;
-		%let __ans=0;
+	%if &____nobs^=0 and %macro_isblank(var) %then %do;
+		%let ____ans=0;
 		%goto quit;
 	%end;
 	%else %do;
 		%if %error_handle(ErrorInputParameter, 
-				%sysfunc(varnum(&_dsid, &var)) EQ 0, mac=&_mac,		
+				%sysfunc(varnum(&____dsid, &var)) EQ 0, mac=&_mac,		
 				txt=%quote(!!! Variable %upcase(&var) not found in dataset %upcase(&dsn) !!!)) %then %do;
-			%let ans=-1;
+			%let ____ans=-1;
 			%goto quit;
 		%end;
 	%end;
@@ -130,26 +130,26 @@ Childress, S. and Welch, B. (2011): ["Three easy ways around nonexistent or empt
 
 	PROC SQL noprint;
 		SELECT DISTINCT count(&var) as N 
-		INTO :_nobs 
+		INTO :____nobs 
 		FROM &_dsn;
 	quit;
  
 	%work_clean(&_dsn); 
 
-	%if &_nobs = 0 %then 
+	%if &____nobs = 0 %then 
 		/* no var field in dsn */
-		%let __ans=1; 
+		%let ____ans=1; 
 	%else  
 		/* var field exists in dsn */
-		%let __ans=0; 
+		%let ____ans=0; 
 
 	%quit:
 	/* return the answer */
 	data _null_;
-		call symput("&_ans_","&__ans");
+		call symput("&_ans_","&____ans");
 	run;
 	/* in all cases, free the dataset identifier */
-	%let _rc = %sysfunc( close(&_dsid) ); 
+	%let ____rc = %sysfunc( close(&____dsid) ); 
 
 	%exit:
 %mend ds_isempty;
