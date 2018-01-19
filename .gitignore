@@ -96,6 +96,7 @@ library/macros/*
 
 # 7.4_Visualisation folder
 # ok
+.gitignore
 .Rproj.user
 .Rhistory
 .DS_Store
