@@ -22,10 +22,8 @@ library/autoexec/_support_.sas
 library/autoexec/_support_macros_.sas
 library/autoexec/_configuration_.sas
 library/autoexec/cfg_SAS_PING.sas
-library/autoexec/_silc_support.sas
-library/autoexec/_silc_module.sas
-library/autoexec/_silc?_*.sas
-library/autoexec/.cfg_*.sas
+library/autoexec/_silc*.sas
+library/autoexec/.cfg*.sas
 library/catalog
 library/catalog/*
 library/pgm/TODO_*
@@ -102,6 +100,5 @@ library/macros/*
 .Rhistory
 .DS_Store
 PING.Rproj
-.gitignore
 .metadata
 .metadata/*
