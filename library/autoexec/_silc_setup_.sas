@@ -8,14 +8,8 @@ It is usually necessary to define a global `G_PING_SETUPPATH` variable with the 
 of the directory where the `PING` library is installed, e.g.:
 
 ~~~sas
-	%let G_PING_SETUPPATH=/ec/prod/server/sas/0eusilc/PING;
-	%let G_PING_PROJECT=0EUSILC;
-~~~
-or equivalently:
-
-~~~sas
-	%let G_PING_SETUPPATH=/ec/prod/server/sas/1eusilc/0eusilc.copy/PING;
-	%let G_PING_PROJECT=1EUSILC;
+	%let G_PING_SETUPPATH=</Server/Path/to/PING/>/PING;
+	%let G_PING_PROJECT=EUSILC;
 ~~~
 then run the following instructions for the complete install:
 
@@ -141,17 +135,14 @@ It is essential for this folder to be located in the same location as the
 	/* legacy: EUSILC was used in the past, we still use it */
 	%global EUSILC;
 	%let EUSILC=&G_PING_DATABASE; 
-	 /* note in particular that EUSILC users will have:
-	 *   - EUSILC=/ec/prod/server/sas/0eusilc if you run on the server, or
-	 *   - EUSILC=z:  if you run on local
-	 */
 
-	%if "%upcase(legacy)"="NONE" %then 				%let legacy=NO;
+	%if %upcase("&legacy")="NONE" %then 			%let legacy=NO;
 	%else 											%let legacy=%upcase(&legacy);
 	%let G_PING_IS_LEGACY=&legacy;
-	%if "%upcase(test)"="ACCEPTANCE" %then 			%let test=YES;
-	%else %if "%upcase(test)"="TEST" %then 			%let test=YES;
-	%else %if "%upcase(test)"="PRODUCTION" %then	%let test=NO;
+
+	%if %upcase("&test")="ACCEPTANCE" %then 		%let test=YES;
+	%else %if %upcase("&test")="TEST" %then 		%let test=YES;
+	%else %if %upcase("&test")="PRODUCTION" %then	%let test=NO;
 	%else 											%let test=%upcase(&test);
 	%let G_PING_IS_IN_TEST=&test;
 
