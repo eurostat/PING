@@ -24,7 +24,7 @@ country and a given year.
 [%silc_ds_split](@ref sas_silc_ds_split).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro udb_ds_split(geo			/* List of desired countries ISO-codse 			(REQ) */
 					, time		/* List of desired years 						(REQ) */

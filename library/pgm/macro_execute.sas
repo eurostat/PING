@@ -36,7 +36,7 @@ to be ran as:
 [CallMacr](http://www.sascommunity.org/wiki/Macro_CallMacr).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro macro_execute/parmbuff;
 	%local _mac;
@@ -98,11 +98,18 @@ to be ran as:
 
 
 %macro _example_macro_execute;
-	%if %symexist(G_PING_ROOTPATH) EQ 0 %then %do; 
-		%if %symexist(G_PING_SETUPPATH) EQ 0 %then 	%let G_PING_SETUPPATH=/ec/prod/server/sas/0eusilc/PING; 
-		%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
-		%_default_setup_;
-	%end;
+	%if %symexist(G_PING_SETUPPATH) EQ 0 %then %do; 
+        %if %symexist(G_PING_ROOTPATH) EQ 0 %then %do;	
+			%put WARNING: !!! PING environment not set - Impossible to run &sysmacroname !!!;
+			%put WARNING: !!! Set global variable G_PING_ROOTPATH to your PING install path !!!;
+			%goto exit;
+		%end;
+		%else %do;
+        	%let G_PING_SETUPPATH=&G_PING_ROOTPATH./PING; 
+        	%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
+        	%_default_setup_;
+		%end;
+    %end;
 
 	%local var ans;
 
@@ -139,14 +146,14 @@ to be ran as:
 	%else 				%put ERROR: TEST FAILED - Macro list_length not found and/or not ran;
 
 	%put;
+
+	%exit:
 %mend _example_macro_execute;
 
 /* Uncomment for quick testing
 options NOSOURCE MRECALL MLOGIC MPRINT NOTES;
 %_example_macro_execute; 
 */
-%_example_macro_execute; 
-
 
 %macro _bass_execute_macro(macroname);
    	%let debug=0;

@@ -52,14 +52,16 @@ Run macro `%%_example_clist_slice` for more examples.
 2. The first occurrence of `end` is necessarily searched for in `list` after the `ibeg`-th position (or first occurrence of `beg`).
 3. The item at position `iend` (or first occurrence of `end`) is not inserted in the output `res` list.
 4. The macro returns an empty list `res=` instead of () when there is no match.
-5. The macro will not return exactly what you want if the symbol £ appears somewhere in the list.
+5. The macro will not return exactly what you want if the symbol `$` appears somewhere in the list. If you need to
+use `$`, you can reset the global macro variable `G_PING_UNLIKELY_CHAR` (see `_setup_` file) to another dumb 
+(unlikely) character of your own.
 
 ### See also
 [%list_slice](@ref sas_list_slice), [%clist_compare](@ref sas_clist_compare), [%clist_append](@ref sas_clist_append), 
 [%clist_unquote](@ref sas_clist_unquote).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro clist_slice(clist 	/* List of items comma-separated by a delimiter and between parentheses (REQ) */
 				, beg=  	/* First item to look for in the list 									(OPT) */
@@ -87,7 +89,7 @@ Run macro `%%_example_clist_slice` for more examples.
 
 	/* REP: setting */
 	%if %symexist(G_PING_UNLIKELY_CHAR) %then 		%let REP=%quote(&G_PING_UNLIKELY_CHAR);
-	%else											%let REP=£;
+	%else											%let REP=$;
 
 	/************************************************************************************/
 	/**                                 actual computation                             **/
@@ -109,11 +111,18 @@ Run macro `%%_example_clist_slice` for more examples.
 %mend clist_slice;
 
 %macro _example_clist_slice;
-	%if %symexist(G_PING_ROOTPATH) EQ 0 %then %do; 
-		%if %symexist(G_PING_SETUPPATH) EQ 0 %then 	%let G_PING_SETUPPATH=/ec/prod/server/sas/0eusilc/PING; 
-		%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
-		%_default_setup_;
-	%end;
+	%if %symexist(G_PING_SETUPPATH) EQ 0 %then %do; 
+        %if %symexist(G_PING_ROOTPATH) EQ 0 %then %do;	
+			%put WARNING: !!! PING environment not set - Impossible to run &sysmacroname !!!;
+			%put WARNING: !!! Set global variable G_PING_ROOTPATH to your PING install path !!!;
+			%goto exit;
+		%end;
+		%else %do;
+        	%let G_PING_SETUPPATH=&G_PING_ROOTPATH./PING; 
+        	%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
+        	%_default_setup_;
+		%end;
+    %end;
 
 	%local clist beg ibeg end iend oclist;
 
@@ -202,6 +211,8 @@ Run macro `%%_example_clist_slice` for more examples.
 		%put ERROR: TEST FAILED - Wrong list returned;
 
 	%put;
+
+	%exit:
 %mend _example_clist_slice;
 
 /* Uncomment for quick testing

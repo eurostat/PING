@@ -53,7 +53,7 @@ Run macro `%%_example_var_info` for more examples.
 [VFORMAT](http://support.sas.com/documentation/cdl/en/lrdict/64316/HTML/default/viewer.htm#a000245971.htm),
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro var_info(dsn
 				, var
@@ -181,11 +181,18 @@ Run macro `%%_example_var_info` for more examples.
 %mend var_info;
 
 %macro _example_var_info;
-	%if %symexist(G_PING_ROOTPATH) EQ 0 %then %do; 
-		%if %symexist(G_PING_SETUPPATH) EQ 0 %then 	%let G_PING_SETUPPATH=/ec/prod/server/sas/0eusilc/PING; 
-		%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
-		%_default_setup_;
-	%end;
+	%if %symexist(G_PING_SETUPPATH) EQ 0 %then %do; 
+        %if %symexist(G_PING_ROOTPATH) EQ 0 %then %do;	
+			%put WARNING: !!! PING environment not set - Impossible to run &sysmacroname !!!;
+			%put WARNING: !!! Set global variable G_PING_ROOTPATH to your PING install path !!!;
+			%goto exit;
+		%end;
+		%else %do;
+        	%let G_PING_SETUPPATH=&G_PING_ROOTPATH./PING; 
+        	%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
+        	%_default_setup_;
+		%end;
+    %end;
 
 	%local fmt infmt type pos len vfmt;
 
@@ -217,6 +224,8 @@ Run macro `%%_example_var_info` for more examples.
 		%put ERROR: TEST FAILED - Test on VALUE variable returns: pos=&pos, type=&type, len=&len, fmt=&fmt, infmt=&infmt, and vfmt=&vfmt;
 
 	%work_clean(_dstest30);
+
+	%exit:
 %mend _example_var_info;
 
 /* Uncomment for quick testing

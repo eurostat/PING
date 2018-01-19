@@ -41,7 +41,7 @@ See [%ctry_population](@ref sas_ctry_population) for further description of the 
 [%meta_populationxcountry](@ref meta_populationxcountry), [%meta_countryxzone](@ref meta_countryxzone).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro zone_population(zone				/* Code of a geographical area in the EU 							(REQ) */
 					, time				/* Year of interest													(OPT) */
@@ -84,11 +84,18 @@ See [%ctry_population](@ref sas_ctry_population) for further description of the 
 
 
 %macro _example_zone_population;
-	%if %symexist(G_PING_ROOTPATH) EQ 0 %then %do; 
-		%if %symexist(G_PING_SETUPPATH) EQ 0 %then 	%let G_PING_SETUPPATH=/ec/prod/server/sas/0eusilc/PING; 
-		%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
-		%_default_setup_;
-	%end;
+	%if %symexist(G_PING_SETUPPATH) EQ 0 %then %do; 
+        %if %symexist(G_PING_ROOTPATH) EQ 0 %then %do;	
+			%put WARNING: !!! PING environment not set - Impossible to run &sysmacroname !!!;
+			%put WARNING: !!! Set global variable G_PING_ROOTPATH to your PING install path !!!;
+			%goto exit;
+		%end;
+		%else %do;
+        	%let G_PING_SETUPPATH=&G_PING_ROOTPATH./PING; 
+        	%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
+        	%_default_setup_;
+		%end;
+    %end;
 
 	/* Note the figures below may get updated - check in population file */
 
@@ -115,6 +122,7 @@ See [%ctry_population](@ref sas_ctry_population) for further description of the 
 	%if &pop_size=381070000 %then 	%put OK: TEST PASSED - Correct population: returns 381070000;
 	%else 							%put ERROR: TEST FAILED - Wrong population: returns &pop_size;
 
+	%exit:
 %mend _example_zone_population;
 
 /* 

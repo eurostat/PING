@@ -41,7 +41,7 @@ returns `asexpr=max(a) AS ma, b, min(h) AS mh`.
 [%sql_clause_by](@ref sas_sql_clause_by), [%sql_clause_modify](@ref sas_sql_clause_modify). 
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro sql_clause_as(dsn	/* Input dataset 											(REQ) */
 					, var	/* List of variables to operate the selection on 			(REQ) */
@@ -173,11 +173,18 @@ returns `asexpr=max(a) AS ma, b, min(h) AS mh`.
 %mend sql_clause_as;
 
 %macro _example_sql_clause_as;
-	%if %symexist(G_PING_ROOTPATH) EQ 0 %then %do; 
-		%if %symexist(G_PING_SETUPPATH) EQ 0 %then 	%let G_PING_SETUPPATH=/ec/prod/server/sas/0eusilc/PING; 
-		%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
-		%_default_setup_;
-	%end;
+	%if %symexist(G_PING_SETUPPATH) EQ 0 %then %do; 
+        %if %symexist(G_PING_ROOTPATH) EQ 0 %then %do;	
+			%put WARNING: !!! PING environment not set - Impossible to run &sysmacroname !!!;
+			%put WARNING: !!! Set global variable G_PING_ROOTPATH to your PING install path !!!;
+			%goto exit;
+		%end;
+		%else %do;
+        	%let G_PING_SETUPPATH=&G_PING_ROOTPATH./PING; 
+        	%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
+        	%_default_setup_;
+		%end;
+    %end;
 
 	%local var as op ovaras expras;
 
@@ -197,6 +204,8 @@ returns `asexpr=max(a) AS ma, b, min(h) AS mh`.
 	%work_clean(_dstest6);
 
 	%put;
+
+	%exit:
 %mend _example_sql_clause_as;
 
 /* Uncomment for quick testing

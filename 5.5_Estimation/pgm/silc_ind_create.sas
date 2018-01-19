@@ -3,8 +3,10 @@
 Create an indicator table from a common variable template and a list of additional labels.
 
 ~~~sas
-	%silc_ind_create(dsn, dim=, var=, type=, len=, ignore_var_dim=NO,
-			cds_ind_con=META_INDICATOR_CONTENTS, cds_var_dim=META_VARIABLE_DIMENSION, lib=WORK);
+	%silc_ind_create(dsn, dim=, var=, type=, len=, 
+		ignore_var_dim=no, force_Nwgh=no, 
+		cds_ind_con=META_INDICATOR_CONTENTS, cds_var_dim=META_VARIABLE_DIMENSION, 
+		lib=WORK);
 ~~~
   
 ### Arguments
@@ -31,6 +33,10 @@ Create an indicator table from a common variable template and a list of addition
 	variables and Eurobase dimensions; by default,	it is named after the value 
 	`&G_PING_VARIABLE_DIMENSION` (_e.g._, `META_VARIABLE_DIMENSION`); for further description, 
 	see [%meta_variable_dimension](@ref meta_variable_dimension);
+* `force_Nwgh` : (_option_) additional boolean flag (`yes/no`) set when an additional
+	variable `nwgh` (representing the weighted sample) is added to the indicator
+	dataset; default: `force_Nwgh=no`, hence the variable `nwgh` will not be present in the 
+	output indicator;
 * `lib` : (_option_) name of the output library where `dsn` shall be stored; by default: 
 	empty, _i.e._ `WORK` is used;
 * `clib` : (_option_) name of the library where the configuration files are stored; default to 
@@ -73,9 +79,13 @@ they may be parameterised since their names derived from the following global va
 | iflag  | `G_PING_LAB_IFLAG`  |
 | unrel  | `G_PING_LAB_UNREL`  |
 | n      | `G_PING_LAB_N`      |
-| nwgh   | `G_PING_LAB_NWGH`   |
 | ntot   | `G_PING_LAB_NTOT`   |
 |ntotwgh | `G_PING_LAB_TOTWGH` |
+
+In addition a column:
+| nwgh   | `G_PING_LAB_NWGH`   |
+
+can be added when the flag `force_Nwgh` is set to `yes`.
 2. Since the type and length of the variables to insert are searched for in configuration dataset
 `cds_var_dim` (that stores the correspondance table between EU-SILC variables and Eurobase dimensions), 
 either variablse `var` or dimensions `dim` must exist in the configuration file. 
@@ -85,7 +95,7 @@ either variablse `var` or dimensions `dim` must exist in the configuration file.
 [%ds_create](@ref sas_ds_create).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro silc_ind_create(dsn				/* Name of final output dataset 											(REQ) */
 						, var=			/* Names of the variables used as breadowns for the indicator				(OPT) */
@@ -96,6 +106,7 @@ either variablse `var` or dimensions `dim` must exist in the configuration file.
 						, ignore_var_dim=/* Boolean flag set to ignore configuration flag 							(OPT) */
 						, cds_ind_con=	/* Configuration file with common indicator dimensions 						(OPT) */
 						, cds_var_dim=  /* Configuration file with correspondance between variables and dimensions 	(OPT) */
+						, force_Nwgh=NO	/* Boolean flag used to add a NWGH variable 								(REQ) */
 						, clib=			/* Name of the configuration library 										(OPT) */
 						);
 	%local _mac;
@@ -155,6 +166,15 @@ either variablse `var` or dimensions `dim` must exist in the configuration file.
 		%else												%let cds_ind_con=INDICATOR_CONTENTS;
 	%end;
 
+	/* FORCE_NWGH: set default  */
+	%if %macro_isblank(force_Nwgh) %then		%let force_Nwgh=NO; 
+	%else 										%let force_Nwgh=%upcase(&force_Nwgh); 
+
+	%if %error_handle(ErrorInputParameter, 
+			%par_check(&force_Nwgh, type=CHAR, set=YES NO) NE 0, mac=&_mac,		
+			txt=%quote(!!! Wrong value for boolean flag FORCE_NWGH - Must be in YES or NO !!!)) %then 
+		%goto exit;
+
 	%if "&ignore_var_dim"="YES" %then %goto ignore_var_dim;
 
 	%let _existindcon= %ds_check(&cds_ind_con, lib=&clib);
@@ -192,9 +212,11 @@ either variablse `var` or dimensions `dim` must exist in the configuration file.
 	/************************************************************************************/
 
 	%local _typ _len
-			/* types and lengths of the (additional) dimensions: they are searched for in configuration 
-			* file that stores the correspondance table between EU-SILC variables and Eurobase dimensions */
-			;
+		/* types and lengths of the (additional) dimensions: they are searched for in configuration 
+		* file that stores the correspondance table between EU-SILC variables and Eurobase dimensions */
+		l_NWGH			/* name of NWGH label */
+		l_TOTWGH		/* ibid, TOTWGH */
+		;
 	%let _typ=;
 	%let _len=;
 
@@ -237,39 +259,43 @@ either variablse `var` or dimensions `dim` must exist in the configuration file.
 		%if not %macro_isblank(len) %then %let _len=&len;
 	%end;
 
+	/* note those two are declared here because they are used in specific cases */
+	%if %symexist(G_PING_LAB_NWGH) %then 		%let l_NWGH=&G_PING_LAB_NWGH;
+	%else										%let l_NWGH=nwgh;
+	%if %symexist(G_PING_LAB_TOTWGH) %then 		%let l_TOTWGH=&G_PING_LAB_TOTWGH;
+	%else										%let l_TOTWGH=totwgh;
+
 	/* note that at this stage, TYP and LEN may be empty */
 
 	/* create the common template/contents of SILC X indicators */ 
 	%if &_existindcon NE 0 %then %do;
 		%local _ISTEMP_		/* flag of temporary creation */
-			l_GEO			/* name of geo variable */
+			l_GEO			/* name of GEO label */
 			GEO_LENGTH		
-			l_TIME			/* ibid, time */
+			l_TIME			/* ibid, TIME */
 			TIME_LENGTH			
-			l_UNIT			/* ibid, unit */
+			l_UNIT			/* ibid, UNIT */
 			UNIT_LENGTH		
-			l_VALUE			/* ibid, value */
-			l_UNREL			/* ibid, unrel */
-			l_N				/* ibid, n */
-			l_NWGH			/* ibid, nwgh */
-			l_NTOT			/* ibid, ntot */
-			l_TOTWGH		/* ibid, totwgh */
-			l_IFLAG			/* ibid, iflag */
+			l_VALUE			/* ibid, VALUE */
+			l_UNREL			/* ibid, UNREL */
+			l_N				/* ibid, N */
+			l_NTOT			/* ibid, NTOT */
+			l_IFLAG			/* ibid, IFLAG */
 			IFLAG_LENGTH;
 		%let _ISTEMP_=YES;
 
 		/* retrieve global setting whenever it exitsts */
 		%if %symexist(G_PING_LAB_GEO) %then 		%let l_GEO=&G_PING_LAB_GEO;
 		%else										%let l_GEO=geo;
-		%if %symexist(G_PING_GEO_LENGTH) %then 		%let GEO_LENGTH=&G_PING_GEO_LENGTH;
+		%if %symexist(G_PING_LEN_GEO) %then 		%let GEO_LENGTH=&G_PING_LEN_GEO;
 		%else										%let GEO_LENGTH=15;
 		%if %symexist(G_PING_LAB_TIME) %then 		%let l_TIME=&G_PING_LAB_TIME;
 		%else										%let l_TIME=time;
-		%if %symexist(G_PING_TIME_LENGTH) %then 	%let TIME_LENGTH=&G_PING_TIME_LENGTH;
+		%if %symexist(G_PING_LEN_TIME) %then 		%let TIME_LENGTH=&G_PING_LEN_TIME;
 		%else										%let TIME_LENGTH=4;
 		%if %symexist(G_PING_LAB_UNIT) %then 		%let l_UNIT=&G_PING_LAB_UNIT;
 		%else										%let l_UNIT=unit;
-		%if %symexist(G_PING_UNIT_LENGTH) %then 	%let UNIT_LENGTH=&G_PING_UNIT_LENGTH;
+		%if %symexist(G_PING_LEN_UNIT) %then 		%let UNIT_LENGTH=&G_PING_LEN_UNIT;
 		%else										%let UNIT_LENGTH=8;
 		%if %symexist(G_PING_LAB_VALUE) %then 		%let l_VALUE=&G_PING_LAB_VALUE;
 		%else										%let l_VALUE=ivalue;
@@ -279,13 +305,9 @@ either variablse `var` or dimensions `dim` must exist in the configuration file.
 		%else										%let l_N=n;
 		%if %symexist(G_PING_LAB_NTOT) %then 		%let l_NTOT=&G_PING_LAB_NTOT;
 		%else										%let l_NTOT=ntot;
-		%if %symexist(G_PING_LAB_NWGH) %then 		%let l_NWGH=&G_PING_LAB_NWGH;
-		%else										%let l_NWGH=nwgh;
-		%if %symexist(G_PING_LAB_TOTWGH) %then 		%let l_TOTWGH=&G_PING_LAB_TOTWGH;
-		%else										%let l_TOTWGH=totwgh;
 		%if %symexist(G_PING_LAB_IFLAG) %then 		%let l_IFLAG=&G_PING_LAB_IFLAG;
 		%else										%let l_IFLAG=iflag;
-		%if %symexist(G_PING_IFLAG_LENGTH) %then 	%let IFLAG_LENGTH=&G_PING_IFLAG_LENGTH;
+		%if %symexist(G_PING_LEN_IFLAG) %then 		%let IFLAG_LENGTH=&G_PING_LEN_IFLAG;
 		%else										%let IFLAG_LENGTH=8;
 
 		DATA WORK.&cds_ind_con;
@@ -306,7 +328,7 @@ either variablse `var` or dimensions `dim` must exist in the configuration file.
 		run;
 		%let clib=WORK;
 	%end;
-	%else 	%let _ISTEMP_=NO;
+	%else %let _ISTEMP_=NO;
 
 	/* run the standard ds_create macro with newly created table */
 	%ds_create(&dsn
@@ -318,6 +340,19 @@ either variablse `var` or dimensions `dim` must exist in the configuration file.
 			, olib=&lib
 			);
 
+	/* actually, the cases below are very SILC specific, the tests are not really needed */
+	DATA &lib..&dsn
+		%if %var_check(&dsn, &l_TOTWGH, lib=&lib) NE 0 %then %do;
+			(rename=(n&l_TOTWGH=&l_TOTWGH)) /* we clean up a bit... */
+		%end;
+		;
+		SET &lib..&dsn
+		%if "&force_Nwgh" EQ "NO" and %var_check(&dsn, &l_NWGH, lib=&lib) EQ 0 %then %do;
+				(DROP=&l_NWGH)
+		%end;
+		;
+	run;
+
 	%if &_ISTEMP_=YES %then %do;
 		%work_clean(&cds_ind_con);
 	%end; 
@@ -327,34 +362,53 @@ either variablse `var` or dimensions `dim` must exist in the configuration file.
 
 
 %macro _example_silc_ind_create;
-	%if %symexist(G_PING_ROOTPATH) EQ 0 %then %do; 
-		%if %symexist(G_PING_SETUPPATH) EQ 0 %then 	%let G_PING_SETUPPATH=/ec/prod/server/sas/0eusilc/PING; 
-		%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
-		%_default_setup_;
-	%end;
+	%if %symexist(G_PING_SETUPPATH) EQ 0 %then %do; 
+        %if %symexist(G_PING_ROOTPATH) EQ 0 %then %do;	
+			%put WARNING: !!! PING environment not set - Impossible to run &sysmacroname !!!;
+			%put WARNING: !!! Set global variable G_PING_ROOTPATH to your PING install path !!!;
+			%goto exit;
+		%end;
+		%else %do;
+			%let G_PING_PROJECT=	0EUSILC;
+        	%let G_PING_SETUPPATH=&G_PING_ROOTPATH./PING; 
+			%let G_PING_DATABASE=	/ec/prod/server/sas/0eusilc;
+        	%include "&G_PING_SETUPPATH/library/autoexec/_eusilc_setup_.sas";
+        	%_default_setup_;
+		%end;
+    %end;
 
 	%local dsn;
 	%let dsn=TMP&sysmacroname;
 	
 	%put;
 	%put (i) Create a table with additional dimensions format retrieved from configuration tables;
-	%silc_ind_create(&dsn, 
-					dim= 	TENURE 	DEG_URB 	WSTATUS
+	%silc_ind_create(&dsn 
+					, dim= 	TENURE 	DEG_URB 	WSTATUS
 					);
 	%ds_print(&dsn, title=(i) &dsn);
 	%work_clean(&dsn);
 
 	%put;
 	%put (ii) Create a table with additional dimensions explicitly set;
-	%silc_ind_create(&dsn, 
-					var= 	AGE 	RB090 	HT1
+	%silc_ind_create(&dsn
+					, var= 	AGE 	RB090 	HT1
 					);
 	%ds_print(&dsn, title=(ii) &dsn);
 	%work_clean(&dsn);
 
 	%put;
+	%put (iii) Ibid, adding also a variable NWGH;
+	%silc_ind_create(&dsn
+					, var= 	AGE 	RB090 	HT1
+					, force_Nwgh=yes);
+	%ds_print(&dsn, title=(iii) &dsn);
+	%work_clean(&dsn);
+
+	%put;
 
 	%work_clean(&dsn);
+
+	%exit:
 %mend _example_silc_ind_create;
 
 /* Uncomment for quick testing

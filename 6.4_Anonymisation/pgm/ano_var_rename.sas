@@ -17,7 +17,7 @@ Rename variables of a dataset.
 [%ano_ds_select](@ref sas_ano_ds_select), [%ano_var_mask](@ref sas_ano_var_mask).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro ano_var_rename/parmbuff;
 	%local _mac;

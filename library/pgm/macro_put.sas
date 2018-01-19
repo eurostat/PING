@@ -37,7 +37,7 @@ should not use any instance of `%%macro_put` so as to avoid recursion (like _"un
 de grand trou noir"_). 
 */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro macro_put(macro
 				, debug=
@@ -76,11 +76,18 @@ de grand trou noir"_).
 
 
 %macro _example_macro_put;
-	%if %symexist(G_PING_ROOTPATH) EQ 0 %then %do; 
-		%if %symexist(G_PING_SETUPPATH) EQ 0 %then 	%let G_PING_SETUPPATH=/ec/prod/server/sas/0eusilc/PING; 
-		%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
-		%_default_setup_;
-	%end;
+	%if %symexist(G_PING_SETUPPATH) EQ 0 %then %do; 
+        %if %symexist(G_PING_ROOTPATH) EQ 0 %then %do;	
+			%put WARNING: !!! PING environment not set - Impossible to run &sysmacroname !!!;
+			%put WARNING: !!! Set global variable G_PING_ROOTPATH to your PING install path !!!;
+			%goto exit;
+		%end;
+		%else %do;
+        	%let G_PING_SETUPPATH=&G_PING_ROOTPATH./PING; 
+        	%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
+        	%_default_setup_;
+		%end;
+    %end;
 
 	%local olddebug;
 
@@ -129,6 +136,8 @@ de grand trou noir"_).
 	%let G_PING_DEBUG=&olddebug;
 
 	%put;
+
+	%exit:
 %mend _example_macro_put;
 
 /* Uncomment for quick testing

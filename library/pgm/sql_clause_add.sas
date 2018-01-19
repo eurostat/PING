@@ -38,7 +38,7 @@ in `_dstest6`.
 [%sql_clause_by](@ref sas_sql_clause_by), [%sql_clause_where](@ref sas_sql_clause_where).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro sql_clause_add(dsn		/* Input dataset 											(REQ) */
 					, var		/* List of variables to add to the input dataset 			(REQ) */
@@ -131,11 +131,18 @@ in `_dstest6`.
 %mend sql_clause_add;
 
 %macro _example_sql_clause_add;
-	%if %symexist(G_PING_ROOTPATH) EQ 0 %then %do; 
-		%if %symexist(G_PING_SETUPPATH) EQ 0 %then 	%let G_PING_SETUPPATH=/ec/prod/server/sas/0eusilc/PING; 
-		%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
-		%_default_setup_;
-	%end;
+	%if %symexist(G_PING_SETUPPATH) EQ 0 %then %do; 
+        %if %symexist(G_PING_ROOTPATH) EQ 0 %then %do;	
+			%put WARNING: !!! PING environment not set - Impossible to run &sysmacroname !!!;
+			%put WARNING: !!! Set global variable G_PING_ROOTPATH to your PING install path !!!;
+			%goto exit;
+		%end;
+		%else %do;
+        	%let G_PING_SETUPPATH=&G_PING_ROOTPATH./PING; 
+        	%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
+        	%_default_setup_;
+		%end;
+    %end;
 
 	%local var oexpradd expradd;
 
@@ -154,6 +161,8 @@ in `_dstest6`.
 	%work_clean(_dstest6);
 
 	%put;
+
+	%exit:
 %mend _example_sql_clause_add;
 
 /* Uncomment for quick testing

@@ -65,7 +65,7 @@ When `force_set=yes`, the value of existing variable/s may be replaced this way.
 */
 /** \cond */ 
 
-/* credits: grillma */
+/* credits: marinapippi */
 
 %macro var_set(idsn
 			, var=
@@ -162,11 +162,18 @@ When `force_set=yes`, the value of existing variable/s may be replaced this way.
 %mend var_set;
 
 %macro _example_var_set;
-	%if %symexist(G_PING_ROOTPATH) EQ 0 %then %do; 
-		%if %symexist(G_PING_SETUPPATH) EQ 0 %then 	%let G_PING_SETUPPATH=/ec/prod/server/sas/0eusilc/PING; 
-		%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
-		%_default_setup_;
-	%end;
+	%if %symexist(G_PING_SETUPPATH) EQ 0 %then %do; 
+        %if %symexist(G_PING_ROOTPATH) EQ 0 %then %do;	
+			%put WARNING: !!! PING environment not set - Impossible to run &sysmacroname !!!;
+			%put WARNING: !!! Set global variable G_PING_ROOTPATH to your PING install path !!!;
+			%goto exit;
+		%end;
+		%else %do;
+        	%let G_PING_SETUPPATH=&G_PING_ROOTPATH./PING; 
+        	%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
+        	%_default_setup_;
+		%end;
+    %end;
 
 	%local dsn;
 
@@ -190,22 +197,11 @@ When `force_set=yes`, the value of existing variable/s may be replaced this way.
 
 	%work_clean(_dstest5, &dsn);
 
+	%exit:
 %mend _example_var_set;
 /*
 options NOSOURCE MRECALL MLOGIC MPRINT NOTES;
 %_example_var_set; 
 */
 /** \endcond */
-	%ds_print(_dstest5);
-	DATA _dstest5;
-		SET _dstest5;  
-		PL1111="";
-	run;
-	%ds_print(_dstest5);
-	PROC SQL noprint;
-		ALTER TABLE _dstest5
-		ADD PL1113 CHAR(5);
-		UPDATE _dstest5 
-		SET PL1113="";
-	quit;
-	%ds_print(_dstest5);
+

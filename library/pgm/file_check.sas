@@ -52,7 +52,7 @@ In short, the error code returned when `ext` is not set is the evaluation of:
 [FILEEXIST](http://support.sas.com/documentation/cdl/en/lrdict/64316/HTML/default/viewer.htm#a000210912.htm).
 */ /** \cond */
 
-/* credits: grazzja, grillma */
+/* credits: gjacopo, marinapippi */
 
 %macro file_check(fn	/* Input filename 									(REQ) */
 				, ext= 	/* Name of the extension/format of the input file 	(OPT) */
@@ -87,11 +87,18 @@ In short, the error code returned when `ext` is not set is the evaluation of:
 %mend file_check;
 
 %macro _example_file_check;
-	%if %symexist(G_PING_ROOTPATH) EQ 0 %then %do; 
-		%if %symexist(G_PING_SETUPPATH) EQ 0 %then 	%let G_PING_SETUPPATH=/ec/prod/server/sas/0eusilc/PING; 
-		%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
-		%_default_setup_;
-	%end;
+	%if %symexist(G_PING_SETUPPATH) EQ 0 %then %do; 
+        %if %symexist(G_PING_ROOTPATH) EQ 0 %then %do;	
+			%put WARNING: !!! PING environment not set - Impossible to run &sysmacroname !!!;
+			%put WARNING: !!! Set global variable G_PING_ROOTPATH to your PING install path !!!;
+			%goto exit;
+		%end;
+		%else %do;
+        	%let G_PING_SETUPPATH=&G_PING_ROOTPATH./PING; 
+        	%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
+        	%_default_setup_;
+		%end;
+    %end;
 
 	%put Examples of use:;
 	%local dfile;
@@ -113,6 +120,8 @@ In short, the error code returned when `ext` is not set is the evaluation of:
 	%else 										%put ERROR: TEST FAILED - Correct format: errcode -1/1;
 
 	%put;
+
+	%exit:
 %mend _example_file_check;
 
 /* Uncomment for quick testing

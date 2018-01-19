@@ -33,7 +33,7 @@ Run macro `%%_example_digits` for more examples.
 finding the maximum value or the number of occurrences of the variables in the table.
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro digits(value /* Numeric value whose digits are returned (REQ) */
 			);
@@ -51,11 +51,18 @@ finding the maximum value or the number of occurrences of the variables in the t
 %mend digits;
 
 %macro _example_digits;
-	%if %symexist(G_PING_ROOTPATH) EQ 0 %then %do; 
-		%if %symexist(G_PING_SETUPPATH) EQ 0 %then 	%let G_PING_SETUPPATH=/ec/prod/server/sas/0eusilc/PING; 
-		%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
-		%_default_setup_;
-	%end;
+	%if %symexist(G_PING_SETUPPATH) EQ 0 %then %do; 
+        %if %symexist(G_PING_ROOTPATH) EQ 0 %then %do;	
+			%put WARNING: !!! PING environment not set - Impossible to run &sysmacroname !!!;
+			%put WARNING: !!! Set global variable G_PING_ROOTPATH to your PING install path !!!;
+			%goto exit;
+		%end;
+		%else %do;
+        	%let G_PING_SETUPPATH=&G_PING_ROOTPATH./PING; 
+        	%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
+        	%_default_setup_;
+		%end;
+    %end;
 
 	%put;
 	%put (ii) Dummy test on non numeric parameter; 
@@ -101,6 +108,8 @@ finding the maximum value or the number of occurrences of the variables in the t
 	%else 							%put ERROR: TEST PASSED - Wrong number of digits returned; 
 
 	%put;
+
+	%exit:
 %mend _example_digits;
 
 /* Uncomment for quick testing

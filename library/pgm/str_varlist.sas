@@ -66,7 +66,7 @@ which is also equivalent to:
 [%ds_check](@ref sas_ds_check), [%list_append](@ref sas_list_append).
 */ /** \cond */
 
-/* credits: grazzja, lamarpi */
+/* credits: gjacopo, pierre-lamarche */
 
 %macro str_varlist(var		/* String representing a list of dataset/variable pairs (REQ) */
 				, ds=		/* Input reference dataset 								(REQ) */
@@ -166,11 +166,18 @@ which is also equivalent to:
 %mend str_varlist;
 
 %macro _example_str_varlist;
-	%if %symexist(G_PING_ROOTPATH) EQ 0 %then %do; 
-		%if %symexist(G_PING_SETUPPATH) EQ 0 %then 	%let G_PING_SETUPPATH=/ec/prod/server/sas/0eusilc/PING; 
-		%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
-		%_default_setup_;
-	%end;
+	%if %symexist(G_PING_SETUPPATH) EQ 0 %then %do; 
+        %if %symexist(G_PING_ROOTPATH) EQ 0 %then %do;	
+			%put WARNING: !!! PING environment not set - Impossible to run &sysmacroname !!!;
+			%put WARNING: !!! Set global variable G_PING_ROOTPATH to your PING install path !!!;
+			%goto exit;
+		%end;
+		%else %do;
+        	%let G_PING_SETUPPATH=&G_PING_ROOTPATH./PING; 
+        	%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
+        	%_default_setup_;
+		%end;
+    %end;
 
 	%local dsn list olist dslst odslst;
 
@@ -230,6 +237,8 @@ which is also equivalent to:
 	%put;
 
 	%work_clean(_dstest5);
+
+	%exit:
 %mend _example_str_varlist;
 
 /* Uncomment for quick testing

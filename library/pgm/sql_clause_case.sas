@@ -27,13 +27,18 @@ The simple example below:
 ~~~
 returns .
 
+### Note
+The macro will not return exactly what you want if the symbol `$` appears somewhere in the `when` or `then` lists. 
+If you need to use `$` in there, you can reset the global macro variable `G_PING_UNLIKELY_CHAR` (see `_setup_` 
+file) to another dumb (unlikely) character of your own.
+
 ### See also
 [%ds_select](@ref sas_ds_select), [%sql_clause_where](@ref sas_sql_clause_where), 
 [%sql_clause_as](@ref sas_sql_clause_as), [%sql_clause_add](@ref sas_sql_clause_add), 
 [%sql_clause_by](@ref sas_sql_clause_by), [%sql_clause_modify](@ref sas_sql_clause_modify). 
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro sql_clause_case(dsn		/* Input dataset 											(REQ) */
 					, var		/* Variable to apply the operation upon 					(REQ) */
@@ -90,7 +95,8 @@ returns .
 	%let when=%sysfunc(compbl(%quote(&when)));
 	
 	/* replace with dummy improbable char */
-	%let REP=%str(£); 
+	%if %symexist(G_PING_UNLIKELY_CHAR) %then 		%let REP=%quote(&G_PING_UNLIKELY_CHAR);
+	%else							%let REP=%str($);
 	%let when=%quote(%sysfunc(tranwrd(%bquote(&when), %str(%), %(), &REP)));
 	%let then=%quote(%sysfunc(tranwrd(%bquote(&then), %str(%), %(), &REP)));
 
@@ -164,11 +170,18 @@ returns .
 %mend sql_clause_case;
 
 %macro _example_sql_clause_case;
-	%if %symexist(G_PING_ROOTPATH) EQ 0 %then %do; 
-		%if %symexist(G_PING_SETUPPATH) EQ 0 %then 	%let G_PING_SETUPPATH=/ec/prod/server/sas/0eusilc/PING; 
-		%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
-		%_default_setup_;
-	%end;
+	%if %symexist(G_PING_SETUPPATH) EQ 0 %then %do; 
+        %if %symexist(G_PING_ROOTPATH) EQ 0 %then %do;	
+			%put WARNING: !!! PING environment not set - Impossible to run &sysmacroname !!!;
+			%put WARNING: !!! Set global variable G_PING_ROOTPATH to your PING install path !!!;
+			%goto exit;
+		%end;
+		%else %do;
+        	%let G_PING_SETUPPATH=&G_PING_ROOTPATH./PING; 
+        	%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
+        	%_default_setup_;
+		%end;
+    %end;
 
 	%let when=  (PL111 between 1 and 3),	 
 			  	(PL111 between 5 and 39),  
@@ -185,6 +198,7 @@ returns .
 				(" ");
 	%put %sql_clause_case(when=%quote(&when), then=%quote(&then));
 
+	%exit:
 %mend _example_sql_clause_case;
 
 /* 

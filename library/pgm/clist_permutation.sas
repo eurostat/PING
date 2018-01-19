@@ -46,13 +46,15 @@ Run macro `%%_example_list_permutation` for examples.
 
 ### Notes
 1. In the example above, one can simply check that `%%list_compare(&par, &olist)=0` holds.
-2. The macro will not return exactly what you want if the symbol £ appears somewhere in the list.
+2. The macro will not return exactly what you want if the symbol `$` appears somewhere in the list. If you need to
+use `$`, you can reset the global macro variable `G_PING_UNLIKELY_CHAR` (see `_setup_` file) to another dumb 
+(unlikely) character of your own.
 
 ### See also
 [%ranuni](@ref sas_ranuni), [%list_sequence](@ref sas_list_sequence).
 */ /** \cond */
 
-/* credits: grazzja, lamarpi */
+/* credits: gjacopo, pierre-lamarche */
 
 %macro clist_permutation(par 		/* Positive integer OR list of items comma-separated by a delimiter and between parentheses	(REQ) */
 				 		, _clist_= 	/* Name of the macro variable storing the output permutted list 							(REQ) */
@@ -84,7 +86,7 @@ Run macro `%%_example_list_permutation` for examples.
 
 	/* REP: setting */
 	%if %symexist(G_PING_UNLIKELY_CHAR) %then 		%let REP=%quote(&G_PING_UNLIKELY_CHAR);
-	%else											%let REP=£;
+	%else											%let REP=$;
 
 	/************************************************************************************/
 	/**                                 actual computation                             **/
@@ -111,11 +113,18 @@ Run macro `%%_example_list_permutation` for examples.
 %mend clist_permutation;
 
 %macro _example_clist_permutation;
-	%if %symexist(G_PING_ROOTPATH) EQ 0 %then %do; 
-		%if %symexist(G_PING_SETUPPATH) EQ 0 %then 	%let G_PING_SETUPPATH=/ec/prod/server/sas/0eusilc/PING; 
-		%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
-		%_default_setup_;
-	%end;
+	%if %symexist(G_PING_SETUPPATH) EQ 0 %then %do; 
+        %if %symexist(G_PING_ROOTPATH) EQ 0 %then %do;	
+			%put WARNING: !!! PING environment not set - Impossible to run &sysmacroname !!!;
+			%put WARNING: !!! Set global variable G_PING_ROOTPATH to your PING install path !!!;
+			%goto exit;
+		%end;
+		%else %do;
+        	%let G_PING_SETUPPATH=&G_PING_ROOTPATH./PING; 
+        	%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
+        	%_default_setup_;
+		%end;
+    %end;
 
 	%local clist oclist ocres;
 	%let oclist=;
@@ -141,6 +150,8 @@ Run macro `%%_example_list_permutation` for examples.
 	%else 										%put ERROR: TEST FAILED - Wrong list permutation: &oclist;
 
 	%put;
+
+	%exit:
 %mend _example_clist_permutation; 
 
 /* Uncomment for quick testing

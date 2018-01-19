@@ -62,7 +62,7 @@ for any year from 2003 on (_e.g._, what used to be `CCWGH60`).
 [%population_compare](@ref sas_population_compare), [%meta_populationxcountry](@ref meta_populationxcountry).
 */ /** \cond */
 
-/* credits: grazzja, grillma */
+/* credits: gjacopo, marinapippi */
 
 %macro ctry_population_compare(ctry_glob	/* Input formatted list of global country ISO-codes  			(REQ) */
 							, ctry_part		/* Ibid for partial country ISO-codes  							(REQ) */
@@ -110,11 +110,18 @@ for any year from 2003 on (_e.g._, what used to be `CCWGH60`).
 
 
 %macro _example_ctry_population_compare;
-	%if %symexist(G_PING_ROOTPATH) EQ 0 %then %do; 
-		%if %symexist(G_PING_SETUPPATH) EQ 0 %then 	%let G_PING_SETUPPATH=/ec/prod/server/sas/0eusilc/PING; 
-		%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
-		%_default_setup_;
-	%end;
+	%if %symexist(G_PING_SETUPPATH) EQ 0 %then %do; 
+        %if %symexist(G_PING_ROOTPATH) EQ 0 %then %do;	
+			%put WARNING: !!! PING environment not set - Impossible to run &sysmacroname !!!;
+			%put WARNING: !!! Set global variable G_PING_ROOTPATH to your PING install path !!!;
+			%goto exit;
+		%end;
+		%else %do;
+        	%let G_PING_SETUPPATH=&G_PING_ROOTPATH./PING; 
+        	%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
+        	%_default_setup_;
+		%end;
+    %end;
 	
 	%let ctry_part=DE;
 	%let ctry_glob=DE MT;
@@ -128,6 +135,8 @@ for any year from 2003 on (_e.g._, what used to be `CCWGH60`).
 	%put the answer is: &run_agg, with ratio=&pop_infl;
 
 	%put;
+
+	%exit:
 %mend _example_ctry_population_compare;
 
 /* 

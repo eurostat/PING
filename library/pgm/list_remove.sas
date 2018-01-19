@@ -39,7 +39,7 @@ Run macro `%%_example_list_remove` for more examples.
 [%list_append](@ref sas_list_append).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro list_remove(list 	/* List of blank separated items 					(REQ) */
 				, item 		/* (list of) item(s) to remove from the input list 	(REQ) */ 
@@ -105,11 +105,18 @@ Run macro `%%_example_list_remove` for more examples.
 %mend list_remove;
 
 %macro _example_list_remove;
-	%if %symexist(G_PING_ROOTPATH) EQ 0 %then %do; 
-		%if %symexist(G_PING_SETUPPATH) EQ 0 %then 	%let G_PING_SETUPPATH=/ec/prod/server/sas/0eusilc/PING; 
-		%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
-		%_default_setup_;
-	%end;
+	%if %symexist(G_PING_SETUPPATH) EQ 0 %then %do; 
+        %if %symexist(G_PING_ROOTPATH) EQ 0 %then %do;	
+			%put WARNING: !!! PING environment not set - Impossible to run &sysmacroname !!!;
+			%put WARNING: !!! Set global variable G_PING_ROOTPATH to your PING install path !!!;
+			%goto exit;
+		%end;
+		%else %do;
+        	%let G_PING_SETUPPATH=&G_PING_ROOTPATH./PING; 
+        	%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
+        	%_default_setup_;
+		%end;
+    %end;
 
 	%local list item olist;
 
@@ -144,6 +151,8 @@ Run macro `%%_example_list_remove` for more examples.
 	%else 											%put ERROR: TEST FAILED - Wrong list returned;
 
 	%put;
+
+	%exit:
 %mend _example_list_remove;
 
 /* Uncomment for quick testing

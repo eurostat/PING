@@ -44,7 +44,7 @@ Run macro `%%_example_list_difference` for more examples.
 [FINDW](http://support.sas.com/documentation/cdl/en/lrdict/64316/HTML/default/viewer.htm#a002978282.htm).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro list_difference(list1, list2	/* Lists of blank-separated items 							(REQ) */
 					, casense=		/* Boolean flag set for case sensitive comparison 			(OPT) */
@@ -118,11 +118,18 @@ Run macro `%%_example_list_difference` for more examples.
 
 
 %macro _example_list_difference;
-	%if %symexist(G_PING_ROOTPATH) EQ 0 %then %do; 
-		%if %symexist(G_PING_SETUPPATH) EQ 0 %then 	%let G_PING_SETUPPATH=/ec/prod/server/sas/0eusilc/PING; 
-		%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
-		%_default_setup_;
-	%end;
+	%if %symexist(G_PING_SETUPPATH) EQ 0 %then %do; 
+        %if %symexist(G_PING_ROOTPATH) EQ 0 %then %do;	
+			%put WARNING: !!! PING environment not set - Impossible to run &sysmacroname !!!;
+			%put WARNING: !!! Set global variable G_PING_ROOTPATH to your PING install path !!!;
+			%goto exit;
+		%end;
+		%else %do;
+        	%let G_PING_SETUPPATH=&G_PING_ROOTPATH./PING; 
+        	%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
+        	%_default_setup_;
+		%end;
+    %end;
 	
 	%local list1 list2 rlist olist olist2;
 
@@ -174,6 +181,8 @@ Run macro `%%_example_list_difference` for more examples.
 	%else 							%put ERROR: TEST FAILED - Wrong difference "list1 - list2" returned: &rlist;
 
 	%put;
+
+	%exit:
 %mend _example_list_difference;
 
 /* Uncomment for quick testing

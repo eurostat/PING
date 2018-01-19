@@ -78,4 +78,4 @@ that the macro `%%gini` runs the following `DATA` step over already sorted data:
 6. Web link on [Gini Coefficient of inequality](http://www.statsdirect.com/help/default.htm#nonparametric_methods/gini.htm).
 
 ### See also
-[%income_gini](@ref sas_income_gini).
+[%income_components_gini](@ref sas_income_components_gini).

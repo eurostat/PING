@@ -1,8 +1,12 @@
 ## silc_ind_create {#sas_silc_ind_create}
 Create an indicator table from a common variable template and a list of additional labels.
 
-	%silc_ind_create(dsn, dim=, var=, type=, len=, ignore_var_dim=NO,
-			cds_ind_con=META_INDICATOR_CONTENTS, cds_var_dim=META_VARIABLE_DIMENSION, lib=WORK);
+~~~sas
+	%silc_ind_create(dsn, dim=, var=, type=, len=, 
+		ignore_var_dim=no, force_Nwgh=no, 
+		cds_ind_con=META_INDICATOR_CONTENTS, cds_var_dim=META_VARIABLE_DIMENSION, 
+		lib=WORK);
+~~~
   
 ### Arguments
 * `dsn` : name of the output (created) dataset;
@@ -28,6 +32,10 @@ Create an indicator table from a common variable template and a list of addition
 	variables and Eurobase dimensions; by default,	it is named after the value 
 	`&G_PING_VARIABLE_DIMENSION` (_e.g._, `META_VARIABLE_DIMENSION`); for further description, 
 	see [%meta_variable_dimension](@ref meta_variable_dimension);
+* `force_Nwgh` : (_option_) additional boolean flag (`yes/no`) set when an additional
+	variable `nwgh` (representing the weighted sample) is added to the indicator
+	dataset; default: `force_Nwgh=no`, hence the variable `nwgh` will not be present in the 
+	output indicator;
 * `lib` : (_option_) name of the output library where `dsn` shall be stored; by default: 
 	empty, _i.e._ `WORK` is used;
 * `clib` : (_option_) name of the library where the configuration files are stored; default to 
@@ -45,8 +53,10 @@ template.
 ### Examples
 Running for instance
 
+~~~sas
 	%let dims=AGE 	RB090 	HT1;
 	%silc_ind_create(dsn, dim=&dims);
+~~~
 
 creates the table `dsn` in the `WORK`ing library as:
 | geo | time | unit | ivalue | iflag | unrel | AGE | SEX | HHTYP | n | nwgh | ntot | ntotwgh | lastup | lastuser |
@@ -68,9 +78,13 @@ they may be parameterised since their names derived from the following global va
 | iflag  | `G_PING_LAB_IFLAG`  |
 | unrel  | `G_PING_LAB_UNREL`  |
 | n      | `G_PING_LAB_N`      |
-| nwgh   | `G_PING_LAB_NWGH`   |
 | ntot   | `G_PING_LAB_NTOT`   |
 |ntotwgh | `G_PING_LAB_TOTWGH` |
+
+In addition a column:
+| nwgh   | `G_PING_LAB_NWGH`   |
+
+can be added when the flag `force_Nwgh` is set to `yes`.
 2. Since the type and length of the variables to insert are searched for in configuration dataset
 `cds_var_dim` (that stores the correspondance table between EU-SILC variables and Eurobase dimensions), 
 either variablse `var` or dimensions `dim` must exist in the configuration file. 

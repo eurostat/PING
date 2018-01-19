@@ -72,7 +72,7 @@ a typical example of configuration table dataset.
 [%meta_indicator_contents](@ref meta_indicator_contents).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro ds_create(odsn			/* Name of final output dataset 						(REQ) */
 				, idsn=			/* Dataset of common variables		(OPT) */
@@ -267,11 +267,18 @@ a typical example of configuration table dataset.
 
 
 %macro _example_ds_create;
-	%if %symexist(G_PING_ROOTPATH) EQ 0 %then %do; 
-		%if %symexist(G_PING_SETUPPATH) EQ 0 %then 	%let G_PING_SETUPPATH=/ec/prod/server/sas/0eusilc/PING; 
-		%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
-		%_default_setup_;
-	%end;
+	%if %symexist(G_PING_SETUPPATH) EQ 0 %then %do; 
+        %if %symexist(G_PING_ROOTPATH) EQ 0 %then %do;	
+			%put WARNING: !!! PING environment not set - Impossible to run &sysmacroname !!!;
+			%put WARNING: !!! Set global variable G_PING_ROOTPATH to your PING install path !!!;
+			%goto exit;
+		%end;
+		%else %do;
+        	%let G_PING_SETUPPATH=&G_PING_ROOTPATH./PING; 
+        	%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
+        	%_default_setup_;
+		%end;
+    %end;
 
 	%local _cds _dsn labels rlabels olabels types rtypes otypes lengths rlengths olengths;
 	%let _dsn=TMP&sysmacroname;
@@ -339,6 +346,7 @@ a typical example of configuration table dataset.
 	%ds_print(&_dsn); /* empty.... */
 
 	%work_clean(&_cds, &_dsn);
+
 	%exit:
 %mend _example_ds_create;
 

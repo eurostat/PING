@@ -50,7 +50,7 @@ NET-SILC2 by [Osier et al, 2013] following the original algorithm of [Berger and
 [%var_est_data_prep](@ref sas_var_est_data_prep), [%var_mvrg_cmpr](@ref sas_var_mvrg_cmpr), [%var_est_srvyfrq](@ref sas_var_est_srvyfrq).
 */ /** \cond */
 
-/* credits: meszama */
+/* credits: mmatyi */
 
 %macro var_est_mvrg (idsn = 	/* name of the input data set										(REQ) */
 					, yr= 		/* year for which the variance is calculated						(REQ) */

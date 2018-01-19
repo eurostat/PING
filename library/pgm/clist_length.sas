@@ -37,13 +37,15 @@ Run macro `%%_example_clist_length` for more examples.
 will return `len=2`, _i.e._ the comma-separated empty items are not taken into
 account in the counting.
 2. See note of [%list_length](@ref sas_list_length).
-3. The macro will not return exactly what you want if the symbol £ appears somewhere in the list.
+3. The macro will not return exactly what you want if the symbol `$` appears somewhere in the list. If you need to
+use `$`, you can reset the global macro variable `G_PING_UNLIKELY_CHAR` (see `_setup_` file) to another dumb 
+(unlikely) character of your own.
 
 ### See also
 [%list_length](@ref sas_list_length), [%clist_unquote](@ref sas_clist_unquote).
 */ /** \cond */
 
-/* credits: grazzja, lamarpi */
+/* credits: gjacopo, pierre-lamarche */
 
 %macro clist_length(clist 	/* List of items comma-separated by a delimiter and between parentheses (REQ) */
 					, mark=	/* Character/string used to quote items in input lists 					(OPT) */
@@ -67,7 +69,7 @@ account in the counting.
 
 	/* REP: setting */
 	%if %symexist(G_PING_UNLIKELY_CHAR) %then 		%let REP=%quote(&G_PING_UNLIKELY_CHAR);
-	%else											%let REP=£;
+	%else											%let REP=$;
 
 	/************************************************************************************/
 	/**                                 actual computation                             **/
@@ -94,11 +96,18 @@ account in the counting.
 %mend clist_length;
 
 %macro _example_clist_length;
-	%if %symexist(G_PING_ROOTPATH) EQ 0 %then %do; 
-		%if %symexist(G_PING_SETUPPATH) EQ 0 %then 	%let G_PING_SETUPPATH=/ec/prod/server/sas/0eusilc/PING; 
-		%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
-		%_default_setup_;
-	%end;
+	%if %symexist(G_PING_SETUPPATH) EQ 0 %then %do; 
+        %if %symexist(G_PING_ROOTPATH) EQ 0 %then %do;	
+			%put WARNING: !!! PING environment not set - Impossible to run &sysmacroname !!!;
+			%put WARNING: !!! Set global variable G_PING_ROOTPATH to your PING install path !!!;
+			%goto exit;
+		%end;
+		%else %do;
+        	%let G_PING_SETUPPATH=&G_PING_ROOTPATH./PING; 
+        	%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
+        	%_default_setup_;
+		%end;
+    %end;
 
 	%let clist=("DE","AT","BE","NL","UK","SE");
 	%put;
@@ -125,7 +134,8 @@ account in the counting.
 	%if %clist_length(&clist)=3 %then 			%put OK: TEST PASSED - Length 3 returned (see previous result);
 	%else 										%put ERROR: TEST FAILED - Wrong length returned;
 	
-	%put;								
+	%put;
+	%exit:	
 %mend _example_clist_length;
 
 /* Uncomment for quick testing

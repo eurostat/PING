@@ -67,7 +67,7 @@ Run macro `%%_example_list_append` for more examples.
 [%clist_append](@ref sas_clist_append), [%clist_difference](@ref sas_clist_difference).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro list_append(list1, list2	/* Lists of blank-separated items 							(REQ) */
 				, zip=			/* Boolean flag used to interleave the lists 				(OPT) */
@@ -166,11 +166,18 @@ Run macro `%%_example_list_append` for more examples.
 %mend list_append;
 
 %macro _example_list_append;
-	%if %symexist(G_PING_ROOTPATH) EQ 0 %then %do; 
-		%if %symexist(G_PING_SETUPPATH) EQ 0 %then 	%let G_PING_SETUPPATH=/ec/prod/server/sas/0eusilc/PING; 
-		%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
-		%_default_setup_;
-	%end;
+	%if %symexist(G_PING_SETUPPATH) EQ 0 %then %do; 
+        %if %symexist(G_PING_ROOTPATH) EQ 0 %then %do;	
+			%put WARNING: !!! PING environment not set - Impossible to run &sysmacroname !!!;
+			%put WARNING: !!! Set global variable G_PING_ROOTPATH to your PING install path !!!;
+			%goto exit;
+		%end;
+		%else %do;
+        	%let G_PING_SETUPPATH=&G_PING_ROOTPATH./PING; 
+        	%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
+        	%_default_setup_;
+		%end;
+    %end;
 
 	%local list1 list2 olist1 olist2;
 
@@ -219,6 +226,8 @@ Run macro `%%_example_list_append` for more examples.
 		%put ERROR: TEST FAILED - Wrong concatenated list "start + end" returned;
 
 	%put;
+
+	%exit:
 %mend _example_list_append;
 
 /* Uncomment for quick testing

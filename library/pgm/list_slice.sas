@@ -64,7 +64,7 @@ Run macro `%%_example_list_slice` for more examples.
 [%list_remove](@ref sas_list_remove),  [%list_append](@ref sas_list_append).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro list_slice(list 	/* list  blank-separated items 						(REQ) */
 				, beg=  /* First item to look for in the list 				(OPT) */
@@ -204,11 +204,18 @@ Run macro `%%_example_list_slice` for more examples.
 %mend list_slice;
 
 %macro _example_list_slice;
-	%if %symexist(G_PING_ROOTPATH) EQ 0 %then %do; 
-		%if %symexist(G_PING_SETUPPATH) EQ 0 %then 	%let G_PING_SETUPPATH=/ec/prod/server/sas/0eusilc/PING; 
-		%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
-		%_default_setup_;
-	%end;
+	%if %symexist(G_PING_SETUPPATH) EQ 0 %then %do; 
+        %if %symexist(G_PING_ROOTPATH) EQ 0 %then %do;	
+			%put WARNING: !!! PING environment not set - Impossible to run &sysmacroname !!!;
+			%put WARNING: !!! Set global variable G_PING_ROOTPATH to your PING install path !!!;
+			%goto exit;
+		%end;
+		%else %do;
+        	%let G_PING_SETUPPATH=&G_PING_ROOTPATH./PING; 
+        	%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
+        	%_default_setup_;
+		%end;
+    %end;
 
 	%local list beg ibeg end iend olist;
 
@@ -301,6 +308,8 @@ Run macro `%%_example_list_slice` for more examples.
 		%put ERROR: TEST FAILED - Wrong list returned;
 
 	%put;
+
+	%exit:
 %mend _example_list_slice;
 
 /* Uncomment for quick testing

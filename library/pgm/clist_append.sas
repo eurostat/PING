@@ -41,13 +41,15 @@ returns: `conc=("1","A","2","B","3","C")`.
 Run macro `%%_example_clist_append` for more examples.
 
 ### Note
-The macro will not return exactly what you want if the symbol £ appears somewhere in the list.
+The macro will not return exactly what you want if the symbol `$` appears somewhere in the list. If you need to
+use `$`, you can reset the global macro variable `G_PING_UNLIKELY_CHAR` (see `_setup_` file) to another dumb 
+(unlikely) character of your own.
 
 ### See also
 [%clist_append](@ref sas_clist_append), [%clist_difference](@ref sas_clist_difference), [%clist_unquote](@ref sas_clist_unquote), [%list_quote](@ref sas_list_quote).
 */ /** \cond */
 
-/* credits: grazzja, grillma */
+/* credits: gjacopo, marinapippi */
 
 %macro clist_append(clist1, clist2	/* Lists of items comma-separated by a delimiter and between parentheses 	(REQ) */
 					, zip=no		/* Boolean flag used to interleave the lists 								(OPT) */
@@ -72,7 +74,7 @@ The macro will not return exactly what you want if the symbol £ appears somewher
 
 	/* REP: setting */
 	%if %symexist(G_PING_UNLIKELY_CHAR) %then 		%let REP=%quote(&G_PING_UNLIKELY_CHAR);
-	%else											%let REP=£;
+	%else											%let REP=$;
 
 	/************************************************************************************/
 	/**                                 actual computation                             **/
@@ -94,11 +96,18 @@ The macro will not return exactly what you want if the symbol £ appears somewher
 %mend clist_append;
 
 %macro _example_clist_append;
-	%if %symexist(G_PING_ROOTPATH) EQ 0 %then %do; 
-		%if %symexist(G_PING_SETUPPATH) EQ 0 %then 	%let G_PING_SETUPPATH=/ec/prod/server/sas/0eusilc/PING; 
-		%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
-		%_default_setup_;
-	%end;
+	%if %symexist(G_PING_SETUPPATH) EQ 0 %then %do; 
+        %if %symexist(G_PING_ROOTPATH) EQ 0 %then %do;	
+			%put WARNING: !!! PING environment not set - Impossible to run &sysmacroname !!!;
+			%put WARNING: !!! Set global variable G_PING_ROOTPATH to your PING install path !!!;
+			%goto exit;
+		%end;
+		%else %do;
+        	%let G_PING_SETUPPATH=&G_PING_ROOTPATH./PING; 
+        	%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
+        	%_default_setup_;
+		%end;
+    %end;
 
 	%local clist1 clist2;
 	%let clist1=("A","B","C","D","E","F");	
@@ -131,7 +140,7 @@ The macro will not return exactly what you want if the symbol £ appears somewher
 		%put ERROR: TEST FAILED - Wrong concatenated list "clist1 + clist2" returned;
 
 	%put;
-
+    %exit:
 %mend _example_clist_append;
 
 /* Uncomment for quick testing

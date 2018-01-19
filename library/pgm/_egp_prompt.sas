@@ -40,7 +40,7 @@ from <a href="mailto:Olivier.DE-GRYSE@ext.ec.europa.eu">O.De Gryse</a> (SAS supp
 [%_egp_geotime](@ref sas__egp_geotime), [%_egp_path](@ref sas__egp_path).
 */ /** \cond */
 
-/* credits: okbisa, grazzja */
+/* credits: okbisa, gjacopo */
 
 %macro _egp_prompt(prompt_name=	/* Name of the prompt 									(OPT) */
 				, ptype=		/* Type of the prompt 									(OPT) */
@@ -234,15 +234,23 @@ data _NULL_;
 
 
 %macro _example__egp_prompt;
-	%if %symexist(G_PING_ROOTPATH) EQ 0 %then %do; 
-		%if %symexist(G_PING_SETUPPATH) EQ 0 %then 	%let G_PING_SETUPPATH=/ec/prod/server/sas/0eusilc/PING; 
-		%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
-		%_default_setup_;
-	%end;
+	%if %symexist(G_PING_SETUPPATH) EQ 0 %then %do; 
+        %if %symexist(G_PING_ROOTPATH) EQ 0 %then %do;	
+			%put WARNING: !!! PING environment not set - Impossible to run &sysmacroname !!!;
+			%put WARNING: !!! Set global variable G_PING_ROOTPATH to your PING install path !!!;
+			%goto exit;
+		%end;
+		%else %do;
+        	%let G_PING_SETUPPATH=&G_PING_ROOTPATH./PING; 
+        	%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
+        	%_default_setup_;
+		%end;
+    %end;
 
 	%put !!! &sysmacroname: Not yet implemented !!!;
 
 	%put;
+	%exit:
 %mend _example__egp_prompt;
 
 /** \endcond */

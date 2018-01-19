@@ -43,13 +43,15 @@ returns `ans=1`.
 Run macro `%%_example_clist_compare` for more examples.
 
 ### Note
-The macro will not return exactly what you want if the symbol £ appears somewhere in the list.
+The macro will not return exactly what you want if the symbol `$` appears somewhere in the list. If you need to
+use `$`, you can reset the global macro variable `G_PING_UNLIKELY_CHAR` (see `_setup_` file) to another dumb 
+(unlikely) character of your own.
 
 ### See also
 [%list_compare](@ref sas_list_compare), [%clist_unquote](@ref sas_clist_unquote).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro clist_compare(clist1, clist2	/* Lists of items comma-separated by a delimiter and between parentheses 	(REQ) */
 					, casense=no	/* Boolean flag set for case sensitive comparison 							(OPT) */
@@ -74,7 +76,7 @@ The macro will not return exactly what you want if the symbol £ appears somewher
 
 	/* REP: setting */
 	%if %symexist(G_PING_UNLIKELY_CHAR) %then 		%let REP=%quote(&G_PING_UNLIKELY_CHAR);
-	%else											%let REP=£;
+	%else											%let REP=$;
 
 	/************************************************************************************/
 	/**                                 actual computation                             **/
@@ -99,11 +101,18 @@ The macro will not return exactly what you want if the symbol £ appears somewher
 %mend clist_compare;
 
 %macro _example_clist_compare;
-	%if %symexist(G_PING_ROOTPATH) EQ 0 %then %do; 
-		%if %symexist(G_PING_SETUPPATH) EQ 0 %then 	%let G_PING_SETUPPATH=/ec/prod/server/sas/0eusilc/PING; 
-		%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
-		%_default_setup_;
-	%end;
+	%if %symexist(G_PING_SETUPPATH) EQ 0 %then %do; 
+        %if %symexist(G_PING_ROOTPATH) EQ 0 %then %do;	
+			%put WARNING: !!! PING environment not set - Impossible to run &sysmacroname !!!;
+			%put WARNING: !!! Set global variable G_PING_ROOTPATH to your PING install path !!!;
+			%goto exit;
+		%end;
+		%else %do;
+        	%let G_PING_SETUPPATH=&G_PING_ROOTPATH./PING; 
+        	%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
+        	%_default_setup_;
+		%end;
+    %end;
 
 	%local clist1 clist2;
 
@@ -127,8 +136,8 @@ The macro will not return exactly what you want if the symbol £ appears somewher
 	%put (iii) Compare lists clist1=&clist1 and clist2=&clist2...;
 	%if %clist_compare(&clist1, &clist2)=1 %then 	%put OK: TEST PASSED - clist1>clist2: result 1;
 	%else 											%put ERROR: TEST FAILED - clist1>clist2: wrong result;
-
-	%put;								
+	%put;
+	%exit:	
 %mend _example_clist_compare;
 
 /* Uncomment for quick testing

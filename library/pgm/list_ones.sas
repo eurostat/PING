@@ -36,7 +36,7 @@ Run macro `%%_example_list_ones` for more examples.
 [%list_append](@ref sas_list_append), [%list_index](@ref sas_list_index).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro list_ones(len 	/* Lenght of output list 					(REQ) */
 				, item= /* Element to replicate in output list 		(OPT) */ 
@@ -79,11 +79,18 @@ Run macro `%%_example_list_ones` for more examples.
 %mend list_ones;
 
 %macro _example_list_ones;
-	%if %symexist(G_PING_ROOTPATH) EQ 0 %then %do; 
-		%if %symexist(G_PING_SETUPPATH) EQ 0 %then 	%let G_PING_SETUPPATH=/ec/prod/server/sas/0eusilc/PING; 
-		%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
-		%_default_setup_;
-	%end;
+	%if %symexist(G_PING_SETUPPATH) EQ 0 %then %do; 
+        %if %symexist(G_PING_ROOTPATH) EQ 0 %then %do;	
+			%put WARNING: !!! PING environment not set - Impossible to run &sysmacroname !!!;
+			%put WARNING: !!! Set global variable G_PING_ROOTPATH to your PING install path !!!;
+			%goto exit;
+		%end;
+		%else %do;
+        	%let G_PING_SETUPPATH=&G_PING_ROOTPATH./PING; 
+        	%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
+        	%_default_setup_;
+		%end;
+    %end;
 
 	%put;
 	%put (i) Crash test;
@@ -105,6 +112,8 @@ Run macro `%%_example_list_ones` for more examples.
 	%else 								%put ERROR: TEST FAILED - Wrong default list of length &len returned;
 
 	%put;
+
+	%exit:
 %mend _example_list_ones;
 
 /* Uncomment for quick testing

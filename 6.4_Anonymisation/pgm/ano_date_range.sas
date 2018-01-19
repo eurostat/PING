@@ -1,8 +1,13 @@
-/* TODO ANO_DATE_RANGE
-* Build basic equally-spaced (in number of years) sequences of dates 
-*/
+/** 
+## ano_date_range {#sas_ano_date_range}
+Create a range of date.
 
-/* credits: grazzja */
+~~~sas
+	%ano_date_range(time, nyears=, bin_step=, bin_ref=, order=);
+~~~
+*/ /** \cond */
+
+/* credits: gjacopo */
 
 %macro ano_date_range(time	/* Date of the survey 						(REQ) */
 					, nyears=	/* Maximum length of the designed range		(REQ) */

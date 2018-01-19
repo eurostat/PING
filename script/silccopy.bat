@@ -132,13 +132,9 @@ ECHO -- Checking/setting
 
 :check 
 
-SET DIRSRC=\\s-isis.eurostat.cec\0eusilc
-SET DIRDEST=\\s-iseult.eurostat.cec\1eusilc\0eusilc.copy
-SET SUBTEST=test\DUMMY
-
-REM   dummy
-REM   SET DIRSRC=\\s-isis.eurostat.cec\0eusilc\test\temp\test1
-REM   SET DIRDEST=\\s-isis.eurostat.cec\0eusilc\test\temp\test2
+REM SET DIRSRC=</put/your/source/here>
+REM DIRDEST=</put/your/destination/here>
+REM SUBTEST=test\DUMMY
 
 IF EXIST %DIRSRC% (
 	ECHO ... OK: source directory %DIRSRC%

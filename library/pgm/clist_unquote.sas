@@ -79,7 +79,7 @@ since then `clist1=clist2`.
 [%UNQUOTE](http://support.sas.com/documentation/cdl/en/mcrolref/61885/HTML/default/viewer.htm#a000543618.htm).
 */ /** \cond */
 
-/* credits: grazzja, lamarpi, grillma */
+/* credits: gjacopo, pierre-lamarche, marinapippi */
 
 %macro clist_unquote(clist 	/* List of items comma-separated by a delimiter and between parentheses (REQ) */
 					, mark=	/* Character/string used to quote items in input lists 					(OPT) */
@@ -191,11 +191,18 @@ since then `clist1=clist2`.
 %mend clist_unquote;
 
 %macro _example_clist_unquote;
-	%if %symexist(G_PING_ROOTPATH) EQ 0 %then %do; 
-		%if %symexist(G_PING_SETUPPATH) EQ 0 %then 	%let G_PING_SETUPPATH=/ec/prod/server/sas/0eusilc/PING; 
-		%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
-		%_default_setup_;
-	%end;
+	%if %symexist(G_PING_SETUPPATH) EQ 0 %then %do; 
+        %if %symexist(G_PING_ROOTPATH) EQ 0 %then %do;	
+			%put WARNING: !!! PING environment not set - Impossible to run &sysmacroname !!!;
+			%put WARNING: !!! Set global variable G_PING_ROOTPATH to your PING install path !!!;
+			%goto exit;
+		%end;
+		%else %do;
+        	%let G_PING_SETUPPATH=&G_PING_ROOTPATH./PING; 
+        	%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
+        	%_default_setup_;
+		%end;
+    %end;
 
 	%local clist olist sep rep;
 
@@ -266,6 +273,8 @@ since then `clist1=clist2`.
 	%else 												%put ERROR: TEST FAILED - wrong list returned;
 
 	%put;
+
+	%exit:
 %mend _example_clist_unquote;
 
 /* Uncomment for quick testing

@@ -36,7 +36,9 @@ Run macro `%%_example_clist_length` for more examples.
 will return `len=2`, _i.e._ the comma-separated empty items are not taken into
 account in the counting.
 2. See note of [%list_length](@ref sas_list_length).
-3. The macro will not return exactly what you want if the symbol £ appears somewhere in the list.
+3. The macro will not return exactly what you want if the symbol `$` appears somewhere in the list. If you need to
+use `$`, you can reset the global macro variable `G_PING_UNLIKELY_CHAR` (see `_setup_` file) to another dumb 
+(unlikely) character of your own.
 
 ### See also
 [%list_length](@ref sas_list_length), [%clist_unquote](@ref sas_clist_unquote).

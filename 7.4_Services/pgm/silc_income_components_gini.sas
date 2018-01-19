@@ -172,7 +172,7 @@ survivor's benefits):
 [%gini](@ref sas_gini), [%silc_income_components_disaggregated](@ref sas_silc_income_components_disaggregated).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro silc_income_components_gini(geo		/* Area of interest 											(REQ) */
 							, year		/* Year of interest 											(REQ) */

@@ -72,7 +72,7 @@ missing value (`.`).
 [%sql_operation_sum](@ref sas_sql_operation_sum), [%ds_count](@ref sas_ds_count).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro sql_operation_count(var=		/* List of original variables to count 				(OPT) */
 						, calcvar=	/* List of previously calculated variables to count (OPT) */
@@ -143,11 +143,18 @@ missing value (`.`).
 %mend sql_operation_count;
 
 %macro _example_sql_operation_count;
-	%if %symexist(G_PING_ROOTPATH) EQ 0 %then %do; 
-		%if %symexist(G_PING_SETUPPATH) EQ 0 %then 	%let G_PING_SETUPPATH=/ec/prod/server/sas/0eusilc/PING; 
-		%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
-		%_default_setup_;
-	%end;
+	%if %symexist(G_PING_SETUPPATH) EQ 0 %then %do; 
+        %if %symexist(G_PING_ROOTPATH) EQ 0 %then %do;	
+			%put WARNING: !!! PING environment not set - Impossible to run &sysmacroname !!!;
+			%put WARNING: !!! Set global variable G_PING_ROOTPATH to your PING install path !!!;
+			%goto exit;
+		%end;
+		%else %do;
+        	%let G_PING_SETUPPATH=&G_PING_ROOTPATH./PING; 
+        	%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
+        	%_default_setup_;
+		%end;
+    %end;
 
 	%local _dsn op1 op2;
 	%let _dsn=TMP&sysmacroname;
@@ -192,12 +199,13 @@ missing value (`.`).
 	%put;
 	
 	%*work_clean(&_dsn.1, &_dsn.2);
+
+	%exit:
 %mend _example_sql_operation_count;
 
 /* Uncomment for quick testing
 options NOSOURCE MRECALL MLOGIC MPRINT NOTES;
 %_example_sql_operation_count; 
 */
-%_example_sql_operation_count; 
 
 /** \endcond */

@@ -37,7 +37,7 @@ and `time=2004 2005 2010 2012 2013 2014` (list ordered).
 [%_run_geotime](@ref sas__run_geotime).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro _egp_geotime(_time_=
 					, _geo_=
@@ -46,6 +46,10 @@ and `time=2004 2005 2010 2012 2013 2014` (list ordered).
 	%local _mac; 
 	%let _mac=&sysmacroname; 
 	%macro_put(&_mac); 
+
+	/************************************************************************************/
+	/**                                 checkings/settings                             **/
+	/************************************************************************************/
 
 	%local SEP;
 	%let SEP=%quote();
@@ -56,9 +60,13 @@ and `time=2004 2005 2010 2012 2013 2014` (list ordered).
 		%goto exit;
 
 	%if %error_handle(ErrorInputParameter,
-			%macro_isblank(_geo_) EQ 1 and %macro_isblank(_time_), mac=&_mac,
+			%macro_isblank(_geo_) EQ 1 and %macro_isblank(_time_) EQ 1, mac=&_mac,
 			txt=%quote(!!! At least one of the parameters _GEO_ or _TIME_ needs to be set !!!)) %then
 		%goto exit;
+
+	/************************************************************************************/
+	/**                                 actual computation                             **/
+	/************************************************************************************/
 
 	%if not %macro_isblank(_geo_) %then %do;
 		/* retrieve the list of geos */
@@ -109,11 +117,18 @@ and `time=2004 2005 2010 2012 2013 2014` (list ordered).
 
 
 %macro _example__egp_geotime;
-	%if %symexist(G_PING_ROOTPATH) EQ 0 %then %do; 
-		%if %symexist(G_PING_SETUPPATH) EQ 0 %then 	%let G_PING_SETUPPATH=/ec/prod/server/sas/0eusilc/PING; 
-		%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
-		%_default_setup_;
-	%end;
+	%if %symexist(G_PING_SETUPPATH) EQ 0 %then %do; 
+        %if %symexist(G_PING_ROOTPATH) EQ 0 %then %do;	
+			%put WARNING: !!! PING environment not set - Impossible to run &sysmacroname !!!;
+			%put WARNING: !!! Set global variable G_PING_ROOTPATH to your PING install path !!!;
+			%goto exit;
+		%end;
+		%else %do;
+        	%let G_PING_SETUPPATH=&G_PING_ROOTPATH./PING; 
+        	%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
+        	%_default_setup_;
+		%end;
+    %end;
 
 	%put !!! &sysmacroname: Not yet implemented !!!;
 
@@ -121,7 +136,8 @@ and `time=2004 2005 2010 2012 2013 2014` (list ordered).
 	%symdel geo time;
 	%_egp_geotime(_geo_=geo, _time_=time);
 	%put geo=&geo -time=&time; */
-	
+
+	%exit:
 %mend _example__egp_geotime;
 
 /** \endcond */

@@ -15,16 +15,22 @@ docs/dox/html
 docs/dox/latex
 
 # library folder 
+library/autoexec/_old*.sas
 library/autoexec/TMP_SUPPORT.sas
 library/autoexec/_module_.sas
 library/autoexec/_support_.sas
 library/autoexec/_support_macros_.sas
 library/autoexec/_configuration_.sas
+library/autoexec/cfg_SAS_PING.sas
+library/autoexec/_silc_support.sas
+library/autoexec/_silc_module.sas
+library/autoexec/_silc?_*.sas
+library/autoexec/.cfg_*.sas
 library/catalog
 library/catalog/*
-library/config/
-library/config/*
 library/pgm/TODO_*
+library/macros
+library/macros/*
 
 # 5.1_Integration folder 
 5.1_Integration/meta/*.xls
@@ -72,6 +78,7 @@ library/pgm/TODO_*
 #6.4_Anonymisation/data/
 #6.4_Anonymisation/data/*
 6.4_Anonymisation/data.lnk
+6.4_Anonymisation/pgm/udb_adhoc_*
 6.4_Anonymisation/pgm/udb_*
 
 # 7.1_Upload folder 

@@ -47,7 +47,7 @@ following:
 ~~~
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro ano_var_btcode(geo
 					, time

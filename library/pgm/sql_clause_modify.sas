@@ -39,14 +39,14 @@ returns `modexpr=d FORMAT=$20. LENGTH=20 LABEL='d2', e FORMAT=10.2 LENGTH=8 LABE
 [MODIFY](https://support.sas.com/documentation/cdl/en/lestmtsref/63323/HTML/default/viewer.htm#n0g9jfr4x5hgsfn17gtma5547lt1.htm).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro sql_clause_modify(dsn	/* Input dataset 											(REQ) */
 					, var		/* List of variables to operate the selection on 			(REQ) */
-					, _mod_=
-					, fmt=
-					, len=
-					, lab=
+					, _mod_=	/* Name of the macro variable storing the output expression	(REQ) */
+					, fmt=		/* Format(s) of the variables								(OPT) */
+					, len=		/* Length(s) of the variables								(OPT) */
+					, lab=		/* Label(s) of the variables								(OPT) */
 					, lib=		/* Name of the input library 								(OPT) */
 					);
 	%local _mac;
@@ -176,11 +176,18 @@ returns `modexpr=d FORMAT=$20. LENGTH=20 LABEL='d2', e FORMAT=10.2 LENGTH=8 LABE
 %mend sql_clause_modify;
 
 %macro _example_sql_clause_modify;
-	%if %symexist(G_PING_ROOTPATH) EQ 0 %then %do; 
-		%if %symexist(G_PING_SETUPPATH) EQ 0 %then 	%let G_PING_SETUPPATH=/ec/prod/server/sas/0eusilc/PING; 
-		%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
-		%_default_setup_;
-	%end;
+	%if %symexist(G_PING_SETUPPATH) EQ 0 %then %do; 
+        %if %symexist(G_PING_ROOTPATH) EQ 0 %then %do;	
+			%put WARNING: !!! PING environment not set - Impossible to run &sysmacroname !!!;
+			%put WARNING: !!! Set global variable G_PING_ROOTPATH to your PING install path !!!;
+			%goto exit;
+		%end;
+		%else %do;
+        	%let G_PING_SETUPPATH=&G_PING_ROOTPATH./PING; 
+        	%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
+        	%_default_setup_;
+		%end;
+    %end;
 
 	%local var ovarmod varmod;
 
@@ -201,6 +208,8 @@ returns `modexpr=d FORMAT=$20. LENGTH=20 LABEL='d2', e FORMAT=10.2 LENGTH=8 LABE
 	%work_clean(_dstest6);
 
 	%put;
+
+	%exit:
 %mend _example_sql_clause_modify;
 
 /* Uncomment for quick testing

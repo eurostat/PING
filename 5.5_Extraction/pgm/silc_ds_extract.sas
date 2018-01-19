@@ -10,7 +10,7 @@ STILL ONGOING...
 [%silc_db_select](@ref sas_silc_db_select).
 */ /** \cond */
 
-/* credits: grazzja, grillma */
+/* credits: gjacopo, marinapippi */
 
 %macro silc_ds_extract(silc_lib
 					, list_var
@@ -166,13 +166,11 @@ STILL ONGOING...
 %mend silc_ds_extract;
 
 
-
 %macro _example_silc_ds_extract;
 
 	libname silc "&g_pdb" ;
 
 	%put (i): Create a table with an unknown zone ;
-
 	%silc_ds_extract(silc,hy020 db090,test,h,2006,year_end=2008,list_country=EU) ;
 
 	proc sort data=test ;
@@ -190,7 +188,6 @@ STILL ONGOING...
 
 
 	%put (ii): Create a table with countries from the EU27 ;
-
 	%silc_ds_extract(silc,hy020 db090,test,h,2006,year_end=2008,list_country=EU27) ;
 
 	proc sort data=test ;
@@ -208,7 +205,6 @@ STILL ONGOING...
 
 
 	%put (iii): Create a table for FR with all variables from D and H tables ;
-
 	%silc_ds_extract(silc,_all_h_ _all_d_,test,h,2010,list_country=FR) ;
 
 	proc sort data=test ;
@@ -224,6 +220,7 @@ STILL ONGOING...
 	%ds_print(test) ;
 	%work_clean ;
 
+	%exit:
 %mend _example_silc_ds_extract;
 
 /* Uncomment for quick testing

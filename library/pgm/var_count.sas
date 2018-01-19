@@ -42,7 +42,7 @@ Run macro `%%_example_var_count` for more examples.
 [%ds_count](@ref sas_ds_count), [%var_check](@ref sas_var_check), [%var_info](@ref sas_var_info).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro var_count(dsn
 				, var
@@ -131,11 +131,18 @@ Run macro `%%_example_var_count` for more examples.
 %mend var_count;
 
 %macro _example_var_count;
-	%if %symexist(G_PING_ROOTPATH) EQ 0 %then %do; 
-		%if %symexist(G_PING_SETUPPATH) EQ 0 %then 	%let G_PING_SETUPPATH=/ec/prod/server/sas/0eusilc/PING; 
-		%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
-		%_default_setup_;
-	%end;
+	%if %symexist(G_PING_SETUPPATH) EQ 0 %then %do; 
+        %if %symexist(G_PING_ROOTPATH) EQ 0 %then %do;	
+			%put WARNING: !!! PING environment not set - Impossible to run &sysmacroname !!!;
+			%put WARNING: !!! Set global variable G_PING_ROOTPATH to your PING install path !!!;
+			%goto exit;
+		%end;
+		%else %do;
+        	%let G_PING_SETUPPATH=&G_PING_ROOTPATH./PING; 
+        	%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
+        	%_default_setup_;
+		%end;
+    %end;
 
 	%local count nmiss;
 
@@ -175,6 +182,8 @@ Run macro `%%_example_var_count` for more examples.
 
 	%work_clean(_dstest1);
 	%work_clean(_dstest28);
+
+	%exit:
 %mend _example_var_count;
 
 /*

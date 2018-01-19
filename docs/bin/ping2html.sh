@@ -68,35 +68,6 @@ if [ $# -eq 1 ] && [ $1 = "-help" ]; then
     echo "                  output file names otherwise; when a suffix is passed, the '_'" 
 	echo "                  symbol is added prior to the suffix; default: empty suffix"
     echo ""
-    echo "Notes"
-	echo "-----"
-	echo "The documentation is read directly from SAS/R file headers and follows a common"
-	echo "framework:"
-	echo "  * for R files, it shall be inserted like comments (i.e. preceded by #) and in"
-	echo "  between two anchors: #STARTDOC and #ENDDOC,"
-	echo "  * for SAS files, it shall be inserted like comments in /** and */ signs." 
-	echo ""
-    echo "Examples"
-	echo "--------"
-    echo "* Test the generation of a markdown file from the clist_unquote.sas program and"
-    echo "  display the result:"
-    echo "    `basename $0` -test $drive/library/pgm/clist_unquote.sas" 
-    echo ""
-    echo "* Actually generate (after the test) that file and store it in a dedicated folder:"
-    echo "    `basename $0` -v -od $drive/documentation/md/library" 
-    echo "                     $drive/z/library/pgm/clist_unquote.sas"
-    echo ""
-    echo "* Similarly with a R file:"
-    echo "    `basename $0` -v -od $drive/documentation/md/library/5.3_Validation " 
-    echo "                     $drive/5.3_Validation/pgm/generate_docs.R"
-    echo ""
-    echo "* Automatically generate markdown files with suffix \"doc\" (i.e., list_quote.sas"
-    echo "  will be associated to the file list_quote_doc.md) from all existing SAS files"
-    echo "  in a given directory:"
-    echo "    `basename $0` -v -od $drive/documentation/md/library/"
-    echo "                     -of doc"
-    echo "                     $drive/library/pgm/"
-    echo ""
     echo ""
     echo "        European Commission  -   DG ESTAT   -   The EU-SILC team  -  2017        "
     echo "================================================================================="
@@ -106,8 +77,8 @@ fi
  
 ## set output parameters
 input_directory=${DIRDOC}/md/
-static_directory=${input_directory}/__static
-module_directory=${input_directory}/__static/modules
+static_directory=${input_directory}/_static
+module_directory=${input_directory}/_static_/modules
 output_directory=${DIRDOC}/
 
 doxygen_directory=${DIRDOC}/dox

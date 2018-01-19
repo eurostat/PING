@@ -26,7 +26,7 @@ In short, this macro runs:
 [CHANGE](http://support.sas.com/documentation/cdl/en/proc/61895/HTML/default/viewer.htm#a000247645.htm).
 */ /** \cond */
 
-/* credits: grazzja, grillma */
+/* credits: gjacopo, marinapippi */
 
 %macro ds_change(olddsn		/* (List of) old name(s) of datasets 					(REQ) */
 				, newdsn	/* (List of) new name(s) of datasets 					(REQ) */
@@ -75,11 +75,18 @@ In short, this macro runs:
 %mend ds_change;
 
 %macro _example_ds_change;
-	%if %symexist(G_PING_ROOTPATH) EQ 0 %then %do; 
-		%if %symexist(G_PING_SETUPPATH) EQ 0 %then 	%let G_PING_SETUPPATH=/ec/prod/server/sas/0eusilc/PING; 
-		%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
-		%_default_setup_;
-	%end;
+	%if %symexist(G_PING_SETUPPATH) EQ 0 %then %do; 
+        %if %symexist(G_PING_ROOTPATH) EQ 0 %then %do;	
+			%put WARNING: !!! PING environment not set - Impossible to run &sysmacroname !!!;
+			%put WARNING: !!! Set global variable G_PING_ROOTPATH to your PING install path !!!;
+			%goto exit;
+		%end;
+		%else %do;
+        	%let G_PING_SETUPPATH=&G_PING_ROOTPATH./PING; 
+        	%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
+        	%_default_setup_;
+		%end;
+    %end;
 
 	%put;
 	%put (i) Create test dataset #1 and rename it;
@@ -104,6 +111,8 @@ In short, this macro runs:
 	%put;
 
 	%work_clean(_dummy1, _dummy2, _dummy5, _dstest1);
+
+	%exit:
 %mend _example_ds_change;
 
 /* Uncomment for quick testing

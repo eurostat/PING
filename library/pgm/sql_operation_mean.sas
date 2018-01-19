@@ -8,10 +8,10 @@ each observation in a SQL procedure.
 ~~~
 
 ### Arguments
-* `var` : (_option_) variable(s) for which the mean will be returned; the variable(s) listed in
-	`var` must be already present (_i.e._, originally coded in the processed table);
-* `calcvar` : (_option_) ibid, however the variable(s) listed in `calcvar` refer to previously calculated 
-	variables (_e.g._ , within the same `SELECT` statement).
+* `var` : (_option_) variable(s) for which the mean will be returned; the variable(s) 
+	listed in `var` must be already present (_i.e._, originally coded in the processed table);
+* `calcvar` : (_option_) ibid, however the variable(s) listed in `calcvar` refer to previously 
+	calculated variables (_e.g._ , within the same `SELECT` statement).
 
 ### Returns
 `expr` : expression for calculating the arithmetic mean of a series of variables, to be used 
@@ -68,7 +68,7 @@ missing value (`.`).
 [%sql_operation_count](@ref sas_sql_operation_count).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro sql_operation_mean(var=		/* List of original variables to average 				(OPT) */
 						, calcvar=	/* List of previously calculated variables to average	(OPT) */
@@ -158,11 +158,18 @@ missing value (`.`).
 %mend sql_operation_mean;
 
 %macro _example_sql_operation_mean;
-	%if %symexist(G_PING_ROOTPATH) EQ 0 %then %do; 
-		%if %symexist(G_PING_SETUPPATH) EQ 0 %then 	%let G_PING_SETUPPATH=/ec/prod/server/sas/0eusilc/PING; 
-		%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
-		%_default_setup_;
-	%end;
+	%if %symexist(G_PING_SETUPPATH) EQ 0 %then %do; 
+        %if %symexist(G_PING_ROOTPATH) EQ 0 %then %do;	
+			%put WARNING: !!! PING environment not set - Impossible to run &sysmacroname !!!;
+			%put WARNING: !!! Set global variable G_PING_ROOTPATH to your PING install path !!!;
+			%goto exit;
+		%end;
+		%else %do;
+        	%let G_PING_SETUPPATH=&G_PING_ROOTPATH./PING; 
+        	%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
+        	%_default_setup_;
+		%end;
+    %end;
 
 	%local _dsn op1 op2;
 	%let _dsn=TMP&sysmacroname;
@@ -206,6 +213,8 @@ missing value (`.`).
 	%put;
 	
 	%work_clean(&_dsn.1, &_dsn.2);
+
+	%exit:
 %mend _example_sql_operation_mean;
 
 /* Uncomment for quick testing

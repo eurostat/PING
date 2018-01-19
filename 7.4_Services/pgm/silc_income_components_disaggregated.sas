@@ -52,7 +52,7 @@ EU-SILC survey reference document [doc65](https://circabc.europa.eu/sd/a/2aa6257
 [%silc_income_components_gini](@ref sas_silc_income_components_gini), [%silc_db_locate](@ref sas_silc_db_locate).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro silc_income_components_disaggregated (geo			/* Area of interest 									(REQ) */
 										, year		/* Year of interest 									(REQ) */

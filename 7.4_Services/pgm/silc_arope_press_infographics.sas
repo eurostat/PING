@@ -62,7 +62,7 @@ http://www.un.org/en/events/povertyday.
 [%silc_arope_press_news](@ref sas_silc_arope_press_news).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro silc_arope_press_infographics(year	/* Year of interest 			(REQ) */
 								, geo=	/* Area of interest 			(OPT) */

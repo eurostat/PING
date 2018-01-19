@@ -153,7 +153,7 @@ db, time` and `geo`:
 [%meta_transmissionxyear](@ref meta_transmissionxyear).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 /* Locate the bulk database (pathname and datasets name) corresponding to given survey (cross-sectional, 
 longitudinal or early), a period and/or a country */
@@ -437,11 +437,20 @@ longitudinal or early), a period and/or a country */
 %mend silc_db_locate;
 
 %macro _example_silc_db_locate;
-	%if %symexist(G_PING_ROOTPATH) EQ 0 %then %do; 
-		%if %symexist(G_PING_SETUPPATH) EQ 0 %then 	%let G_PING_SETUPPATH=/ec/prod/server/sas/0eusilc/PING; 
-		%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
-		%_default_setup_;
-	%end;
+	%if %symexist(G_PING_SETUPPATH) EQ 0 %then %do; 
+        %if %symexist(G_PING_ROOTPATH) EQ 0 %then %do;	
+			%put WARNING: !!! PING environment not set - Impossible to run &sysmacroname !!!;
+			%put WARNING: !!! Set global variable G_PING_ROOTPATH to your PING install path !!!;
+			%goto exit;
+		%end;
+		%else %do;
+			%let G_PING_PROJECT=	0EUSILC;
+        	%let G_PING_SETUPPATH=&G_PING_ROOTPATH./PING; 
+			%let G_PING_DATABASE=	/ec/prod/server/sas/0eusilc;
+        	%include "&G_PING_SETUPPATH/library/autoexec/_eusilc_setup_.sas";
+        	%_default_setup_;
+		%end;
+    %end;
 
 	%local ftyp oftyp ds ods path opath;
 
@@ -498,7 +507,7 @@ longitudinal or early), a period and/or a country */
 	%silc_db_locate(X, 2015, src=pdb, _ftyp_=ftyp, _ds_=ds, _path_=path);
 	%put ftyp=&ftyp path=&path ds=&ds;
 
-   
+	%exit:
 %mend _example_silc_db_locate;
 
 /* Uncomment for quick testing

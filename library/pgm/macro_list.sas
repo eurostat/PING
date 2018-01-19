@@ -48,7 +48,7 @@ Droogendyk, H. (2009): ["Which SASAUTOS macros are available to my SAS session?"
 [%list_sasautos][http://www.stratia.ca/papers/list_sasautos.sas].
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro macro_list(work=no 	/* Boolean flag set to list WORK.SASMACR entries 	(OPT) */
 				, dsn=		/* Ouput dataset 									(OPT) */
@@ -280,8 +280,8 @@ Droogendyk, H. (2009): ["Which SASAUTOS macros are available to my SAS session?"
 
 			return;
 
-			/* This code is specified here and LINKed to from two different places.  NOT using sashelp.vcatalog
-			* because it just got toooooo complicated because I don’t have the libname.  Gets complicated with
+			/* This code is specified here and LINKed to from two different places. NOT using sashelp.vcatalog
+			* because it just got toooooo complicated because I don’t have the libname. Gets complicated with
 			* compiled macros.  We’re getting catalog details in the following step. */
 
 			do_cat:
@@ -361,13 +361,9 @@ Droogendyk, H. (2009): ["Which SASAUTOS macros are available to my SAS session?"
 	/* run the macro */
 	%_list_sasautos(work=&work, dsn=&dsn, lib=&lib, help=&help);
 
-%put in &sysmacroname : dsn=&dsn, lib=&lib;
-
  	%if not %macro_isblank(_maclst_) %then %do;
-		%put ENTER HERRRRRRRRRRRRRRRRRRRRRRRRRE;
 		%let SEP=%str( );
 		%var_to_list(&dsn, member, _varlst_=_maclst, sep=&SEP, lib=&lib);
-		%put EXIT HERRRRRRRRRRRRRRRRRRRRRRRRRE;
 		%put _maclst=&_maclst;
 		%put %list_length(&_maclst, sep=&SEP);
 		%let _nmaclst=;
@@ -396,11 +392,18 @@ Droogendyk, H. (2009): ["Which SASAUTOS macros are available to my SAS session?"
 %mend macro_list;
 
 %macro _example_macro_list;
-	%if %symexist(G_PING_ROOTPATH) EQ 0 %then %do; 
-		%if %symexist(G_PING_SETUPPATH) EQ 0 %then 	%let G_PING_SETUPPATH=/ec/prod/server/sas/0eusilc/PING; 
-		%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
-		%_default_setup_;
-	%end;
+	%if %symexist(G_PING_SETUPPATH) EQ 0 %then %do; 
+        %if %symexist(G_PING_ROOTPATH) EQ 0 %then %do;	
+			%put WARNING: !!! PING environment not set - Impossible to run &sysmacroname !!!;
+			%put WARNING: !!! Set global variable G_PING_ROOTPATH to your PING install path !!!;
+			%goto exit;
+		%end;
+		%else %do;
+        	%let G_PING_SETUPPATH=&G_PING_ROOTPATH./PING; 
+        	%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
+        	%_default_setup_;
+		%end;
+    %end;
 
 	%macro_list(help=HELP);
 
@@ -416,11 +419,12 @@ Droogendyk, H. (2009): ["Which SASAUTOS macros are available to my SAS session?"
 	%put;
 
 	%*work_clean(&dsn);
+
+	%exit:
 %mend _example_macro_list;
 
 /* Uncomment for quick testing
 options NOSOURCE MRECALL MLOGIC MPRINT NOTES;
 */
-%_example_macro_list; 
 
 /** \endcond */

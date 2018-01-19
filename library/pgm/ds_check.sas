@@ -78,7 +78,7 @@ is set.
 [EXIST](http://support.sas.com/documentation/cdl/en/lrdict/64316/HTML/default/viewer.htm#a000210903.htm).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro ds_check(dsn 		/* Input dataset 					(REQ) */
 				, _dslst_= 	/* Output list of updated datasets  (REQ) */
@@ -168,11 +168,18 @@ is set.
 %mend ds_check;
 
 %macro _example_ds_check;
-	%if %symexist(G_PING_ROOTPATH) EQ 0 %then %do; 
-		%if %symexist(G_PING_SETUPPATH) EQ 0 %then 	%let G_PING_SETUPPATH=/ec/prod/server/sas/0eusilc/PING; 
-		%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
-		%_default_setup_;
-	%end;
+	%if %symexist(G_PING_SETUPPATH) EQ 0 %then %do; 
+        %if %symexist(G_PING_ROOTPATH) EQ 0 %then %do;	
+			%put WARNING: !!! PING environment not set - Impossible to run &sysmacroname !!!;
+			%put WARNING: !!! Set global variable G_PING_ROOTPATH to your PING install path !!!;
+			%goto exit;
+		%end;
+		%else %do;
+        	%let G_PING_SETUPPATH=&G_PING_ROOTPATH./PING; 
+        	%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
+        	%_default_setup_;
+		%end;
+    %end;
 
 	libname rdb "&G_PING_C_RDB"; 
 	libname rdb2 "&G_PING_C_RDB2"; 
@@ -233,6 +240,8 @@ is set.
 	%put;
 
 	%work_clean(_dstest0, _dstest1, _dstest2, _dstest5);
+
+	%exit:
 %mend _example_ds_check;
 
 /* Uncomment for quick testing

@@ -46,7 +46,7 @@ one could also use (in the case `sep=%%quote( )`):
 [COUNTW](http://support.sas.com/documentation/cdl/en/lrdict/64316/HTML/default/viewer.htm#a002977495.htm).
 */ /** \cond */
 
-/* credits: grazzja, lamarpi, grillma */
+/* credits: gjacopo, pierre-lamarche, marinapippi */
 
 %macro list_length(list /* List of blank separated items 			(REQ) */
 				, sep=	/* Character/string used as list separator 	(OPT) */
@@ -75,6 +75,7 @@ one could also use (in the case `sep=%%quote( )`):
 	%let _len=1;
 
 	%do %while (%quote(%scan(&list, &_len, &sep)) ne %quote());
+	/*%do %while (%quote(%scan(%quote(&list), &_len, &sep)) ne %quote());*/
 		/* note the use of %quote: this is necessary when dealing with items like -3.55 (example iv below) */
 		%let _len=%eval(&_len+1);
 	%end;
@@ -88,11 +89,18 @@ one could also use (in the case `sep=%%quote( )`):
 
 
 %macro _example_list_length;
-	%if %symexist(G_PING_ROOTPATH) EQ 0 %then %do; 
-		%if %symexist(G_PING_SETUPPATH) EQ 0 %then 	%let G_PING_SETUPPATH=/ec/prod/server/sas/0eusilc/PING; 
-		%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
-		%_default_setup_;
-	%end;
+	%if %symexist(G_PING_SETUPPATH) EQ 0 %then %do; 
+        %if %symexist(G_PING_ROOTPATH) EQ 0 %then %do;	
+			%put WARNING: !!! PING environment not set - Impossible to run &sysmacroname !!!;
+			%put WARNING: !!! Set global variable G_PING_ROOTPATH to your PING install path !!!;
+			%goto exit;
+		%end;
+		%else %do;
+        	%let G_PING_SETUPPATH=&G_PING_ROOTPATH./PING; 
+        	%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
+        	%_default_setup_;
+		%end;
+    %end;
 
 	%local len;
 
@@ -123,6 +131,8 @@ one could also use (in the case `sep=%%quote( )`):
 	%else 										%put ERROR: TEST FAILED - Wrong length returned;
 
 	%put;
+
+	%exit:
 %mend _example_list_length;
 
 /* Uncomment for quick testing

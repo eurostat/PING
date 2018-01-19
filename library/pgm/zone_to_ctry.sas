@@ -7,7 +7,7 @@ Return a list and/or a table composed of countries (geo) belonging to a given ge
 ~~~
 
 ### Arguments
-* `zone` : code of the zone, _e.g._, EU28, EA19, etc...;
+* `zone` : code of a geographical zone, _e.g._, EU28, EA19, etc...;
 * `time` : (_option_) selected year; if empty, all the countries that belong or once belonged 
 	to the area are returned; default: not set;
 * `cds_ctryxzone` : (_option_) configuration file storing the description of geographical areas; by default,
@@ -138,7 +138,7 @@ See [%ctry_in_zone](@ref sas_ctry_in_zone) for further description of this table
 [%meta_countryxzone](@ref meta_countryxzone).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro zone_to_ctry(zone				/* Code of a geographical area in the EU 										(REQ) */
 					, time=				/* Year of interest																(OPT) */
@@ -286,11 +286,17 @@ See [%ctry_in_zone](@ref sas_ctry_in_zone) for further description of this table
 
 
 %macro _example_zone_to_ctry;
-	%if %symexist(G_PING_ROOTPATH) EQ 0 %then %do; 
-		%if %symexist(G_PING_SETUPPATH) EQ 0 %then 	%let G_PING_SETUPPATH=/ec/prod/server/sas/0eusilc/PING; 
-		%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
-		%_default_setup_;
-	%end;
+	%if %symexist(G_PING_SETUPPATH) EQ 0 %then %do; 
+        %if %symexist(G_PING_ROOTPATH) EQ 0 %then %do;	
+			%put WARNING: !!! PING environment not set - Impossible to run &sysmacroname !!!;
+			%put WARNING: !!! Set global variable G_PING_ROOTPATH to your PING install path !!!;
+		%end;
+		%else %do;
+        	%let G_PING_SETUPPATH=&G_PING_ROOTPATH./PING; 
+        	%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
+        	%_default_setup_;
+		%end;
+    %end;
 
 	%local ctry octry;
 	%let dsn=_TMP%upcase(&sysmacroname);
@@ -380,6 +386,8 @@ See [%ctry_in_zone](@ref sas_ctry_in_zone) for further description of this table
 	%put;
 
 	%work_clean(&dsn);
+
+	%exit:
 %mend _example_zone_to_ctry;
 
 /* Uncomment for quick testing

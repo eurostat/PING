@@ -36,7 +36,9 @@ Run macro `%%_example_clist_index` for more examples.
 and error is generated.
 2. For wrongly typed indexes (_e.g._ non numeric index), an error is also generated.
 3. In general case of error, the output `res` returned is empty (_i.e._ `res=`).
-4. The macro will not return exactly what you want if the symbol £ appears somewhere in the list.
+4. The macro will not return exactly what you want if the symbol `$` appears somewhere in the list. If you need to
+use `$`, you can reset the global macro variable `G_PING_UNLIKELY_CHAR` (see `_setup_` file) to another dumb 
+(unlikely) character of your own.
 
 ### See also
 [%list_index](@ref sas_list_index), [%clist_slice](@ref sas_clist_slice), [%clist_compare](@ref sas_clist_compare), 
@@ -44,7 +46,7 @@ and error is generated.
 [%INDEX](http://support.sas.com/documentation/cdl/en/mcrolref/61885/HTML/default/viewer.htm#a000543562.htm).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro clist_index(clist 	/* List of items comma-separated by a delimiter and between parentheses (REQ) */
 				, index		/* (List of) position(s) of elements to extract from the list 	(REQ) */
@@ -70,7 +72,7 @@ and error is generated.
 
 	/* REP: setting */
 	%if %symexist(G_PING_UNLIKELY_CHAR) %then 		%let REP=%quote(&G_PING_UNLIKELY_CHAR);
-	%else											%let REP=£;
+	%else											%let REP=$;
 
 	/************************************************************************************/
 	/**                                 actual computation                             **/
@@ -90,11 +92,18 @@ and error is generated.
 %mend clist_index;
 
 %macro _example_clist_index;
-	%if %symexist(G_PING_ROOTPATH) EQ 0 %then %do; 
-		%if %symexist(G_PING_SETUPPATH) EQ 0 %then 	%let G_PING_SETUPPATH=/ec/prod/server/sas/0eusilc/PING; 
-		%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
-		%_default_setup_;
-	%end;
+	%if %symexist(G_PING_SETUPPATH) EQ 0 %then %do; 
+        %if %symexist(G_PING_ROOTPATH) EQ 0 %then %do;	
+			%put WARNING: !!! PING environment not set - Impossible to run &sysmacroname !!!;
+			%put WARNING: !!! Set global variable G_PING_ROOTPATH to your PING install path !!!;
+			%goto exit;
+		%end;
+		%else %do;
+        	%let G_PING_SETUPPATH=&G_PING_ROOTPATH./PING; 
+        	%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
+        	%_default_setup_;
+		%end;
+    %end;
 	
 	%local clist index oclist;
 
@@ -123,6 +132,7 @@ and error is generated.
 	%else 												%put ERROR: TEST FAILED - Wrong list returned;
 
 	%put;
+	%exit:
 %mend _example_clist_index;
 
 /* Uncomment for quick testing

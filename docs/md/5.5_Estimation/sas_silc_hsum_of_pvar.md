@@ -1,24 +1,23 @@
 ## silc_hsum_of_pvar {#sas_silc_hsum_of_pvar}
-Sum P varibale by row and  columns
+Sum personal (P) variable(s) over households (_i.e._, by row and columns).
 
 ~~~sas
-	%silc_hsum_of_pvar(yyyy, odsn=,ds=,var=,rvar=,ovar=,by=,lib=pdb, olib=WORK);
+	%silc_hsum_of_pvar(yyyy, odsn=, ids=, var=, rvar=, ovar=, by=, lib=pdb, olib=WORK);
 ~~~
 		   				
 ### Arguments
 * `yyyy` : reference year;  
-* `odsn` : a output dataset;
-* `ds`   : type of input dataset ;
+* `ids` : (_option_) type of input dataset; default: `ids=P`;
 * `var`  : name of variable on which the sum is calculated;
-* `by`   : list of variables used for GROUP BY condition in SQL statement; by default: empty, _i.e._ `PB010 PB020 PHID` is used;
-* `ilib` : (_option_) name of the input library; by default: empty, _i.e._ `pdb` is used;
+* `by`   : list of variables used for GROUP BY condition in SQL statement; by default: 
+	`by=PB010 PB020 PHID` is used;
+* `ilib` : (_option_) name of the input library; by default: `ilib=pdb`.
   
 ### Returns
-* `odsn` : (_option_) name of the output dataset (in `WORK` library);by default: empty, _i.e._ `hsum` is used;
-* `ovar` :  sum variable ;by default: empty, _i.e._ `hsum` is used;
-* `rvar` :  sumrow P  variables ;by default: empty, _i.e._ `Ptot` is used;
-* `olib` : (_option_) name of the output library; by default: empty, _i.e._ `WORK` is used;
-	is used.
+* `odsn` : (_option_) name of the output dataset (in `WORK` library); by default: `odsn=HSUM`;
+* `ovar` : (_option_) sum variable; by default: `ovar=hsum`;
+* `rvar` : (_option_) sumrow P variables ;by default: `rvar=Ptot`;
+* `olib` : (_option_) name of the output library; by default: `olib=WORK`.
 
 ### Examples
 Let us consider the test dataset #45:
@@ -29,11 +28,10 @@ DB020 | DB010 |   RB030  |EQ_INC20 | RB050a
  BE   | 2015  |   3312   |   10    |   10 
  BE   | 2015  |   4434   |   20	   |   20 
 
-
 and run the macro:
 	
 ~~~sas
-	%silc_hsum_of_pvar();
+	%silc_hsum_of_pvar;
 ~~~
 which updates QUANTILE with the following table:
 DB020 | DB010 |   RB030  |EQ_INC20 | RB050a | QUINTILE |    QUANTILE
@@ -44,8 +42,8 @@ DB020 | DB010 |   RB030  |EQ_INC20 | RB050a | QUINTILE |    QUANTILE
  
 Run macro `%%_example_income_quantile` for more examples.
 
-### Notes
-1. In short, the macro runs the following `PROC SORT` procedure:
+### Note
+In short, the macro runs the following `PROC SQL` procedure:
 
 ~~~sas
 	PROC SQL noprint;

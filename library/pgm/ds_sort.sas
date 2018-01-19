@@ -102,7 +102,7 @@ ran).
 [SORT](http://support.sas.com/documentation/cdl/en/proc/61895/HTML/default/viewer.htm#a000057941.htm).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro ds_sort(idsn		/* Input reference dataset 									(REQ) */
 			, odsn=		/* Output dataset 											(OPT) */
@@ -249,11 +249,18 @@ ran).
 %mend ds_sort;
 
 %macro _example_ds_sort;
-	%if %symexist(G_PING_ROOTPATH) EQ 0 %then %do; 
-		%if %symexist(G_PING_SETUPPATH) EQ 0 %then 	%let G_PING_SETUPPATH=/ec/prod/server/sas/0eusilc/PING; 
-		%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
-		%_default_setup_;
-	%end;
+	%if %symexist(G_PING_SETUPPATH) EQ 0 %then %do; 
+        %if %symexist(G_PING_ROOTPATH) EQ 0 %then %do;	
+			%put WARNING: !!! PING environment not set - Impossible to run &sysmacroname !!!;
+			%put WARNING: !!! Set global variable G_PING_ROOTPATH to your PING install path !!!;
+			%goto exit;
+		%end;
+		%else %do;
+        	%let G_PING_SETUPPATH=&G_PING_ROOTPATH./PING; 
+        	%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
+        	%_default_setup_;
+		%end;
+    %end;
 
 	%local olddebug;
 	/* set the debug option to the highest level (1) */
@@ -299,6 +306,8 @@ ran).
 	%put;
 
 	%work_clean(&dsn,_dstest35);
+
+	%exit:
 %mend _example_ds_sort;
 
 /* Uncomment for quick testing

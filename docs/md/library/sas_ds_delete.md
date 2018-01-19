@@ -72,6 +72,6 @@ is dropped from the dataset. This matters in the cases where `cond` is an expres
 2. Gupta, S. (2006): ["WHERE vs. IF statements: Knowing the difference in how and when to apply"](http://www2.sas.com/proceedings/sugi31/238-31.pdf).
 
 ### See also
-[%ds_check](@ref sas_ds_check), [%ds_isempty](@ref sas_ds_isempty), [%ds_iscond](@ref sas_ds_iscond), [%var_check](@ref sas_var_check),
+[%ds_check](@ref sas_ds_check), [%ds_isempty](@ref sas_ds_isempty), [%var_check](@ref sas_var_check),
 [DELETE](http://support.sas.com/documentation/cdl/en/proc/61895/HTML/default/viewer.htm#a000247666.htm),
 [DROP](http://support.sas.com/documentation/cdl/en/lestmtsref/63323/HTML/default/viewer.htm#n1capr0s7tilbvn1lypdshkgpaip.htm).

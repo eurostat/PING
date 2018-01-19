@@ -177,11 +177,11 @@ and `test2` as:
 
 ### See also
 [%ds_append](@ref sas_ds_append), [%ds_isempty](@ref sas_ds_isempty), [%ds_check](@ref sas_ds_check),
-[%sql_clause_by](@ref sas_sql_clause_by), [%sql_clause_as](@ref sas_sql_clause_as), [%obs_select](@ref sas_select), 
+[%sql_clause_by](@ref sas_sql_clause_by), [%sql_clause_as](@ref sas_sql_clause_as), [%obs_select](@ref sas_obs_select), 
 [SELECT statement](http://support.sas.com/documentation/cdl/en/proc/61895/HTML/default/viewer.htm#a002473678.htm).
 */ /** \cond */
 
-/* credits: grazzja, grillma */
+/* credits: gjacopo, marinapippi */
 
 %macro ds_select(idsn			/* Input dataset 														(REQ) */
 				, odsn 			/* Output dataset 														(REQ) */ 
@@ -369,11 +369,18 @@ and `test2` as:
 %mend ds_select;
 
 %macro _example_ds_select;
-	%if %symexist(G_PING_ROOTPATH) EQ 0 %then %do; 
-		%if %symexist(G_PING_SETUPPATH) EQ 0 %then 	%let G_PING_SETUPPATH=/ec/prod/server/sas/0eusilc/PING; 
-		%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
-		%_default_setup_;
-	%end;
+	%if %symexist(G_PING_SETUPPATH) EQ 0 %then %do; 
+        %if %symexist(G_PING_ROOTPATH) EQ 0 %then %do;	
+			%put WARNING: !!! PING environment not set - Impossible to run &sysmacroname !!!;
+			%put WARNING: !!! Set global variable G_PING_ROOTPATH to your PING install path !!!;
+			%goto exit;
+		%end;
+		%else %do;
+        	%let G_PING_SETUPPATH=&G_PING_ROOTPATH./PING; 
+        	%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
+        	%_default_setup_;
+		%end;
+    %end;
 
 	%local dsn var varas varop where having groupby proc oproc;
 
@@ -470,6 +477,8 @@ and `test2` as:
 	%put;
 
 	%work_clean(&dsn, _dstest5, _dstest10, _dstest35); 
+
+	%exit:
 %mend _example_ds_select;
 
 /* Uncomment for quick testing

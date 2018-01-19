@@ -21,7 +21,7 @@ Run macro `%%_example_file_copy` for examples.
 [%file_move](@ref sas_file_move).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro file_copy(ifn	/* Full path of input filename 	(REQ) */
 				, ofn	/* Full path of output filename (REQ) */
@@ -45,15 +45,29 @@ Run macro `%%_example_file_copy` for examples.
 %mend file_copy;
 
 %macro _example_file_copy;
-	%if %symexist(G_PING_ROOTPATH) EQ 0 %then %do; 
-		%if %symexist(G_PING_SETUPPATH) EQ 0 %then 	%let G_PING_SETUPPATH=/ec/prod/server/sas/0eusilc/PING; 
-		%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
-		%_default_setup_;
-	%end;
+	%if %symexist(G_PING_SETUPPATH) EQ 0 %then %do; 
+        %if %symexist(G_PING_ROOTPATH) EQ 0 %then %do;	
+			%put WARNING: !!! PING environment not set - Impossible to run &sysmacroname !!!;
+			%put WARNING: !!! Set global variable G_PING_ROOTPATH to your PING install path !!!;
+			%goto exit;
+		%end;
+		%else %do;
+        	%let G_PING_SETUPPATH=&G_PING_ROOTPATH./PING; 
+        	%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
+        	%_default_setup_;
+		%end;
+    %end;
 
 	%put !!! &sysmacroname: Not yet implemented !!!;
 
 	%put;
+
+	%exit:
 %mend _example_file_copy;
 
- /** \endcond */
+/* Uncomment for quick testing
+options NOSOURCE MRECALL MLOGIC MPRINT NOTES;
+%_example_file_copy; 
+*/
+
+/** \endcond */

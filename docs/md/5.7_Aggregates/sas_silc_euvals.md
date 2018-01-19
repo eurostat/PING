@@ -4,15 +4,15 @@ in the "old-fashioned" way.
 
 ~~~sas
 	%silc_EUvals(eu, ms, _idb=, _yyyy=, _tab=, _thres=, _grpdim=, _flag=, _not60=, 
-				_rdb=, _ex_data=, force_Nwgh=0);
+				_rdb=, _ex_data=, force_Nwgh=no);
 ~~~
 
 ### Arguments
 * `eu` : ISO-code of the aggregate area (_e.g._, `EU28`);
 * `ms` : list of country(ies) ISO-codes corresponding to (_i.e._, included in)  the 
 	`eu` area;
-* `mode` : flag (char) setting the mode of data output; it can be `UPDATE` (_e.g., for
-	primary RDB indicators) or `INSERT` (for a secondary RDB2 indicators);
+* `mode` : flag (char) setting the mode of data output; it can be `UPDATE` (_e.g._, for
+	primary RDB indicators) or `INSERT` (for secondary RDB2 indicators);
 * `_yyyy` : year of interest;
 * `_tab` : name of the input indicator (and the corresponding table as well);
 * `_thres` : threshold (in range [0,1]) used to compare ratio of available population
@@ -25,9 +25,10 @@ in the "old-fashioned" way.
 * `_not60` : boolean flag (0/1) used to force the aggregate calculation;
 * `_ex_data`: name of the library where the file `_ccwgh60` with countries' population 
 	is stored;
-* `force_Nwgh` : additional boolean flag (0/1) set when an additional variable `nwgh` 
-	(representing the weighted sample) is present in the output dataset; note that 
-	this option is not foreseen in the original `EUvals` implementation.
+* `force_Nwgh` : additional boolean flag (`yes/no`) set when an additional variable 
+	`nwgh` (representing the weighted sample) is present in the output dataset; note that 
+	this option is not foreseen in the original `EUvals` implementation; default: 
+	`force_Nwgh=no`.
 
 ### Notes
 1. In addition to the macro defined above, this file provides additional macros/scripts so 
@@ -52,4 +53,4 @@ actual operation running.
 legacy `%%EUvals` program. 
 
 ### See also
-[%silc_agg_compute](@ref sas_silc_agg_compute).
+[%silc_agg_process](@ref sas_silc_agg_process), [%silc_agg_compute](@ref sas_silc_agg_compute).

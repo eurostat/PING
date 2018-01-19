@@ -60,22 +60,22 @@ Run macro `%%_example_aggregate_build`.
 [%zone_replace](@ref sas_zone_replace).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro ctry_select(idsn
-				, geo
-				, time
-				, ctrydsn 	/* Name of the table where to store the presence+year of countries */	
+				, geo			/* Name of the geographical aggregated area 						(REQ) */
+				, time			/* Year of interest  												(REQ) */
+				, ctrydsn 		/* Name of the table where to store the presence+year of countries 	(REQ) */	
 				, _pop_infl_=
 				, _run_agg_=
 				, _pop_part_=
-				, max_yback=
-				, ilib=
-				, olib=
+				, max_yback=	/* Number of years to explore 										(OPT) */
+				, ilib=			/* Name of the output library 										(OPT) */
+				, olib=			/* Name of the input library 										(OPT) */
 				, sampsize=
 				, max_sampsize=
-				, thr_min=
-				, thr_cum=
+				, thr_min=		/* Threshold on currently available population  					(OPT) */
+				, thr_cum=		/* Threshold on cumulated available population  					(OPT) */
 				, cds_popxctry=
 				, cds_ctryxzone=
 				, clib=
@@ -394,11 +394,20 @@ Run macro `%%_example_aggregate_build`.
 %mend ctry_select;
 
 %macro _example_ctry_select;
-	%if %symexist(G_PING_ROOTPATH) EQ 0 %then %do; 
-		%if %symexist(G_PING_SETUPPATH) EQ 0 %then 	%let G_PING_SETUPPATH=/ec/prod/server/sas/0eusilc/PING; 
-		%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
-		%_default_setup_;
-	%end;
+	%if %symexist(G_PING_SETUPPATH) EQ 0 %then %do; 
+        %if %symexist(G_PING_ROOTPATH) EQ 0 %then %do;	
+			%put WARNING: !!! PING environment not set - Impossible to run &sysmacroname !!!;
+			%put WARNING: !!! Set global variable G_PING_ROOTPATH to your PING install path !!!;
+			%goto exit;
+		%end;
+		%else %do;
+			%let G_PING_PROJECT=	0EUSILC;
+        	%let G_PING_SETUPPATH=&G_PING_ROOTPATH./PING; 
+			%let G_PING_DATABASE=	/ec/prod/server/sas/0eusilc;
+        	%include "&G_PING_SETUPPATH/library/autoexec/_eusilc_setup_.sas";
+        	%_default_setup_;
+		%end;
+    %end;
 
 	libname rdb "&G_PING_C_RDB"; /* "&eusilc/IDB_RDB_TEST/C_RDB"; */ 
 
@@ -474,6 +483,8 @@ Run macro `%%_example_aggregate_build`.
 	%work_clean(&tab_part);
 
 	%put;
+
+	%exit:
 %mend _example_ctry_select;
 
 /* 

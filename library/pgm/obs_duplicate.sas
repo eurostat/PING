@@ -30,11 +30,11 @@ Extract duplicated/unique observations from a given dataset.
 
 ### See also
 [%obs_select](@ref sas_obs_select), [%ds_isempty](@ref sas_ds_isempty), [%ds_check](@ref sas_ds_check),
-[%sql_clause_by](@ref sas_sql_clause_by), [%sql_clause_as](@ref sas_sql_clause_as), [%ds_select](@ref sas_ds_ select), 
+[%sql_clause_by](@ref sas_sql_clause_by), [%sql_clause_as](@ref sas_sql_clause_as), [%ds_select](@ref sas_ds_select), 
 [SELECT ](http://support.sas.com/documentation/cdl/en/proc/61895/HTML/default/viewer.htm#a002473678.htm).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro obs_duplicate(idsn		/* Input dataset 															(REQ) */
 					, dim=		/* Dimensions taken into account when identifying identical observations	(OPT) */
@@ -136,22 +136,6 @@ Extract duplicated/unique observations from a given dataset.
 		BY &dim;
 	run;
 
-	%if %macro_isblank(select) %then %do;
-		/* unique values */
-		DATA &olib..&unidsn;
-			SET &_dsn; 
-			BY &dim;
-			IF first.&_dim_last=0 OR last.&_dim_last=0;
-		run;
-		/* duplicates */
-		DATA &olib..&dupdsn;
-			SET &_dsn; 
-			BY &dim;
-			IF first.&_dim_last=1 AND last.&_dim_last=1;
-		run;
-		%goto exit;
-	%end;
-
 	/* create table with FIRST/LAST variables */
 	DATA &_dsn;
 		SET &_dsn;
@@ -171,7 +155,7 @@ Extract duplicated/unique observations from a given dataset.
 			FROM &_dsn
 			WHERE (first_&_dim_last=1 and last_&_dim_last=1) 
 				%if not %macro_isblank(select) %then %do;
-					OR &select
+					AND &select
 				%end;
 				;
 		run;
@@ -185,7 +169,7 @@ Extract duplicated/unique observations from a given dataset.
 			FROM &_dsn
 			WHERE (first_&_dim_last=0 or last_&_dim_last=0) 
 				%if not %macro_isblank(select) %then %do;
-					AND not(&select)
+					AND &select
 				%end;
 				;
 		run;
@@ -198,11 +182,18 @@ Extract duplicated/unique observations from a given dataset.
 
 
 %macro _example_obs_duplicate;
-	%if %symexist(G_PING_ROOTPATH) EQ 0 %then %do; 
-		%if %symexist(G_PING_SETUPPATH) EQ 0 %then 	%let G_PING_SETUPPATH=/ec/prod/server/sas/0eusilc/PING; 
-		%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
-		%_default_setup_;
-	%end;
+	%if %symexist(G_PING_SETUPPATH) EQ 0 %then %do; 
+        %if %symexist(G_PING_ROOTPATH) EQ 0 %then %do;	
+			%put WARNING: !!! PING environment not set - Impossible to run &sysmacroname !!!;
+			%put WARNING: !!! Set global variable G_PING_ROOTPATH to your PING install path !!!;
+			%goto exit;
+		%end;
+		%else %do;
+        	%let G_PING_SETUPPATH=&G_PING_ROOTPATH./PING; 
+        	%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
+        	%_default_setup_;
+		%end;
+    %end;
 
 	 data test;
 		geo="BE"; time=2015; hhtyp="HH_NDCH"; indic_il="LIP_MD60"; unit="PC_POP"; ivalue=9.6356617344; output;
@@ -239,9 +230,14 @@ Extract duplicated/unique observations from a given dataset.
 		geo="EA19"; time=2015; hhtyp="A1_DCH"; indic_il="LIP_MD60"; unit="PC"; ivalue=28.173894694; output;
 	run;
 
+	%obs_duplicate(test, dim=geo time hhtyp indic_il, unidsn=unidsn, dupdsn=dupdsn, 
+		ilib=WORK, olib=WORK);
+
 	%obs_duplicate(test, dim=geo time hhtyp indic_il, unidsn=unidsn, dupdsn=dupdsn, select=%quote(UNIT="PC"), 
 		ilib=WORK, olib=WORK);
 
+
+	%exit:
 %mend _example_obs_duplicate;
 
 /* Uncomment for quick testing

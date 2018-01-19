@@ -127,7 +127,7 @@ macro runs in practice:
 		;
 	quit;
 ~~~
-Following, to retrieve the common type `ftyp` of transmission files for a given year `time` 
+  Following, to retrieve the common type `ftyp` of transmission files for a given year `time` 
 and a survey of type `survey`, simply run:
 	
 ~~~sas
@@ -148,5 +148,5 @@ db, time` and `geo`:
 ~~~
 	
 ### See also
-[Stata implementation](@ref stata_silc_db_locate), [%silc_ds_extract](@ref sas_silc_ds_extract),
+[silc_db_locate (Stata)](@ref stata_silc_db_locate), [%silc_ds_extract](@ref sas_silc_ds_extract),
 [%meta_transmissionxyear](@ref meta_transmissionxyear).

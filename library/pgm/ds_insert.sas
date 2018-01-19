@@ -60,7 +60,7 @@ In short the macro runs the following `DATA STEP` statements:
 [%ds_contents](@ref sas_ds_contents)
 */ /** \cond */
 
-/* credits: grillma */
+/* credits: marinapippi */
 
 %macro ds_insert(idsn		/* Input dataset 														(REQ) */
 				, odsn= 	/* Output dataset 														(OPT) */ 
@@ -144,11 +144,18 @@ In short the macro runs the following `DATA STEP` statements:
 %mend ds_insert;
 
 %macro _example_ds_insert;
-	%if %symexist(G_PING_ROOTPATH) EQ 0 %then %do; 
-		%if %symexist(G_PING_SETUPPATH) EQ 0 %then 	%let G_PING_SETUPPATH=/ec/prod/server/sas/0eusilc/PING; 
-		%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
-		%_default_setup_;
-	%end;
+	%if %symexist(G_PING_SETUPPATH) EQ 0 %then %do; 
+        %if %symexist(G_PING_ROOTPATH) EQ 0 %then %do;	
+			%put WARNING: !!! PING environment not set - Impossible to run &sysmacroname !!!;
+			%put WARNING: !!! Set global variable G_PING_ROOTPATH to your PING install path !!!;
+			%goto exit;
+		%end;
+		%else %do;
+        	%let G_PING_SETUPPATH=&G_PING_ROOTPATH./PING; 
+        	%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
+        	%_default_setup_;
+		%end;
+    %end;
 
 	%local dsn var value;
     %_dstest38;
@@ -205,6 +212,8 @@ In short the macro runs the following `DATA STEP` statements:
 	%ds_print(&dsn,title="(vi) &descr");   
 
 	%work_clean(&dsn, _dstest38); 
+
+	%exit:
 %mend _example_ds_insert;
 
 /* Uncomment for quick testing

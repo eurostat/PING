@@ -1,10 +1,12 @@
 ## silc_ind_deprivation {#sas_silc_ind_deprivation}
-Compute common EU-SILC material deprivation variables for longitudinal dataset. 
+Compute common EU-SILC material deprivation indicators for longitudinal dataset. 
 
+~~~sas
 	% silc_ind_deprivation(survey, geo, time, odsn, 
 					idir=, olib=, n=3, n_sev=4, n_ext=5, 
 					cds_transxyear=&G_PING_TRANSMISSIONxYEAR, clib=&G_PING_LIBCFG);
- 
+~~~
+
 ### Arguments
 * `survey` : type of the survey; this can be any of the character values defined through the 
 	global variable `G_PING_SURVEYTYPES`, _i.e._:
@@ -48,9 +50,11 @@ as follows:
 ### Examples
 We can run the macro `%%silc_ind_deprivation` with:
 
-    %let geo=AT;
-    %let time=2010;
-    %silc_ind_deprivation(dsn, &geo, &time);
+~~~sas
+    	%let geo=AT;
+    	%let time=2010;
+    	%silc_ind_deprivation(dsn, &geo, &time);
+~~~
 
 returns in `dsn` the following values for the `deprived`, `sev_sep` and `ext_dep` variables:
 | HB010 | HB020 | HB030 | deprived | sev_dep | ext_dep|
@@ -60,11 +64,12 @@ returns in `dsn` the following values for the `deprived`, `sev_sep` and `ext_dep
 | ...   |  ..   |  ...  |  ...     |   ...   |  ...   |  
 Similarly, we can run the macro with:
 
+~~~sas
 	%let geo=AT BE;
 	%let time=2013;
 	%let n_ext=8;
 	%silc_ind_deprivation(dsn, &geo, &time, n_ext=&n_ext);
-
+~~~
 returns in `dsn` the following values for the `deprived`, `sev_sep` and `ext_dep` variables:
 | HB010 | HB020 | HB030 | deprived | sev_dep | ext_dep|
 |-------|-------|-------|----------|---------|--------| 
@@ -74,7 +79,7 @@ returns in `dsn` the following values for the `deprived`, `sev_sep` and `ext_dep
 | 2011  |  BE   |4924400|   0      |    0    |   0    |
 | ...   |  ..   |  ...  |  ...     |   ...   |  ...   |  
 
-Run `%%_example_silc_ind_deprivation` for more examples.
+Run `%%_example_silc_var_deprivation` for more examples.
 
 ### See also
 [%ds_check](@ref sas_ds_check), [%macro_isblank](@ref sas_macro_isblank).

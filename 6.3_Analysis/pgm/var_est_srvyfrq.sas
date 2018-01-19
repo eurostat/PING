@@ -44,7 +44,7 @@ Run for instance:
 [%var_est_mvrg](@ref sas_var_est_mvrg), [%var_mvrg_cmpr](@ref sas_var_mvrg_cmpr).
 */ /** \cond */
 
-/* credits: meszama */
+/* credits: mmatyi */
 
 %macro var_est_srvyfrq(idsn = 	/* name of the input data set										(REQ) */
 					, yr= 		/* the year for which the calculation is made						(REQ) */

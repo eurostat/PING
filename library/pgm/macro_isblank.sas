@@ -83,7 +83,7 @@ while they also evaluate:
 [%SUPERQ](http://support.sas.com/documentation/cdl/en/mcrolref/61885/HTML/default/viewer.htm#a000206633.htm).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro macro_isblank(____macro_isblank_parameter 	/* Input variable name to test 				(REQ) */
 					, verb=no						/* Boolean flag to defined the verbose mode (OPT) */
@@ -158,11 +158,18 @@ while they also evaluate:
 %mend macro_isblank;
 
 %macro _example_macro_isblank;
-	%if %symexist(G_PING_ROOTPATH) EQ 0 %then %do; 
-		%if %symexist(G_PING_SETUPPATH) EQ 0 %then 	%let G_PING_SETUPPATH=/ec/prod/server/sas/0eusilc/PING; 
-		%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
-		%_default_setup_;
-	%end;
+	%if %symexist(G_PING_SETUPPATH) EQ 0 %then %do; 
+        %if %symexist(G_PING_ROOTPATH) EQ 0 %then %do;	
+			%put WARNING: !!! PING environment not set - Impossible to run &sysmacroname !!!;
+			%put WARNING: !!! Set global variable G_PING_ROOTPATH to your PING install path !!!;
+			%goto exit;
+		%end;
+		%else %do;
+        	%let G_PING_SETUPPATH=&G_PING_ROOTPATH./PING; 
+        	%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
+        	%_default_setup_;
+		%end;
+    %end;
 
 	%local var;
 	
@@ -232,6 +239,8 @@ while they also evaluate:
 	%else 							%put ERROR: TEST FAILED - blank variable: 0 returned;
 
 	%put;
+
+	%exit:
 %mend _example_macro_isblank;
 
 /* Uncomment for quick testing

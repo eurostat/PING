@@ -113,7 +113,7 @@ Wilson, S.A. (2011): ["The validator: A macro to validate parameters"](http://su
 [%macro_isblank](@ref sas_macro_isblank).
 */ /** \cond */ 
 
-/* credits: grazzja, grillma */
+/* credits: gjacopo */
 
 %macro par_check(par			/* Input parameter to check 			(REQ) */
 				, type=			/* Type of input parameter to check 	(OPT) */
@@ -135,7 +135,7 @@ Wilson, S.A. (2011): ["The validator: A macro to validate parameters"](http://su
 	%let _ans=; 
 
 	%local _type 
-		_k 
+		_k _s
 		_par 
 		SEP 
 		_len 
@@ -254,11 +254,25 @@ Wilson, S.A. (2011): ["The validator: A macro to validate parameters"](http://su
 		/* test the set of possible values */
 		%if not %macro_isblank(set) %then %do;
 			/* check whether _par corresponds to any of the considered values */
-			%if %sysfunc(findw(&set, &_par)) > 0 %then %do; 
-				%let _ans=&_ans.&SEP.0; /* value found => accepted */
-				%goto next;
+			%if "&_type"="CHAR" %then %do; 
+				%if %sysfunc(findw(&set, &_par)) > 0 %then %do; 
+					/* note that the test using FINDW will not work with numeric: for instance, 0 and 0.0
+					* will differ! */
+					%let _ans=&_ans.&SEP.0; /* value found => accepted */
+					%goto next;
+				%end;
 			%end;
-			%else %if "&_type"="CHAR" /* we did not find the char ... */
+			%else %if "&_type"="NUMERIC" %then %do;
+				%do _s=1 %to %list_length(set);
+					/* note the use of %quote( ) below: this is to ensure that decimal numbers are scanned correctly */
+					%if %sysevalf(&_par = %scan(&set, &_s, %quote( ))) %then %do; 
+						%let _ans=&_ans.&SEP.0; /* value found => accepted */
+						%goto next;
+					%end;
+				%end;
+			%end;
+			/* if we reached that point...*/
+			%if "&_type"="CHAR" /* we did not find the char ... */
 					or ("&_type"="NUMERIC" and %macro_isblank(range) and %macro_isblank(norange)) /* nothing more to test ... */
 				%then %do;
 				%let _ans=&_ans.&SEP.&WrongValuesError;	
@@ -323,12 +337,18 @@ Wilson, S.A. (2011): ["The validator: A macro to validate parameters"](http://su
 %mend par_check;
 
 %macro _example_par_check;
-	%if %symexist(G_PING_ROOTPATH) EQ 0 %then %do; 
-		%if %symexist(G_PING_SETUPPATH) EQ 0 %then 	%let G_PING_SETUPPATH=/ec/prod/server/sas/0eusilc/PING; 
-		%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
-		%_default_setup_;
-	%end;
-
+	%if %symexist(G_PING_SETUPPATH) EQ 0 %then %do; 
+        %if %symexist(G_PING_ROOTPATH) EQ 0 %then %do;	
+			%put WARNING: !!! PING environment not set - Impossible to run &sysmacroname !!!;
+			%put WARNING: !!! Set global variable G_PING_ROOTPATH to your PING install path !!!;
+			%goto exit;
+		%end;
+		%else %do;
+        	%let G_PING_SETUPPATH=&G_PING_ROOTPATH./PING; 
+        	%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
+        	%_default_setup_;
+		%end;
+    %end;
 
 	%let par=1;
 	%put;
@@ -509,9 +529,12 @@ Wilson, S.A. (2011): ["The validator: A macro to validate parameters"](http://su
 	%if %par_check(&par, type=CHAR, set=YES NO) EQ 0 %then %put OK: TEST PASSED - Value test succeeds: &par found in (yes/no);
 	%else													%put ERROR: TEST FAILED - Value &par not boolean;
 
+	%exit:
 %mend _example_par_check;
 
 /*
 options NOSOURCE MRECALL MLOGIC MPRINT NOTES;
 %_example_par_check;
 */
+
+/** \endcond */

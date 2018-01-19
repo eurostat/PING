@@ -49,7 +49,7 @@ a simple basename is passed, an empty directory path is returned.
 [%file_check](@ref sas_file_check).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro file_name(path		/* Full path of a file 						(REQ) */
 				, res=file	/* Flag used to specify the output returned	(OPT) */
@@ -113,11 +113,18 @@ a simple basename is passed, an empty directory path is returned.
 
 
 %macro _example_file_name;
-	%if %symexist(G_PING_ROOTPATH) EQ 0 %then %do; 
-		%if %symexist(G_PING_SETUPPATH) EQ 0 %then 	%let G_PING_SETUPPATH=/ec/prod/server/sas/0eusilc/PING; 
-		%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
-		%_default_setup_;
-	%end;
+	%if %symexist(G_PING_SETUPPATH) EQ 0 %then %do; 
+        %if %symexist(G_PING_ROOTPATH) EQ 0 %then %do;	
+			%put WARNING: !!! PING environment not set - Impossible to run &sysmacroname !!!;
+			%put WARNING: !!! Set global variable G_PING_ROOTPATH to your PING install path !!!;
+			%goto exit;
+		%end;
+		%else %do;
+        	%let G_PING_SETUPPATH=&G_PING_ROOTPATH./PING; 
+        	%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
+        	%_default_setup_;
+		%end;
+    %end;
 
 	%local fn;
 
@@ -165,6 +172,7 @@ a simple basename is passed, an empty directory path is returned.
 
 	%put;
 
+	%exit:
 %mend _example_file_name;
 
 /* Uncomment for quick testing

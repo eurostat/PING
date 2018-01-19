@@ -41,7 +41,7 @@ and error is generated.
 [%INDEX](http://support.sas.com/documentation/cdl/en/mcrolref/61885/HTML/default/viewer.htm#a000543562.htm).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro list_index(list 	/* List of blank separated items 								(REQ) */
 				, index	/* (List of) position(s) of elements to extract from the list 	(REQ) */
@@ -108,11 +108,18 @@ and error is generated.
 %mend list_index;
 
 %macro _example_list_index;
-	%if %symexist(G_PING_ROOTPATH) EQ 0 %then %do; 
-		%if %symexist(G_PING_SETUPPATH) EQ 0 %then 	%let G_PING_SETUPPATH=/ec/prod/server/sas/0eusilc/PING; 
-		%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
-		%_default_setup_;
-	%end;
+	%if %symexist(G_PING_SETUPPATH) EQ 0 %then %do; 
+        %if %symexist(G_PING_ROOTPATH) EQ 0 %then %do;	
+			%put WARNING: !!! PING environment not set - Impossible to run &sysmacroname !!!;
+			%put WARNING: !!! Set global variable G_PING_ROOTPATH to your PING install path !!!;
+			%goto exit;
+		%end;
+		%else %do;
+        	%let G_PING_SETUPPATH=&G_PING_ROOTPATH./PING; 
+        	%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
+        	%_default_setup_;
+		%end;
+    %end;
 
 	%local list index olist;
 
@@ -150,6 +157,8 @@ and error is generated.
 	%else 											%put ERROR: TEST FAILED - Wrong list returned;
 
 	%put;
+
+	%exit:
 %mend _example_list_index;
 
 /* Uncomment for quick testing

@@ -75,7 +75,7 @@ roughly equivalent to running:
 [%BQUOTE](http://support.sas.com/documentation/cdl/en/mcrolref/61885/HTML/default/viewer.htm#z3514bquote.htm).
 */ /** \cond */
 
-/* credits: grazzja, grillma, lamarpi */
+/* credits: gjacopo, marinapippi, pierre-lamarche */
 
 %macro list_quote(list 	/* List of blank separated items 							(REQ) */
 				, mark=	/* Character/string used to quote items in input list 		(OPT) */
@@ -142,11 +142,18 @@ roughly equivalent to running:
 
 
 %macro _example_list_quote;
-	%if %symexist(G_PING_ROOTPATH) EQ 0 %then %do; 
-		%if %symexist(G_PING_SETUPPATH) EQ 0 %then 	%let G_PING_SETUPPATH=/ec/prod/server/sas/0eusilc/PING; 
-		%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
-		%_default_setup_;
-	%end;
+	%if %symexist(G_PING_SETUPPATH) EQ 0 %then %do; 
+        %if %symexist(G_PING_ROOTPATH) EQ 0 %then %do;	
+			%put WARNING: !!! PING environment not set - Impossible to run &sysmacroname !!!;
+			%put WARNING: !!! Set global variable G_PING_ROOTPATH to your PING install path !!!;
+			%goto exit;
+		%end;
+		%else %do;
+        	%let G_PING_SETUPPATH=&G_PING_ROOTPATH./PING; 
+        	%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
+        	%_default_setup_;
+		%end;
+    %end;
 
 	%let list=;
 	%put;
@@ -209,6 +216,8 @@ roughly equivalent to running:
 		%put ERROR: TEST FAILED - wrong list returned;
 
 	%put;
+
+	%exit:
 %mend _example_list_quote;
 
 /* Uncomment for quick testing

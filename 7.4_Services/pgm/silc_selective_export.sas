@@ -33,7 +33,7 @@ Perform selective export of a dataset to any format accepted by `PROC EXPORT`.
 [%ds_export](@ref sas_ds_export), [%ds_select](@ref sas_ds_select).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro silc_selective_export(idsn		/* Input dataset(s)									(REQ) */
 							, time=		/* Input year under consideration 					(OPT) */ 

@@ -27,6 +27,9 @@ Import (convert) a file from any format accepted by `PROC IMPORT` into a SAS dat
 * `_ods_` : (_option_) name (string) of the macro variable storing the name of the output dataset;
 	useful when `odsn` has not been set.
  
+### Example
+Run macro `%%_example_file_import` for examples.
+
 ### Notes
 1. There is no format/existence checking, hence if the output selected type is the same as 
 the type of the input dataset, or if the output dataset already exists, a new dataset will be 
@@ -35,12 +38,7 @@ not overwrite an existing data set.
 2. In debug mode (_e.g._, `G_PING_DEBUG=1`), the import process is aborted; still it can checked
 that the output dataset will be created with the correct name and location using the option 
 `_ods_`. Consider using this option for checking before actually importing. 
-
-### Example
-Run macro `%%_example_file_import` for examples.
-
-### Notes
-1. When trying to guess the types of the input variables, there is a *SAS issue with 
+3. When trying to guess the types of the input variables, there is a *SAS issue with 
 the type of the last column/variable*, _e.g._ setting `guessingrows=MAX`. For instance, 
 let us consider the following CSV table: 
     var1,var2,var3,var4,var5,var6
@@ -83,7 +81,7 @@ and `awk` commands.
 Original source code (no license, no disclaimer) is available at 
 <http://blog.nguyenvq.com/blog/2015/10/09/automatically-specify-line-break-options-with-termstr-as-crlf-or-lf-in-sas-when-importing-data/>.
 
-2. Variable names should be alphanumeric strings, not numeric values (otherwise converted).
+4. Variable names should be alphanumeric strings, not numeric values (otherwise converted).
 
 ### See also
 [%ds_export](@ref sas_ds_export), [%file_check](@ref sas_file_check),
@@ -91,7 +89,7 @@ Original source code (no license, no disclaimer) is available at
 [IMPORT](http://support.sas.com/documentation/cdl/en/proc/61895/HTML/default/viewer.htm#a000308090.htm).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 	
 %macro file_import(ifn			/* Input filename 															(REQ) */
 				, idir=			/* Full path of input directory 											(OPT) */
@@ -261,11 +259,18 @@ Original source code (no license, no disclaimer) is available at
 
 
 %macro _example_file_import;
-	%if %symexist(G_PING_ROOTPATH) EQ 0 %then %do; 
-		%if %symexist(G_PING_SETUPPATH) EQ 0 %then 	%let G_PING_SETUPPATH=/ec/prod/server/sas/0eusilc/PING; 
-		%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
-		%_default_setup_;
-	%end;
+	%if %symexist(G_PING_SETUPPATH) EQ 0 %then %do; 
+        %if %symexist(G_PING_ROOTPATH) EQ 0 %then %do;	
+			%put WARNING: !!! PING environment not set - Impossible to run &sysmacroname !!!;
+			%put WARNING: !!! Set global variable G_PING_ROOTPATH to your PING install path !!!;
+			%goto exit;
+		%end;
+		%else %do;
+        	%let G_PING_SETUPPATH=&G_PING_ROOTPATH./PING; 
+        	%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
+        	%_default_setup_;
+		%end;
+    %end;
 
 	%local idir ifn type
 		odsn ds;
@@ -314,6 +319,8 @@ Original source code (no license, no disclaimer) is available at
 	%let G_PING_DEBUG=&olddebug;
 
 	%put;
+
+	%exit:
 %mend _example_file_import;
 
 /* Uncomment for quick testing

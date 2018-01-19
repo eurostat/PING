@@ -2,7 +2,7 @@
 ## SAS quantile {#sas_quantile}
 Compute empirical quantiles of a variable with sample data corresponding to given probabilities. 
 	
-	%quantile(var, probs=, _quantiles_=, names=, type=7, method=DIRECT,  
+	%quantile(var, weights=, probs=, _quantiles_=, names=, type=7, method=DIRECT,  
 		idsn=, odsn=, ilib=WORK, olib=WORK, na_rm = YES);
 
 ### Arguments
@@ -10,6 +10,9 @@ Compute empirical quantiles of a variable with sample data corresponding to give
 		+ the name of the variable in a dataset storing the data; in that case, the parameter 
 			`idsn` (see below) should be set; 
 		+ a list of (blank separated) numeric values;
+* `weights` : (_option_) name of the variable containing the weights, in the case where the 
+	computation of quantiles has to be performed on survey data. Please note that only methods
+	available in the `PROC UNIVARIATE` are available so far.
 * `probs` : (_option_) list of probabilities with values in [0,1]; the smallest observation 
 	corresponds to a probability of 0 and the largest to a probability of 1; in the case 
 	`method=INHERIT` (see below), these values are multiplied by 100 in order to be used by 
@@ -20,7 +23,7 @@ Compute empirical quantiles of a variable with sample data corresponding to give
 	discussed in Hyndman and Fan's article (see references) and detailed below to be used; 
 	| `type` |                    description                                 | `PCTLDEF` |
 	|:------:|:---------------------------------------------------------------|:---------:|
-	|    1   | inverted empirical CDF					  |     3     |
+	|    1   | inverted empirical CDF					 					  |     3     |
 	|    2   | inverted empirical CDF with averaging at discontinuities       |     5     |        
 	|    3   | observation numberer closest to qN (piecewise linear function) |     2     | 
 	|    4   | linear interpolation of the empirical CDF                      |     1     | 
@@ -125,25 +128,25 @@ Copyright (c) 2017, J.Grazzini & P.Lamarche, European Commission
 Licensed under [European Union Public License](https://joinup.ec.europa.eu/community/eupl/og_page/european-union-public-licence-eupl-v11)
 */
 
-/* credits: grazzja, lamarpi */
+/* credits: gjacopo, pierre-lamarche */
 
-%global _FORCE_STANDALONE_;
-
-%macro quantile(var			/* Name of the input variable/list 		(REQ) */
-		, probs=		/* List of probabilities 			(OPT) */
-		, type=			/* Type of interpolation considered 		(OPT) */
+%macro quantile(var		/* Name of the input variable/list 				(REQ) */
+		,weights = 		/* Name of the weighting variable 				(OPT)*/
+		, probs=		/* List of probabilities 						(OPT) */
+		, type=			/* Type of interpolation considered 			(OPT) */
 		, method=		/* Flag used to select the estimation method 	(OPT) */
-		, names=		/* Output name of variable/dataset 		(OPT) */
-		, _quantiles_=		/* Name of the output variable 			(OPT) */
-		, idsn=			/* Name of input dataset 			(OPT) */
-		, ilib=			/* Name of input library 			(OPT) */
-		, odsn=			/* Name of output dataset 			(OPT) */
-		, olib=			/* Name of output library 			(OPT) */
-		, na_rm =		/* Dummy variable 				(OPT) */
+		, names=		/* Output name of variable/dataset 				(OPT) */
+		, _quantiles_=	/* Name of the output variable 					(OPT) */
+		, idsn=			/* Name of input dataset 						(OPT) */
+		, ilib=			/* Name of input library 						(OPT) */
+		, odsn=			/* Name of output dataset 						(OPT) */
+		, olib=			/* Name of output library 						(OPT) */
+		, na_rm =		/* Dummy variable 								(OPT) */
 		);
 	%local _mac;
 	%let _mac=&sysmacroname;
 
+	%if	%symexist(_FORCE_STANDALONE_) EQ 0 %then %let _FORCE_STANDALONE_ = ;
 	%if &_FORCE_STANDALONE_ EQ %then %let _FORCE_STANDALONE_=1;
 
 	%if %symexist(G_PING_ROOTPATH) EQ 1 %then %do; 
@@ -252,7 +255,7 @@ Licensed under [European Union Public License](https://joinup.ec.europa.eu/commu
 	%let SAS_DEF_QU_METHOD=	3;
 	%let DEF_QU_METHOD=		&R_DEF_QU_METHOD;
 
-	%if %symexist(G_PING_MACHINE_EPSILON) %then %let MACHINE_EPSILON=&G_PING_EPSILON;
+	%if %symexist(G_PING_MACHINE_EPSILON) %then %let MACHINE_EPSILON=&G_PING_MACHINE_EPSILON;
 	%else /* likewise R */						%let MACHINE_EPSILON=%sysevalf(1./10**14);
 
 	/* shall we use low-level macros from PING, or not?
@@ -279,8 +282,24 @@ Licensed under [European Union Public License](https://joinup.ec.europa.eu/commu
 		%if %error_handle(ErrorInputDataset, 
 				%var_check(&idsn, &var, lib=&ilib) NE 0, mac=&_mac,		
 				txt=%quote(!!! Input variable %upcase(&var) not found in %upcase(&idsn) !!!)) %then
-			%goto exit;
+		%goto exit;
 		%let varname=&var;
+	%end; 
+
+	/* WEIGHTS: check/set */
+	%if %macro_isblank(weights) = 0 %then %do ;
+		%if %error_handle(ErrorInputDataset, %macro_isblank(idsn), mac=&_mac,
+		txt=%quote(!!! Input dataset not specified !!!)) %then
+			%goto exit;
+		%if %error_handle(ErrorInputDataset,
+			%var_check(&idsn, &weights, lib = &ilib) NE 0, mac=&_mac,
+			txt=%quote(!!! Weighting variable %upcase(&weights) not found in %upcase(&idsn) !!!)) %then
+			%goto %exit;
+		%if %error_handle(ErrorInputParameter,
+			"&method"^="INHERIT", mac=&_mac,
+			txt=%quote(!!! Method &method does not implement the computation of weighted quantiles yet. 
+			Please set the parameter METHOD to INHERIT !!!)) %then
+			%goto exit;
 	%end; 
 
 	/* TYPE: check/set */
@@ -357,7 +376,7 @@ Licensed under [European Union Public License](https://joinup.ec.europa.eu/commu
 
 	%if "&method"="INHERIT" %then %do;
 		/* implementation based on existing PROC UNIVARIATE */
-		%macro _quantile_univariate(var, probs=, type=, qname=, idsn=, ilib=, odsn=, olib=);
+		%macro _quantile_univariate(var, weights=, probs=, type=, qname=, idsn=, ilib=, odsn=, olib=);
 
 			%local tmp
 				pctlpts
@@ -403,6 +422,9 @@ Licensed under [European Union Public License](https://joinup.ec.europa.eu/commu
 			PROC UNIVARIATE data=&ilib..&idsn  pctldef = &pctldef;
 			   VAR &varname;
 			   OUTPUT out=&tmp pctlpre=&qname._ pctlpts = &pctlpts; /* pctlpre is dummy here */
+			%if %macro_isblank(weights) = 0 ;
+				WEIGHT &weights ;
+			%end ;
 			run;
 			ods results on; /* reactivate */
 
@@ -420,7 +442,7 @@ Licensed under [European Union Public License](https://joinup.ec.europa.eu/commu
 
 		%mend _quantile_univariate;
 		/* run the macro */
-		%_quantile_univariate(&var, probs=&probs, type=&type, qname=&qname, 
+		%_quantile_univariate(&var, weights=&weights, probs=&probs, type=&type, qname=&qname, 
 			idsn=&idsn, ilib=&ilib, odsn=&tmp, olib=WORK);
 	%end;
 
@@ -588,11 +610,18 @@ Licensed under [European Union Public License](https://joinup.ec.europa.eu/commu
 %mend quantile;
 
 %macro _example_quantile;
-	%if %symexist(G_PING_ROOTPATH) EQ 0 and &_FORCE_STANDALONE_ EQ 0 %then %do; 
-		%if %symexist(G_PING_SETUPPATH) EQ 0 %then 	%let G_PING_SETUPPATH=/ec/prod/server/sas/0eusilc/PING; 
-		%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
-		%_default_setup_;
-	%end;
+	%if %symexist(G_PING_SETUPPATH) EQ 0 %then %do; 
+        %if %symexist(G_PING_ROOTPATH) EQ 0 %then %do;	
+			%put WARNING: !!! PING environment not set - Impossible to run &sysmacroname !!!;
+			%put WARNING: !!! Set global variable G_PING_ROOTPATH to your PING install path !!!;
+			%goto exit;
+		%end;
+		%else %do;
+        	%let G_PING_SETUPPATH=&G_PING_ROOTPATH./PING; 
+        	%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
+        	%_default_setup_;
+		%end;
+    %end;
 
 	%local dsn N;
 	%let dsn=TMP&sysmacroname;	
@@ -621,6 +650,8 @@ Licensed under [European Union Public License](https://joinup.ec.europa.eu/commu
 
 	%put;
 	PROC DATASETS lib=WORK nolist; DELETE &dsn; quit;
+
+	%exit:
 %mend _example_quantile;
 
 /* Uncomment for quick testing

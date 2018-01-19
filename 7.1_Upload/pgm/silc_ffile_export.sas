@@ -54,7 +54,7 @@ been created using the macro [%silc_ind_create](@ref sas_silc_ind_create).
 [%var_to_list](@ref sas_var_to_list).
 */ /** \cond */
 
-/* credits: grazzja */
+/* credits: gjacopo */
 
 %macro silc_ffile_export(idsn		/* Name of the input dataset/indicator to publish 				(REQ) */
 						, geo		/* List of countries ISO-codes or geographical area 			(REQ) */
@@ -331,14 +331,24 @@ been created using the macro [%silc_ind_create](@ref sas_silc_ind_create).
 %mend silc_ffile_export;
 
 %macro _example_silc_ffile_export;
-	%if %symexist(G_PING_ROOTPATH) EQ 0 %then %do; 
-		%if %symexist(G_PING_SETUPPATH) EQ 0 %then 	%let G_PING_SETUPPATH=/ec/prod/server/sas/0eusilc/PING; 
-		%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
-		%_default_setup_;
-	%end;
+	%if %symexist(G_PING_SETUPPATH) EQ 0 %then %do; 
+        %if %symexist(G_PING_ROOTPATH) EQ 0 %then %do;	
+			%put WARNING: !!! PING environment not set - Impossible to run &sysmacroname !!!;
+			%put WARNING: !!! Set global variable G_PING_ROOTPATH to your PING install path !!!;
+			%goto exit;
+		%end;
+		%else %do;
+			%let G_PING_PROJECT=	0EUSILC;
+        	%let G_PING_SETUPPATH=&G_PING_ROOTPATH./PING; 
+			%let G_PING_DATABASE=	/ec/prod/server/sas/0eusilc;
+        	%include "&G_PING_SETUPPATH/library/autoexec/_eusilc_setup_.sas";
+        	%_default_setup_;
+		%end;
+    %end;
 
 	%silc_ffile_export(di01, AT, 2015, ilib=&G_PING_LIBCRDB, ofn=test, odir=&G_PING_C_RDB);
 
+	%exit:
 %mend _example_silc_ffile_export;
 
 /* Uncomment for quick testing

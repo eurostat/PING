@@ -2,7 +2,9 @@
 Test a macro using the _example_* programs implemented inside the considered 
 macro files.
 
+~~~sas
 	%_example_check(macro_name, dir=);
+~~~
 
 ### Arguments
 * `macro_name` : string representing the macro name;

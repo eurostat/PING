@@ -2,8 +2,7 @@
 PING
 ====
 
-Library of macro/function utilities implemented in R/SAS/Stata for 
-*statistical data handling and processing in production environments*.
+Library of macro/function utilities for *statistical data handling and processing in production environments*.
 ---
 
 **About**
@@ -11,16 +10,16 @@ Library of macro/function utilities implemented in R/SAS/Stata for
 `PING` Is Not GSAST! 
 
 <table align="center">
-    <tr> <td align="left"><i>documentation</i></td> <td align="left">available at: https://gjacopo.github.io/PING/</td> </tr> 
+    <tr> <td align="left"><i>documentation</i></td> <td align="left">available at: https://eurostat.github.io/PING/</td> </tr> 
     <tr> <td align="left"><i>version</i></td> <td align="left">0.9</td> </tr> 
     <tr> <td align="left"><i>since</i></td> <td align="left">2016</td> </tr> 
-    <tr> <td align="left"><i>contributors</i></td> <td align="left">see the list <a href="https://gjacopo.github.io/PING/d3/df9/mainpage_about.html">here</a></td> </tr> 
+    <tr> <td align="left"><i>contributors</i></td> <td align="left">see the list <a href="https://eurostat.github.io/PING/d3/df9/mainpage_about.html">here</a></td> </tr> 
     <tr> <td align="left"><i>license</i></td> <td align="left"><a href="https://joinup.ec.europa.eu/sites/default/files/eupl1.1.-licence-en_0.pdfEUPL">EUPL</a></td> </tr> 
 </table>
 
 **Usage**
 
-Check the [usage page](https://gjacopo.github.io/PING/dd/dcb/mainpage_usage.html).
+Check the [usage page](https://eurostat.github.io/PING/dd/dcb/mainpage_usage.html).
 
 ###### Running PING SAS macros 
 
@@ -35,20 +34,22 @@ depending **whether you are already running a SAS session or not**, _e.g._ emplo
 You will first need to set the path of your install, then you will be able to configure the `SASAUTOS` 
 environment (defining where to look for macros) using the corresponding keyword with `options` as follows:
 
-	%let G_PING_ROOTPATH=</your/server/>; 
+	%let G_PING_SETUPPATH=</your/server/PING>; 
 	options MAUTOSOURCE;
 	options SASAUTOS =(SASAUTOS 
-			"&G_PING_ROOTPATH/library/pgm/" 		
-			"&G_PING_ROOTPATH/library/test" 			
-			"&G_PING_ROOTPATH/5.1_Integration/pgm/"
-			"&G_PING_ROOTPATH/5.3_Validation/pgm/"
-			"&G_PING_ROOTPATH/5.5_Extraction/pgm/"
-			"&G_PING_ROOTPATH/5.5_Estimation/pgm/"
-			"&G_PING_ROOTPATH/5.7_Aggregates/pgm/"
-			"&G_PING_ROOTPATH/7.1_Upload/pgm/"
-			"&G_PING_ROOTPATH/7.3_Dissemination/pgm/"
-			"&G_PING_ROOTPATH/7.4_Visualisation/pgm/"
-			"&G_PING_ROOTPATH/7.4_Services/pgm/"
+			"&G_PING_SETUPPATH/library/pgm/" 		
+			"&G_PING_SETUPPATH/library/test" 			
+			"&G_PING_SETUPPATH/5.1_Integration/pgm/"
+			"&G_PING_SETUPPATH/5.3_Validation/pgm/"
+			"&G_PING_SETUPPATH/5.5_Extraction/pgm/"
+			"&G_PING_SETUPPATH/5.5_Estimation/pgm/"
+			"&G_PING_SETUPPATH/5.7_Aggregates/pgm/"
+			"&G_PING_SETUPPATH/6.3_Analysis/pgm/"
+			"&G_PING_SETUPPATH/7.1_Upload/pgm/"
+			"&G_PING_SETUPPATH/7.2_Visualisation/pgm/"
+			"&G_PING_SETUPPATH/7.3_Dissemination/pgm/"
+			"&G_PING_SETUPPATH/7.4_Services/pgm/"
+			/* more... */
 			);
 
 This way you will be able to run `PING` macros. 
@@ -58,12 +59,19 @@ However, this command alone will not allow you to load/set all default configura
 
 In order to load all PING macros, as well as associated default configuration parameters, we provide a 
 configuration file named `_setup_.sas` (documentation [here](#sas_setup_); file is located in the directory 
-`library/autoexec`). You can then set your SAS environment with something similar to the following command:
+`library/autoexec`). You can then set your `SAS` environment with something similar to the following command:
 
-	%let G_PING_SETUPPATH=</your/server/PING/>; /* again, specific to our own case */
+	%global G_PING_SETUPPATH
+		G_PING_PROJECT 
+		G_PING_DATABASE;
+	%let G_PING_SETUPPATH=	</path/to/your/server/PING/>; 
+	%let G_PING_PROJECT=	<you_choose>;
+	%let G_PING_DATABASE=	</path/to/your/data/server/>;
 	%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";	
 	%_default_setup_;
 	
+where we also set the global macro variables associated with your project name (by default, simply `PING` but 
+you may fork it to another project) and common source datasets.
 Note however that this will work only if you have not already set your `SASAUTOS` environment using (_e.g._ 
 using the `options SASAUTOS` command like above) since `SASAUTOS` can be set once only. So as to avoid launching
 the `options SASAUTOS` several times, you can put the setup commands above inside a conditional macro as follows, 
@@ -93,8 +101,12 @@ other location), or created on-the-fly, so as to contain the following settings 
 above), _e.g._:
 
 	%global G_PING_SETUPPATH
-	%let G_PING_SETUPPATH=</your/server/PING/>;
-	%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";
+		G_PING_PROJECT 
+		G_PING_DATABASE;
+	%let G_PING_SETUPPATH=	</path/to/your/server/PING/>; 
+	%let G_PING_PROJECT=	<you_choose>;
+	%let G_PING_DATABASE=	</path/to/your/data/server/>;
+	%include "&G_PING_SETUPPATH/library/autoexec/_setup_.sas";	
 	%_default_setup_;
  
 Then, SAS can be launched by specifying this file in the `-autoexec` option of the inline command, _.e.g._ (in 
