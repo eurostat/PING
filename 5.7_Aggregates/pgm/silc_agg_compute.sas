@@ -1,7 +1,7 @@
 /**  
 ## silc_agg_compute {#sas_silc_agg_compute}
-Legacy _"EUVALS"_-based code that calculates _(i)_ the EU aggregate of _(ii)_ an indicator 
-_(iii)_ during a given year, possibly imputing data for missing countries from past years. 
+Legacy "EUVALS"-based code that calculates (i) the EU aggregate of (ii) an indicator 
+(iii) during a given year, possibly imputing data for missing countries from past years. 
 
 ~~~sas
 	%silc_agg_compute(geo, time, idsn, odsn, ctrylst=,
@@ -96,6 +96,12 @@ indicator from the so-called `rdb` library:
 	%work_clean(PEPS01);
 ~~~
 2. For that reason, the datasets `idsn` and `odsn` must be different!
+3. The macro will also create/update a table named `META_AGGREGATE_ESTIMATES` in the `WORK`ing
+library. This table informs with the last estimated aggregates. If the estimation succeeds, it
+will updated with the following observation: 
+| code   | time  | geo  | lastup           |
+|:------:|------:|:----:|:----------------:|
+| &idsn  | &time | &geo | <end-of-process> |
 
 ### References
 1. World Bank [aggregation rules](http://data.worldbank.org/about/data-overview/methodologies).
@@ -127,6 +133,7 @@ indicator from the so-called `rdb` library:
 						, ilib=			/* Name of the input library 										(OPT) */
 						, plib=			/* Name of the population library 									(OPT) */
 						, olib=			/* Name of the output library 										(OPT) */
+						, code=			/* Dummy code name													(OPT) */
 						);
 	%local _mac;
 	%let _mac=&sysmacroname;
@@ -153,7 +160,7 @@ indicator from the so-called `rdb` library:
 
 	%if %error_handle(ErrorInputDataset, 
 			%ds_check(&idsn, lib=&ilib) NE 0, mac=&_mac,		
-			txt=%quote(!!! Input dataset &idsn does not exist !!!)) %then 
+			txt=%quote(!!! Input dataset &ilib..&idsn does not exist !!!)) %then 
 		%goto exit;
 
 	/* ODSN/OLIB: check */ 
@@ -169,19 +176,26 @@ indicator from the so-called `rdb` library:
 		%goto warning1;
 	%warning1:
 
+	/* CODE: set */ 
+	%if %macro_isblank(code) %then 		%let code=&idsn;
+
 	/* further checks */
 	%local __years __ctrylst
 		_i _tmp  
 		ctryflagged nctrylst
 		pop_infl run_agg pop_part;
 
-	%local L_TIME L_GEO L_VALUE;
-	%if %symexist(G_PING_LAB_TIME) %then 			%let L_TIME=&G_PING_LAB_TIME;
-	%else											%let L_TIME=TIME;
-	%if %symexist(G_PING_LAB_GEO) %then 			%let L_GEO=&G_PING_LAB_GEO;
-	%else											%let L_GEO=GEO;
-	%if %symexist(G_PING_LAB_VALUE) %then 			%let L_VALUE=&G_PING_LAB_VALUE;
-	%else											%let L_VALUE=IVALUE;
+	%local l_TIME l_GEO l_VALUE l_UPDATE l_CODE;
+	%if %symexist(G_PING_LAB_TIME) %then 			%let l_TIME=&G_PING_LAB_TIME;
+	%else											%let l_TIME=TIME;
+	%if %symexist(G_PING_LAB_GEO) %then 			%let l_GEO=&G_PING_LAB_GEO;
+	%else											%let l_GEO=GEO;
+	%if %symexist(G_PING_LAB_VALUE) %then 			%let l_VALUE=&G_PING_LAB_VALUE;
+	%else											%let l_VALUE=IVALUE;
+	%if %symexist(G_PING_LAB_CODE) %then 			%let l_CODE=&G_PING_LAB_CODE;
+	%else											%let l_CODE=CODE;
+	%if %symexist(G_PING_LAB_UPDATE) %then 			%let l_UPDATE=&G_PING_LAB_UPDATE;
+	%else											%let l_UPDATE=LASTUP;
 
 	/* CTRYLST: set */
 	%if %macro_isblank(ctrylst) %then %do;
@@ -479,21 +493,37 @@ indicator from the so-called `rdb` library:
 	/* further filter... */
 	%if "&agg_only" = "YES" %then %do;
 		DATA &olib..&odsn;
-			SET &olib..&odsn(WHERE=(time=&time and geo="&geo"));
-		run;
+			SET &olib..&odsn(WHERE=(&l_TIME=&time and &l_GEO="&geo"));
+		run; 
 	%end;
 
 	/* save the list of paris (country,year) used for calculation... */
-	DATA &olib..ctry_&odsn._&time /*&olib..ctry_&odsn*/;
-		RETAIN geo time; /* reorder */
+	DATA &olib..CTRY_&odsn. /* &olib..CTRY_&odsn._&time */;
+		RETAIN &L_GEO &l_TIME; /* reorder */
 		SET &_tmp;
 	run;
+
+	/* update the list of computed aggregates */
+	PROC SQL noprint;
+		%if %ds_check(META_AGGREGATE_ESTIMATES, lib=WORK) NE 0 %then %do;
+			CREATE TABLE WORK.META_AGGREGATE_ESTIMATES
+			(	&l_CODE char(10),
+				&l_GEO char(4),
+				&l_TIME num(4),
+				&l_UPDATE char(14)
+			); 
+		%end;
+		/* %else: we assume META_AGGREGATE_ESTIMATES is well formatted already */
+	    INSERT INTO WORK.META_AGGREGATE_ESTIMATES 
+		(&l_CODE,&l_GEO,&l_TIME,&l_UPDATE) VALUES ("&code","&geo",&time,"%datetime_current");
+	quit;
 
 	/* clean your shit... */
 	%work_clean(&_tmp); 
 	%if %sysfunc(libref(_libtmp)) EQ 0 %then %do;
 		libname _libtmp clear;
 	%end;
+
 	%if "&_isPopulationFileTemp"="YES" %then %do;
 		%work_clean(&pdsn); 
 	%end;
@@ -600,4 +630,3 @@ options NOSOURCE MRECALL MLOGIC MPRINT NOTES;
 */
 
 /** \endcond */
-
