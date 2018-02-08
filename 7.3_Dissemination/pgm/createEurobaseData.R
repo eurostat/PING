@@ -1,0 +1,115 @@
+#STARTDOC
+### createEurobaseData {#r_createEurobaseData}
+#Create flat/DFT files for the dissemination of data on Eurobase
+#
+#~~~r
+# > createEurobaseData(data, dimensions, values, domain, table, type, name, folderOut, digits, rounding, count, flags, threshold_n)
+#~~~
+#
+#### Arguments
+#* `data` : the table to be exported.
+#* `dimensions` : a list containing the different dimensions, describing the different 
+# values taken by each dimension. Please report to Examples for more details.
+#* `values` : name of the column in the data giving the values to be disseminated.
+#* `domain` : name of the domain, to be included in the header of the file.
+#* `table` : name of the table, to be included in the header of the file.
+#* `type` : type of the file to be produced. Either DFT ("DFT") or flat/txt ("FLAT").
+#* `name` : name of the file to be produced. By default, the file takes the name of the table.
+#* `folderOut` : folder where to place the file to be produced. By default, the current working directory.
+#* `digits` : defines the decimal rounding of the values.
+#* `rounding` : defines a possible simplification of the values (typically, a division by 1,000). 
+# By default, no rounding.
+#* `count` : name of the column in the data giving the number of observations used for the computation of 
+# this particular cell. Useful to discard unreliable values.
+#* `flags` : name of the column in the data giving the flagging values. By default, no flag are put on the 
+# observations. Flagging values will be overriden when values discarded due to a low number of observations.
+#* `threshold_n` : defines the bound under which the number of observations is considered as too for the 
+# estimation to be reliable. By default, 30.
+#
+#### Returns
+# It produces a text file that can be uploaded for the dissemination of statistics on Eurobase.
+#
+#### Examples
+
+
+#' Title
+#'
+#' @param data the table to be exported.
+#' @param dimensions a list containing the different dimensions, describing the different 
+#' values taken by each dimension. Please report to [details] for more information.
+#' @param values name of the column in the data giving the values to be disseminated.
+#' @param domain name of the domain, to be included in the header of the file.
+#' @param table name of the table, to be included in the header of the file.
+#' @param type type of the file to be produced. Either DFT ("DFT") or flat/txt ("FLAT").
+#' @param name name of the file to be produced. By default, the file takes the name of the table.
+#' @param folderOut folder where to place the file to be produced. By default, the current working directory.
+#' @param digits defines the decimal rounding of the values.
+#' @param rounding defines a possible simplification of the values (typically, a division by 1,000). 
+#' By default, no rounding.
+#' @param count name of the column in the data giving the number of observations used for the computation of 
+#' this particular cell. Useful to discard unreliable values.
+#' @param flags name of the column in the data giving the flagging values. By default, no flag are put on the 
+#' observations. Flagging values will be overriden when values discarded due to a low number of observations.
+#' @param threshold_n defines the bound under which the number of observations is considered as too for the 
+#' estimation to be reliable. By default, 30.
+#'
+#' @return It produces a text file that can be uploaded for the dissemination of statistics on Eurobase.
+#' @details
+#' @export
+#'
+#' @examples
+#' 
+#' 
+createEurobaseData <- function(data, dimensions, values, domain, table, type = c("FLAT","DFT"), name = NULL, folderOut = getwd(), digits,
+                               rounding = NULL, count, flags = NULL, threshold_n = 30) {
+  if (is.null(name))
+    name <- table
+  
+  data <- as.data.frame(data)
+  n <- data[,count]
+  if (!is.null(flags))
+    flags <- data[,flags] else
+      flags <- rep(NA,nrow(data))
+  varsToTake <- c(dimensions$pos, which(names(data) == values))
+  data <- data[, varsToTake]
+  names(data) <- c(toupper(dimensions$name),"VALUES")
+  if (is.null(rounding))
+    data$VALUES <- round(data$VALUES, digits = digits) else
+      data$VALUES <- round(data$VALUES/10**rounding, digits = 0)*10**rounding
+  if (sum(!is.na(flags)) > 0) 
+    data[!is.na(flags),]$VALUES <- paste(data[!is.na(flags),]$VALUES, flags[!is.na(flags)], sep = "~")
+  if (sum(as.numeric(n < threshold_n)) > 0) 
+    data[n < threshold_n,]$VALUES <- ":~n"
+  tab <- expand.grid(dimensions$values)
+  names(tab) <- toupper(dimensions$name)
+  tab <- merge(tab, data, all.x = TRUE)
+  if (sum(is.na(tab$VALUES)) > 0)
+    tab[is.na(tab$VALUES),"VALUES"] <- ":"
+  if (type == "FLAT") {
+    txtTXT <- "FLAT_FILE=STANDARD\n"
+    txtTXT <- paste0(txtTXT,"ID_KEYS=",domain,"_",table,"\n")
+    txtTXT <- paste0(txtTXT,"FIELDS=",paste(toupper(dimensions$name), collapse = ",", sep = ""),"\n")
+    txtTXT <- paste0(txtTXT,"UPDATE_MODE=RECORDS")
+    setwd(folderOut)
+    write.table(txtTXT, file = paste0(name,".txt"), quote = FALSE, col.names = FALSE, row.names = FALSE)
+    write.table(tab, file = paste0(name,".txt"), append = TRUE, quote = FALSE, col.names = FALSE, row.names = FALSE, sep = "\t")
+    write.table("END_OF_FLAT_FILE", file = paste0(name,".txt"), append = TRUE, quote = FALSE, col.names = FALSE, row.names = FALSE)
+  } else {
+    Sys.setlocale("LC_ALL","English_United Kingdom.1252")
+    txtDFT <- "INFO \nCreated: "
+    txtDFT <- paste0(txtDFT, toupper(format(Sys.time(), "%a %d %b %Y %T UPDATE_MODE = MERGE \n")))
+    txtDFT <- paste0(txtDFT, "LASTUP \n", toupper(format(Sys.time(), "%a %d %b %Y %T"))," \n")
+    txtDFT <- paste0(txtDFT, "TYPE \nV \nDELIMS \n(),@~ \n")
+    txtDFT <- paste0(txtDFT, "DIMLST \n(soft,domain,table,",paste0(dimensions$name, collapse = ",", sep = ""),") \n")
+    txtDFT <- paste0(txtDFT, "DIMUSE \n(R,N,N,", paste(rep("V",length(dimensions$name)), collapse = ","),") \n")
+    txtDFT <- paste0(txtDFT, "POSTLST \n(r) \n(", domain,") \n(", table,") \n")
+    for (k in 1:length(dimensions$name)) {
+      txtDFT <- paste0(txtDFT,"(", paste(dimensions$values[[k]], collapse = ",", sep = ""),")\n")
+    }
+    txtDFT <- paste0(txtDFT, "FORMAT \nFORMATR \n")
+    txtDFT <- paste0(txtDFT, "NOTAV \n: \n")
+    txtDFT <- paste0(txtDFT, "VALLST \n(", paste(tab[,"VALUES"], collapse = ",", sep = ""), ")\n")
+    setwd(folderOut)
+    write.table(txtDFT, file = paste0(name,".dft"), quote = FALSE, col.names = FALSE, row.names = FALSE)
+  }
+}
