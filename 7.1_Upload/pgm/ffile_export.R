@@ -99,6 +99,28 @@ ffile_export <- function(data, dimensions, values, domain, table, type = c("FLAT
   if (is.null(name))
     name <- table
   
+  # check the existence and type of data
+  if (!exists(deparse(substitute(data))))
+    stop("Table ", deparse(substitute(data)), " does not exist.")
+  if (!any(sapply(class(data), function(x) x %in% c("data.frame","matrix"))))
+    warning("Table ", deparse(subsitute(data)), " may have not the right type.")
+  
+  # check the proper specification of dimensions
+  # TODO: S3/S4 proper specification of a class `dimension` with a builder and checks (S4)
+  if (length(unique(unlist(lapply(dimensions, length)))) != 1)
+    stop("List ", deparse(substitute(dimensions)), " is misspecified.")
+  if (max(dimensions$pos) > ncol(data))
+    stop("Attribute pos for ", deparse(substitute(dimensions)), 
+         " exceeds the size of the table.")
+  
+  # check existence and type of the value variable
+  if (!values %in% names(data))
+    stop("Variable ", values, " does not exist in ", 
+         deparse(substitute(data)), ".")
+  if (class(eval(parse(text = paste0(deparse(substitute(data)), "$", 
+                                     values)))) != "numeric")
+    warning("Variable ", values, "may have a wrong type.")
+  
   data <- as.data.frame(data)
   n <- data[,count]
   if (!is.null(flags))
@@ -147,3 +169,26 @@ ffile_export <- function(data, dimensions, values, domain, table, type = c("FLAT
     write.table(txtDFT, file = paste0(name,".dft"), quote = FALSE, col.names = FALSE, row.names = FALSE)
   }
 }
+
+## Tests
+
+library(eurostat)
+dataToExp <- get_eurostat("icw_sr_01", time_format = "num", stringsAsFactors = FALSE)
+## should not find the table
+ffile_export(data = test, dimensions = dim, values = "values", domain = "icw", table = "sr_01",
+             type = "FLAT", name = "icw_sr01", digits = 1,
+             count = "count", flags = "flag")
+
+dataToExp$count <- 50
+dataToExp$flag <- "e"
+dim <- list(name = c("geo","time","age","unit"),
+           values = list(geo = unique(dataToExp$geo),
+                         time = unique(dataToExp$time),
+                         age = unique(dataToExp$age),
+                         unit = unique(dataToExp$unit)),
+           pos = sapply(c("geo","time","age","unit"), function(x) which(x == names(dataToExp))))
+
+ffile_export(data = dataToExp, dimensions = dim, values = "values", domain = "icw", table = "sr_01",
+             type = "FLAT", name = "icw_sr01", digits = 1,
+             count = "count", flags = "flag")
+
