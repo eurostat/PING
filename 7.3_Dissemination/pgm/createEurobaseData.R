@@ -3,7 +3,7 @@
 #Create flat/DFT files for the dissemination of data on Eurobase
 #
 #~~~r
-# > createEurobaseData(data, dimensions, values, domain, table, type, name, folderOut, digits, rounding, count, flags, threshold_n)
+#    > createEurobaseData(data, dimensions, values, domain, table, type, name, folderOut, digits, rounding, count, flags, threshold_n)
 #~~~
 #
 #### Arguments
@@ -30,9 +30,26 @@
 # It produces a text file that can be uploaded for the dissemination of statistics on Eurobase.
 #
 #### Examples
+#
+#~~~r
+#    > library(eurostat)
+#    >
+#    > dataToExp <- get_eurostat("icw_sr_01", time_format = "num", stringsAsFactors = FALSE)
+#    > dataToExp$flag <- "e"
+#    > dim <- list(name = c("geo","time","age","unit"),
+#    >             values = list(geo = unique(dataToExp$geo),
+#    >                           time = unique(dataToExp$time),
+#    >                           age = unique(dataToExp$age),
+#    >                           unit = unique(dataToExp$unit)),
+#    >             pos = sapply(c("geo","time","age","unit"), function(x) which(x == names(dataToExp))))
+#    >
+#    > createEurobaseData(data = dataToExp, dimensions = dim, values = "values", domain = "icw", table = "sr_01",
+#    >                    type = "FLAT", name = "icw_sr01", digits = 1,
+#    >                    count = "count", flags = "flag")
+#~~~
+#ENDDOC
 
-
-#' Title
+#' Creating text files for the dissemination on Eurobase.
 #'
 #' @param data the table to be exported.
 #' @param dimensions a list containing the different dimensions, describing the different 
@@ -58,7 +75,24 @@
 #' @export
 #'
 #' @examples
-#' 
+#' ```
+#' library(eurostat)
+#'
+#' dataToExp <- get_eurostat("icw_sr_01", time_format = "num", stringsAsFactors = FALSE)
+#' dataToExp$count <- 50
+#' dataToExp$flag <- "e"
+#' dim <- list(name = c("geo","time","age","unit"),
+#'            values = list(geo = unique(dataToExp$geo),
+#'                          time = unique(dataToExp$time),
+#'                          age = unique(dataToExp$age),
+#'                          unit = unique(dataToExp$unit)),
+#'            pos = sapply(c("geo","time","age","unit"), function(x) which(x == names(dataToExp))))
+#'
+#' createEurobaseData(data = dataToExp, dimensions = dim, values = "values", domain = "icw", table = "sr_01",
+#'                   type = "FLAT", name = "icw_sr01", digits = 1,
+#'                   count = "count", flags = "flag")
+#'
+#'``` 
 #' 
 createEurobaseData <- function(data, dimensions, values, domain, table, type = c("FLAT","DFT"), name = NULL, folderOut = getwd(), digits,
                                rounding = NULL, count, flags = NULL, threshold_n = 30) {
