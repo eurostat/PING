@@ -1,9 +1,9 @@
 #STARTDOC
-### createEurobaseData {#r_createEurobaseData}
-#Create flat/DFT files for the dissemination of data on Eurobase
+### ffile_export {#ffile_export}
+#Create flat/DFT files for the dissemination of data on Eurobase.
 #
 #~~~r
-#    > createEurobaseData(data, dimensions, values, domain, table, type, name, folderOut, digits, rounding, count, flags, threshold_n)
+#    > ffile_export(data, dimensions, values, domain, table, type, name, folderOut, digits, rounding, count, flags, threshold_n)
 #~~~
 #
 #### Arguments
@@ -43,7 +43,7 @@
 #    >                           unit = unique(dataToExp$unit)),
 #    >             pos = sapply(c("geo","time","age","unit"), function(x) which(x == names(dataToExp))))
 #    >
-#    > createEurobaseData(data = dataToExp, dimensions = dim, values = "values", domain = "icw", table = "sr_01",
+#    > ffile_export(data = dataToExp, dimensions = dim, values = "values", domain = "icw", table = "sr_01",
 #    >                    type = "FLAT", name = "icw_sr01", digits = 1,
 #    >                    count = "count", flags = "flag")
 #~~~
@@ -88,14 +88,14 @@
 #'                          unit = unique(dataToExp$unit)),
 #'            pos = sapply(c("geo","time","age","unit"), function(x) which(x == names(dataToExp))))
 #'
-#' createEurobaseData(data = dataToExp, dimensions = dim, values = "values", domain = "icw", table = "sr_01",
-#'                   type = "FLAT", name = "icw_sr01", digits = 1,
-#'                   count = "count", flags = "flag")
+#' ffile_export(data = dataToExp, dimensions = dim, values = "values", domain = "icw", table = "sr_01",
+#'              type = "FLAT", name = "icw_sr01", digits = 1,
+#'              count = "count", flags = "flag")
 #'
 #'``` 
 #' 
-createEurobaseData <- function(data, dimensions, values, domain, table, type = c("FLAT","DFT"), name = NULL, folderOut = getwd(), digits,
-                               rounding = NULL, count, flags = NULL, threshold_n = 30) {
+ffile_export <- function(data, dimensions, values, domain, table, type = c("FLAT","DFT"), name = NULL, folderOut = getwd(), digits,
+                         rounding = NULL, count, flags = NULL, threshold_n = 30) {
   if (is.null(name))
     name <- table
   
