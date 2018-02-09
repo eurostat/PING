@@ -121,6 +121,22 @@ ffile_export <- function(data, dimensions, values, domain, table, type = c("FLAT
                                      values)))) != "numeric")
     warning("Variable ", values, "may have a wrong type.")
   
+  # check existence and type of the count variable
+  if (!count %in% names(data))
+    stop("Variable ", count, " does not exist in ", 
+         deparse(substitute(data)), ".")
+  if (class(eval(parse(text = paste0(deparse(substitute(data)), "$", 
+                                     count)))) != "numeric")
+    warning("Variable ", count, "may have a wrong type.")
+  
+  # check existence and type of the flag variable
+  if (!count %in% names(data))
+    stop("Variable ", flag, " does not exist in ", 
+         deparse(substitute(data)), ".")
+  if (class(eval(parse(text = paste0(deparse(substitute(data)), "$", 
+                                     flag)))) != "character")
+    warning("Variable ", flag, "may have a wrong type.")
+  
   data <- as.data.frame(data)
   n <- data[,count]
   if (!is.null(flags))
