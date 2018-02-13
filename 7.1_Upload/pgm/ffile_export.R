@@ -16,6 +16,7 @@
 #* `type` : type of the file to be produced. Either DFT ("DFT") or flat/txt ("FLAT").
 #* `ofn` : name of the file to be produced. By default, the file takes the name of the table.
 #* `odir` : folder where to place the file to be produced. By default, the current working directory.
+#* `replace` : boolean to indicate whether to replace the output file, if already existing. Default to FALSE.
 #* `digits` : defines the decimal rounding of the values.
 #* `rounding` : defines a possible simplification of the values (typically, a division by 1,000). 
 # By default, no rounding.
@@ -63,6 +64,7 @@
 #' @param type type of the file to be produced. Either DFT ("DFT") or flat/txt ("FLAT").
 #' @param ofn name of the file to be produced. By default, the file takes the name of the table.
 #' @param odir folder where to place the file to be produced. By default, the current working directory.
+#' @param replace boolean to indicate whether to replace the output file, if already existing. Default to FALSE.
 #' @param digits defines the decimal rounding of the values.
 #' @param rounding defines a possible simplification of the values (typically, a division by 1,000). 
 #' By default, no rounding.
@@ -99,8 +101,8 @@
 #'
 #'``` 
 #' 
-ffile_export <- function(data, dimensions, values, domain, table, type = c("FLAT","DFT"), ofn = NULL, odir = getwd(), digits,
-                         rounding = NULL, count, flags = NULL, threshold_n = 30, mode = NULL) {
+ffile_export <- function(data, dimensions, values, domain, table, type = c("FLAT","DFT"), ofn = NULL, odir = getwd(), replace = FALSE, 
+                         digits, rounding = NULL, count, flags = NULL, threshold_n = 30, mode = NULL) {
   if (is.null(ofn))
     ofn <- table
   
@@ -158,6 +160,18 @@ ffile_export <- function(data, dimensions, values, domain, table, type = c("FLAT
       stop("Parameter mode is misspecified: ", deparse(substitute(mode), "is not a valid value."))
     if (type == "FLAT" & mode %in% c("REPLACE", "CUBE"))
       warning("Option ", deparse(substitute(mode)), "for parameter mode to be deprecated.")
+  }
+  
+  # checking the existence of the output folder
+  if (!dir.exists(odir))
+    stop("The folder ", odir, " does not exist.")
+  
+  # checking the existence of the output file
+  ext <- ifelse(type == "FLAT", "txt", "dft")
+  if (file.exists(paste0(odir, "/", ofn, ".", ext))) {
+    if (replace)
+      warning("The file ", ofn, " already exists; it will be crashed.")
+    else stop("The file ", ofn, " already exists and won't be replaced.")
   }
   
   data <- as.data.frame(data)
@@ -229,3 +243,12 @@ ffile_export(data = dataToExp, dimensions = dim, values = "values", domain = "ic
              type = "FLAT", ofn = "icw_sr01", digits = 1,
              count = "count", flags = "flag")
 
+#a second time : should be cancelled, as replace is set to FALSE
+ffile_export(data = dataToExp, dimensions = dim, values = "values", domain = "icw", table = "sr_01",
+             type = "FLAT", ofn = "icw_sr01", digits = 1,
+             count = "count", flags = "flag")
+
+#a third time : should issue a warning, as replace is set to TRUE
+ffile_export(data = dataToExp, dimensions = dim, values = "values", domain = "icw", table = "sr_01",
+             type = "FLAT", ofn = "icw_sr01", replace = TRUE, digits = 1,
+             count = "count", flags = "flag")
