@@ -25,6 +25,8 @@
 # observations. Flagging values will be overriden when values discarded due to a low number of observations.
 #* `threshold_n` : defines the bound under which the number of observations is considered as too for the 
 # estimation to be reliable. By default, 30.
+#* `mode` : mode of upload. Either "RECORDS" (by default) or "DELETE" for txt files, "MERGE" (the default)
+# or "REPLACE" for DFT files. Other options will be soon phased out.
 #
 #### Returns
 # It produces a text file that can be uploaded for the dissemination of statistics on Eurobase.
@@ -48,6 +50,7 @@
 #    >                    count = "count", flags = "flag")
 #~~~
 #ENDDOC
+# credits: pierre-lamarche
 
 #' Creating text files for the dissemination on Eurobase.
 #'
@@ -69,6 +72,8 @@
 #' observations. Flagging values will be overriden when values discarded due to a low number of observations.
 #' @param threshold_n defines the bound under which the number of observations is considered as too for the 
 #' estimation to be reliable. By default, 30.
+#' @param mode mode of upload. Either "RECORDS" (by default) or "DELETE" for txt files, "MERGE" (the default)
+#' or "REPLACE" for DFT files. Other options will be soon phased out.
 #'
 #' @return It produces a text file that can be uploaded for the dissemination of statistics on Eurobase.
 #' @details
@@ -95,7 +100,7 @@
 #'``` 
 #' 
 ffile_export <- function(data, dimensions, values, domain, table, type = c("FLAT","DFT"), name = NULL, folderOut = getwd(), digits,
-                         rounding = NULL, count, flags = NULL, threshold_n = 30) {
+                         rounding = NULL, count, flags = NULL, threshold_n = 30, mode = NULL) {
   if (is.null(name))
     name <- table
   
@@ -137,6 +142,20 @@ ffile_export <- function(data, dimensions, values, domain, table, type = c("FLAT
                                      flag)))) != "character")
     warning("Variable ", flag, "may have a wrong type.")
   
+  # assigning a value to parameter mode and checking validity of the parameter
+  if (is.null(mode)) {
+    if (type == "FLAT")
+      mode <- "RECORDS" else
+        mode <- "MERGE"
+  } else {
+    if (type == "FLAT" & !mode %in% c("RECORDS", "DELETE", "REPLACE", "CUBE"))
+      stop("Parameter mode is misspecified: ", deparse(substitute(mode), "is not a valid value."))
+    if (type == "DFT" & !mode %in% c("MERGE", "REPLACE"))
+      stop("Parameter mode is misspecified: ", deparse(substitute(mode), "is not a valid value."))
+    if (type == "FLAT" & mode %in% c("REPLACE", "CUBE"))
+      warning("Option ", deparse(substitute(mode)), "for parameter mode to be deprecated.")
+  }
+  
   data <- as.data.frame(data)
   n <- data[,count]
   if (!is.null(flags))
@@ -161,7 +180,7 @@ ffile_export <- function(data, dimensions, values, domain, table, type = c("FLAT
     txtTXT <- "FLAT_FILE=STANDARD\n"
     txtTXT <- paste0(txtTXT,"ID_KEYS=",domain,"_",table,"\n")
     txtTXT <- paste0(txtTXT,"FIELDS=",paste(toupper(dimensions$name), collapse = ",", sep = ""),"\n")
-    txtTXT <- paste0(txtTXT,"UPDATE_MODE=RECORDS")
+    txtTXT <- paste0(txtTXT,"UPDATE_MODE=", mode)
     setwd(folderOut)
     write.table(txtTXT, file = paste0(name,".txt"), quote = FALSE, col.names = FALSE, row.names = FALSE)
     write.table(tab, file = paste0(name,".txt"), append = TRUE, quote = FALSE, col.names = FALSE, row.names = FALSE, sep = "\t")
@@ -169,7 +188,7 @@ ffile_export <- function(data, dimensions, values, domain, table, type = c("FLAT
   } else {
     Sys.setlocale("LC_ALL","English_United Kingdom.1252")
     txtDFT <- "INFO \nCreated: "
-    txtDFT <- paste0(txtDFT, toupper(format(Sys.time(), "%a %d %b %Y %T UPDATE_MODE = MERGE \n")))
+    txtDFT <- paste0(txtDFT, toupper(format(Sys.time(), "%a %d %b %Y %T")), "UPDATE_MODE =", mode, " \n")
     txtDFT <- paste0(txtDFT, "LASTUP \n", toupper(format(Sys.time(), "%a %d %b %Y %T"))," \n")
     txtDFT <- paste0(txtDFT, "TYPE \nV \nDELIMS \n(),@~ \n")
     txtDFT <- paste0(txtDFT, "DIMLST \n(soft,domain,table,",paste0(dimensions$name, collapse = ",", sep = ""),") \n")
