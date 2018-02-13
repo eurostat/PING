@@ -14,8 +14,8 @@
 #* `domain` : name of the domain, to be included in the header of the file.
 #* `table` : name of the table, to be included in the header of the file.
 #* `type` : type of the file to be produced. Either DFT ("DFT") or flat/txt ("FLAT").
-#* `name` : name of the file to be produced. By default, the file takes the name of the table.
-#* `folderOut` : folder where to place the file to be produced. By default, the current working directory.
+#* `ofn` : name of the file to be produced. By default, the file takes the name of the table.
+#* `odir` : folder where to place the file to be produced. By default, the current working directory.
 #* `digits` : defines the decimal rounding of the values.
 #* `rounding` : defines a possible simplification of the values (typically, a division by 1,000). 
 # By default, no rounding.
@@ -61,8 +61,8 @@
 #' @param domain name of the domain, to be included in the header of the file.
 #' @param table name of the table, to be included in the header of the file.
 #' @param type type of the file to be produced. Either DFT ("DFT") or flat/txt ("FLAT").
-#' @param name name of the file to be produced. By default, the file takes the name of the table.
-#' @param folderOut folder where to place the file to be produced. By default, the current working directory.
+#' @param ofn name of the file to be produced. By default, the file takes the name of the table.
+#' @param odir folder where to place the file to be produced. By default, the current working directory.
 #' @param digits defines the decimal rounding of the values.
 #' @param rounding defines a possible simplification of the values (typically, a division by 1,000). 
 #' By default, no rounding.
@@ -94,15 +94,15 @@
 #'            pos = sapply(c("geo","time","age","unit"), function(x) which(x == names(dataToExp))))
 #'
 #' ffile_export(data = dataToExp, dimensions = dim, values = "values", domain = "icw", table = "sr_01",
-#'              type = "FLAT", name = "icw_sr01", digits = 1,
+#'              type = "FLAT", ofn = "icw_sr01", digits = 1,
 #'              count = "count", flags = "flag")
 #'
 #'``` 
 #' 
-ffile_export <- function(data, dimensions, values, domain, table, type = c("FLAT","DFT"), name = NULL, folderOut = getwd(), digits,
+ffile_export <- function(data, dimensions, values, domain, table, type = c("FLAT","DFT"), ofn = NULL, odir = getwd(), digits,
                          rounding = NULL, count, flags = NULL, threshold_n = 30, mode = NULL) {
-  if (is.null(name))
-    name <- table
+  if (is.null(ofn))
+    ofn <- table
   
   # check the existence and type of data
   if (!exists(deparse(substitute(data))))
@@ -204,8 +204,7 @@ ffile_export <- function(data, dimensions, values, domain, table, type = c("FLAT
     txtDFT <- paste0(txtDFT, "FORMAT \nFORMATR \n")
     txtDFT <- paste0(txtDFT, "NOTAV \n: \n")
     txtDFT <- paste0(txtDFT, "VALLST \n(", paste(tab[,"VALUES"], collapse = ",", sep = ""), ")\n")
-    setwd(folderOut)
-    write.table(txtDFT, file = paste0(name,".dft"), quote = FALSE, col.names = FALSE, row.names = FALSE)
+    write.table(txtDFT, file = paste0(odir, "/", ofn, ".dft"), quote = FALSE, col.names = FALSE, row.names = FALSE)
   }
 }
 
