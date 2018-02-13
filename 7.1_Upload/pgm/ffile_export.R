@@ -3,7 +3,7 @@
 #Create flat/DFT files for the dissemination of data on Eurobase.
 #
 #~~~r
-#    > ffile_export(data, dimensions, values, domain, table, type, name, folderOut, digits, rounding, count, flags, threshold_n)
+#    > ffile_export(data, dimensions, values, domain, table, type, ofn, odir, digits, rounding, count, flags, threshold_n)
 #~~~
 #
 #### Arguments
@@ -142,7 +142,7 @@ ffile_export <- function(data, dimensions, values, domain, table, type = c("FLAT
       stop("Variable ", flag, " does not exist in ", 
            deparse(substitute(data)), ".")
     if (class(eval(parse(text = paste0(deparse(substitute(data)), "$", 
-                                       flag)))) != "character")
+                                       flags)))) != "character")
       warning("Variable ", flag, "may have a wrong type.")
   }
   
@@ -185,10 +185,9 @@ ffile_export <- function(data, dimensions, values, domain, table, type = c("FLAT
     txtTXT <- paste0(txtTXT,"ID_KEYS=",domain,"_",table,"\n")
     txtTXT <- paste0(txtTXT,"FIELDS=",paste(toupper(dimensions$name), collapse = ",", sep = ""),"\n")
     txtTXT <- paste0(txtTXT,"UPDATE_MODE=", mode)
-    setwd(folderOut)
-    write.table(txtTXT, file = paste0(name,".txt"), quote = FALSE, col.names = FALSE, row.names = FALSE)
-    write.table(tab, file = paste0(name,".txt"), append = TRUE, quote = FALSE, col.names = FALSE, row.names = FALSE, sep = "\t")
-    write.table("END_OF_FLAT_FILE", file = paste0(name,".txt"), append = TRUE, quote = FALSE, col.names = FALSE, row.names = FALSE)
+    write.table(txtTXT, file = paste0(odir, "/" , ofn,".txt"), quote = FALSE, col.names = FALSE, row.names = FALSE)
+    write.table(tab, file = paste0(odir, "/", ofn,".txt"), append = TRUE, quote = FALSE, col.names = FALSE, row.names = FALSE, sep = "\t")
+    write.table("END_OF_FLAT_FILE", file = paste0(odir, "/", ofn,".txt"), append = TRUE, quote = FALSE, col.names = FALSE, row.names = FALSE)
   } else {
     Sys.setlocale("LC_ALL","English_United Kingdom.1252")
     txtDFT <- "INFO \nCreated: "
@@ -214,7 +213,7 @@ library(eurostat)
 dataToExp <- get_eurostat("icw_sr_01", time_format = "num", stringsAsFactors = FALSE)
 ## should not find the table
 ffile_export(data = test, dimensions = dim, values = "values", domain = "icw", table = "sr_01",
-             type = "FLAT", name = "icw_sr01", digits = 1,
+             type = "FLAT", ofn = "icw_sr01", digits = 1,
              count = "count", flags = "flag")
 
 dataToExp$count <- 50
@@ -227,6 +226,6 @@ dim <- list(name = c("geo","time","age","unit"),
             pos = sapply(c("geo","time","age","unit"), function(x) which(x == names(dataToExp))))
 
 ffile_export(data = dataToExp, dimensions = dim, values = "values", domain = "icw", table = "sr_01",
-             type = "FLAT", name = "icw_sr01", digits = 1,
+             type = "FLAT", ofn = "icw_sr01", digits = 1,
              count = "count", flags = "flag")
 
