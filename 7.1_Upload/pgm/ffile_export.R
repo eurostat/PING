@@ -117,6 +117,8 @@ ffile_export <- function(data, dimensions, values, domain, table, type = c("FLAT
   if (max(dimensions$pos) > ncol(data))
     stop("Attribute pos for ", deparse(substitute(dimensions)), 
          " exceeds the size of the table.")
+  if (any(sapply(dimensions$name, function(x) !x %in% names(data))))
+    stop("Some of the dimensions are not contained in table", deparse(substitute(data)))
   
   # check existence and type of the value variable
   if (!values %in% names(data))
