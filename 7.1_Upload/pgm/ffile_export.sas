@@ -2,7 +2,7 @@
 ## ffile_export {#sas_ffile_export}
 Generate a flat file from a dataset to be uploaded on Eurobase. 
 ~~~sas
-	%ffile_export(idsn, dimensions, values, domain, table, type, count, idir=, ilib=, ofn=, odir=,
+	%ffile_export(idsn, dimensions, values, domain, table, type, count, ilib=, ofn=, odir=, replace=FALSE,
 				  digits=, rounding=, flags=, threshold_n = 30);
 ~~~
 ### Arguments
@@ -10,6 +10,10 @@ Generate a flat file from a dataset to be uploaded on Eurobase.
 * `dimensions` : a list containing the different dimensions, describing the different 
 values taken by each dimension. Please report to Examples for more details;
 * `values` : name of the column in the data giving the values to be disseminated;
+* `domain` : name of the domain, to be included in the header of the file;
+* `table` : name of the table, to be included in the header of the file;
+* `type` : type of the file to be produced. Either DFT ("DFT") or flat/txt ("FLAT");
+* `ofn` : name of the file to be produced. By default, the file takes the name of the table;
 * `ilib` : (_option_) name of the input library; by default, when not set, `ilib=WORK`;
 * `key` : (_option_) name of the key used to indentified the indicator; when not passed, it
 	is set to `&idsn`;
@@ -49,10 +53,20 @@ been created using the macro [%silc_ind_create](@ref sas_silc_ind_create).
 /* credits: pierre-lamarche */
 
 %macro ffile_export(idsn /* name of the input dataset */
-					, dimensions
-					, values
-					, domain, table, type, count, ilib=, ofn=, odir=,
-				  	digits=, rounding=, flags=, threshold_n = 30);
+					, dimensions /* dimensions for the exportation on Eurobase */
+					, values /* name of the variable giving the values */
+					, domain
+					, table
+					, type
+					, count
+					, ilib=
+					, ofn=
+					, odir=
+				  	,digits=
+					, rounding=
+					, flags=
+					, threshold_n=30
+					, mode=);
 
 %local _mac;
 %let _mac=&sysmacroname;
@@ -70,5 +84,89 @@ been created using the macro [%silc_ind_create](@ref sas_silc_ind_create).
 				 %ds_check(&idsn, lib = &ilib) ne 0, mac=&_mac,
 				 txt = !!! Then input data cannot be found !!!) %then
 				 %goto exit ;
+
+/* check the existence of dimensions in idsn */
+%if %error_handle(ErrorInputParameter,
+				  %macro_isblank(dimensions), mac=&_mac,
+				  txt = !!! Parameter dimensions needs to be set !!!) %then
+				  %goto exit;
+%let check_dim = %var_check(dsn = &idsn, var = &dimensions, lib = &ilib) ;
+%if %error_handle(ErrorInput,
+				  %index(&check_dim, 1) > 0, mac=&_mac,
+				  txt = !!! Some dimensions are missing in the input data !!!) %then
+				  %goto exit ;
+
+/* check the existence of value */
+%if %error_handle(ErrorInputParameter,
+				  %macro_isblank(values), mac=&_mac,
+				  txt = !!! Parameter values needs to be set !!!) %then
+				  %goto exit;
+%if %error_handle(ErrorInput,
+				  %var_check(dsn = &idsn, var = &values, lib = &ilib) = 1, mac = &_mac,
+				  txt = !!! Variable &values is missing in the input data !!!) %then 
+				  %goto exit ;
+
+/* check the existence of count */
+%if %error_handle(ErrorInputParameter,
+				  %macro_isblank(count), mac=&_mac,
+				  txt = !!! Parameter count needs to be set !!!) %then
+				  %goto exit;
+%if %error_handle(ErrorInput,
+				  %var_check(dsn = &idsn, var = &count, lib = &ilib) = 1, mac = &_mac,
+				  txt = !!! Variable &count is missing in the input data !!!) %then 
+				  %goto exit ;
+
+/* check the existence of flags */
+%if %macro_isblank(flags) = 0 %then %do ;
+	%if %error_handle(ErrorInput,
+					  %var_check(dsn = &idsn, var = &flags, lib = &ilib) = 1, mac = &_mac,
+					  txt = !!! Variable &flags is missing in the input data !!!) %then 
+					  %goto exit ;
+
+/* check the value taken by type */
+%let type_possible = DFT FLAT ;
+%if %error_handle(ErrorInputParameter,
+				  %list_find(&type_possible, type) EQ , mac = &_mac,
+				  txt = !!! Wrong type for the output data !!!) %then
+				  %goto exit ;
+
+/* assigning a value to mode and checking the validity of the parameter */
+%if %macro_isblank(mode) %then %do ;
+	%if &type = FLAT %then %let mode = RECORDS ;
+	%else %let mode = MERGE ;
+%end ;
+
+/* checking the existence of the output folder */
+%if %error_handle(ErrorInputParameter,
+				  %dir_check(&odir) = 1, mac = &_mac,
+				  txt = !!! The output directory does not exist !!!) %then
+				  %goto exit ;
+
+/* checking the existence of the output file */
+%if &type = DFT %then %let ext = dft ;
+%else ext = txt ;
+%if %file_check(&odir./&ofn, ext = &ext) = 0 %then %do ;
+	%if &replace = FALSE %then do ;
+		%put !!! The output file already exists and won't be replaced !!!;
+		%goto exit ;
+	%end ;
+	%else %do ;
+		%put WARNING: The output file already exists; it will be crashed. ;
+	%end ;
+
+data _temp_ ;
+set &ilib..&idns ;
+keep &dimensions &values &flags &count ;
+run ;
+
+data _temp_ ;
+set _temp_ ;
+%if %macro_isblank(rounding) = 1 %then 
+	values = round(&values, &digits);
+%else values = round(&values/10**&rouding, 0)*10**rounding ;
+;
+if missing(&flags) = 0 then values = trim(values)!!"~"!!left(&flags) ;
+if &count < &threshold_n then values = ":~n" ;
+run ;
 
 %mend ;
