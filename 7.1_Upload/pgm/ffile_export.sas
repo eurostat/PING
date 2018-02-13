@@ -151,7 +151,7 @@ been created using the macro [%silc_ind_create](@ref sas_silc_ind_create).
 		%goto exit ;
 	%end ;
 	%else %do ;
-		%put WARNING: The output file already exists; it will be crashed. ;
+		%put WARNING: The output file already exists and it will be crashed. ;
 	%end ;
 
 data _temp_ ;
@@ -168,5 +168,44 @@ set _temp_ ;
 if missing(&flags) = 0 then values = trim(values)!!"~"!!left(&flags) ;
 if &count < &threshold_n then values = ":~n" ;
 run ;
+
+/* TODO: expand all possible combinations of dimensions */
+
+%if &type = FLAT %then %do ;
+
+data header ;
+file "&odir./&ofn..txt" LRECL=32000 ;
+attrib txtTXT length = $2000. ;
+txtTXT = "FLAT_FILE=STANDARD" ;
+output ;
+txtTXT = "ID_KEYS=&domain._&table" ;
+output ;
+txtTXT = "FIELDS=%list_quote(&dimensions, mark = %str())" ;
+output ;
+txtTXT = "UPDATE_MODE=&mode" ;
+output ;
+put txtTXT ;
+run ;
+
+data tail ;
+attrib txtTXT length = $2000. ;
+txtTXT = "END_OF_FLAT_FILE" ;
+output ;
+run ;
+
+data _temp_ ;
+infile "&odir./&ofn..txt" LRECL=32000 ;
+input txtTXT $ ;
+set _temp_ tail ;
+file "&odir./&ofn..txt" LRECL=32000 ;
+put txtTXT &dimensions values ;
+run ;
+
+%end ;
+%else %do ;
+
+/* todo */
+
+%end ;
 
 %mend ;
