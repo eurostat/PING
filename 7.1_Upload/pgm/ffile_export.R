@@ -137,12 +137,14 @@ ffile_export <- function(data, dimensions, values, domain, table, type = c("FLAT
     warning("Variable ", count, "may have a wrong type.")
   
   # check existence and type of the flag variable
-  if (!count %in% names(data))
-    stop("Variable ", flag, " does not exist in ", 
-         deparse(substitute(data)), ".")
-  if (class(eval(parse(text = paste0(deparse(substitute(data)), "$", 
-                                     flag)))) != "character")
-    warning("Variable ", flag, "may have a wrong type.")
+  if (!is.null(flags)) {
+    if (!count %in% names(data))
+      stop("Variable ", flag, " does not exist in ", 
+           deparse(substitute(data)), ".")
+    if (class(eval(parse(text = paste0(deparse(substitute(data)), "$", 
+                                       flag)))) != "character")
+      warning("Variable ", flag, "may have a wrong type.")
+  }
   
   # assigning a value to parameter mode and checking validity of the parameter
   if (is.null(mode)) {
@@ -219,11 +221,11 @@ ffile_export(data = test, dimensions = dim, values = "values", domain = "icw", t
 dataToExp$count <- 50
 dataToExp$flag <- "e"
 dim <- list(name = c("geo","time","age","unit"),
-           values = list(geo = unique(dataToExp$geo),
-                         time = unique(dataToExp$time),
-                         age = unique(dataToExp$age),
-                         unit = unique(dataToExp$unit)),
-           pos = sapply(c("geo","time","age","unit"), function(x) which(x == names(dataToExp))))
+            values = list(geo = unique(dataToExp$geo),
+                          time = unique(dataToExp$time),
+                          age = unique(dataToExp$age),
+                          unit = unique(dataToExp$unit)),
+            pos = sapply(c("geo","time","age","unit"), function(x) which(x == names(dataToExp))))
 
 ffile_export(data = dataToExp, dimensions = dim, values = "values", domain = "icw", table = "sr_01",
              type = "FLAT", name = "icw_sr01", digits = 1,
