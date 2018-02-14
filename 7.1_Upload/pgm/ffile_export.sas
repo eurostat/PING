@@ -13,37 +13,22 @@ values taken by each dimension. Please report to Examples for more details;
 * `domain` : name of the domain, to be included in the header of the file;
 * `table` : name of the table, to be included in the header of the file;
 * `type` : type of the file to be produced. Either DFT ("DFT") or flat/txt ("FLAT");
-* `ofn` : name of the file to be produced. By default, the file takes the name of the table;
+* `count` : name of the variable giving the number of observations per cell;
 * `ilib` : (_option_) name of the input library; by default, when not set, `ilib=WORK`;
-* `key` : (_option_) name of the key used to indentified the indicator; when not passed, it
-	is set to `&idsn`;
-* `prefkey` : (_option_) prefix string for the identification of the published dataset; it is
-	used before the indicator key of the disseminated dataset; for instance, for an indicator 
-	named `<IND>` to be identified in Eurobase tree node as `ILC_<IND>`, `prefkey` should be 
-	set to `ILC` so that the field ID keys in the flat file will appear as:
-~~~sas
-			`FIELDS=ILC_<IND>`
-~~~
-	note the use of `_EMPTY_` to set `prefkey` to a blank string; by default, it is set to: 
-	`prefkey=ILC`;
-* `headkeys` : (_option_) head keys (strings) used for the identification of the published 
-	dataset; for instance, for an indicator named `<IND>` to be identified in Eurobase tree 
-	node as `SAS.ILC.<IND>`, `headkeys` should be set to `SAS ILC` so that the field ID keys 
-	in the flat file will appear as: 
-~~~sas
-			`FIELDS=SAS,ILC,<IND>`
-~~~
-	by default, it is not set: `headkeys=`;
+* `replace` : (_option_) boolean to indicate whether to replace the output file, if already existing. Default to FALSE;
+* `rounding` : (_option_) defines a possible simplification of the values (typically, a division by 1,000). By default, no rounding;
+* `flags` : (_option_) name of the variable in the data giving the flagging values. By default, no flag is put on the 
+observations. Flagging values will be overriden when values discarded due to a low number of observations.
+* `threshold_n` (_option_) defines the bound under which the number of observations is considered as too for the 
+estimation to be reliable. By default, 30.
+* `digits` : (_option_) defines the decimal rounding of the values;
 * `mode` : (_option_) mode of upload; by default, when not set, `mode=RECORDS`.
 ### Returns
 * `ofn` : (_option_) name of the output (text) file (without the txt extension); by default, 
-	when not set, `ofn` is built from the input name `&idsn` and the input year(s) `&years`;
-* `odir` : (_option_) name of the output directory; by default, `odir=%sysfunc(pathname(&ilib))`.
+	when not set, `ofn` is built from the table name;
+* `odir` : (_option_) name of the output directory; by default, `odir=%sysfunc(pathname(work))`.
 ### Example
 Run `%%_example_ffile_export` for examples.
-### Note
-The indicator is "SILC-formatted" _e.g._ it is structured in such a way that it has/could have
-been created using the macro [%silc_ind_create](@ref sas_silc_ind_create).
 ### See also
 [%silc_ind_create](@ref sas_silc_ind_create), [%silc_ind_info](@ref sas_silc_ind_info), 
 [%ds_contents](@ref sas_ds_contents), [%obs_count](@ref sas_obs_count), 
@@ -55,19 +40,19 @@ been created using the macro [%silc_ind_create](@ref sas_silc_ind_create).
 %macro ffile_export(idsn /* name of the input dataset */
 					, dimensions /* dimensions for the exportation on Eurobase */
 					, values /* name of the variable giving the values */
-					, domain
-					, table
-					, type
-					, count
-					, ilib=
-					, ofn=
-					, odir=
-					, replace=FALSE
-				  	, digits=
-					, rounding=
-					, flags=
-					, threshold_n=30
-					, mode=);
+					, domain /* name of the domain in Eurobase */
+					, table /* name of the table in Eurobase */
+					, type /* type of file to be produced: either dft or txt */
+					, count /* name of the variable counting the number of observations per cell*/
+					, ilib= /* name of the library with the input data. By default ilib = WORK */
+					, ofn= /* name of the output file. By default the name of the table */
+					, odir= /* name of the output directory. By default the path of the work */
+					, replace=FALSE /* replace or not the existing output file. By default no*/
+				  	, digits= /* decimal rounding */
+					, rounding= /* simplication of the values. Typically transforming numbers into thousands */
+					, flags= /* name of the variable for the flags */
+					, threshold_n=30 /* threshold below which the number of observations is considered as leading to unreliable estimation */
+					, mode=); /* mode of update on Eurobase */
 
 %local _mac;
 %let _mac=&sysmacroname;
