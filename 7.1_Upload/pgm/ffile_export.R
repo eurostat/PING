@@ -208,7 +208,7 @@ ffile_export <- function(data, dimensions, values, domain, table, type = c("FLAT
     txtDFT <- paste0(txtDFT, toupper(format(Sys.time(), "%a %d %b %Y %T")), "UPDATE_MODE =", mode, " \n")
     txtDFT <- paste0(txtDFT, "LASTUP \n", toupper(format(Sys.time(), "%a %d %b %Y %T"))," \n")
     txtDFT <- paste0(txtDFT, "TYPE \nV \nDELIMS \n(),@~ \n")
-    txtDFT <- paste0(txtDFT, "DIMLST \n(soft,domain,table,",paste0(dimensions$name, collapse = ",", sep = ""),") \n")
+    txtDFT <- paste0(txtDFT, "DIMLST \n(soft, ", domain, ", ", table,",", paste0(dimensions$name, collapse = ",", sep = ""),") \n")
     txtDFT <- paste0(txtDFT, "DIMUSE \n(R,N,N,", paste(rep("V",length(dimensions$name)), collapse = ","),") \n")
     txtDFT <- paste0(txtDFT, "POSTLST \n(r) \n(", domain,") \n(", table,") \n")
     for (k in 1:length(dimensions$name)) {
