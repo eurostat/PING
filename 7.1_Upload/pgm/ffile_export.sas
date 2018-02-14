@@ -165,19 +165,42 @@ data _temp_ ;
 set _temp_ end=eof ;
 file "&odir./&ofn..txt" LRECL=32000 TERMSTR=crlf ;
 if _n_ = 1 then do ;
-put "FLAT_FILE=STANDARD" ;
-put "ID_KEYS=&domain._&table" ;
-put "FIELDS=%list_quote(&dimensions, mark = _EMPTY_)" ;
-put "UPDATE_MODE=&mode" ;
+	put "FLAT_FILE=STANDARD" ;
+	put "ID_KEYS=&domain._&table" ;
+	put "FIELDS=%list_quote(&dimensions, mark = _EMPTY_)" ;
+	put "UPDATE_MODE=&mode" ;
 end ;
 put &dimensions values ;
 if eof then do ;
-put "END_OF_FLAT_FILE" ;
+	put "END_OF_FLAT_FILE" ;
 end ;
 run ;
 
 %end ;
 %else %do ;
+
+%let stamp = %sysfunc(today(), eurdfwkx15.) %sysfunc(time(), time.) ;
+%let stamp = %sysfunc(tranwrd(%quote(&stamp), %str(,), %str())) ;
+
+data _temp_ ;
+set _temp_ end=eof ;
+file "&odir./&ofn..txt" LRECL=32000 TERMSTR=crlf ;
+if _n_ = 1 then do ;
+	put "INFO" ;
+	put "Created %upcase(&stamp) UPDATE_MODE = %upcase(&mode)" ;
+	put "LASTUP %upcase(&stamp)" ;
+	put "TYPE" ;
+	put "V" ;
+	put "DELIMS" ;
+	put "~@" ;
+	put "DMLST" ;
+	put "(soft, &domain, &table, %list_quote(&dimensions, mark = _EMPTY_))" ;
+	put "DIMUSE" ;
+	put "R, N, N, " /* to finish: add list_rep as a function in PING */ ;
+	put "POSTLST" ;
+	put "(sas)" ;
+	put "(&domain)" ;
+	put "(&table)" ;
 
 /* todo */
 
