@@ -62,7 +62,8 @@ been created using the macro [%silc_ind_create](@ref sas_silc_ind_create).
 					, ilib=
 					, ofn=
 					, odir=
-				  	,digits=
+					, replace=FALSE
+				  	, digits=
 					, rounding=
 					, flags=
 					, threshold_n=30
@@ -70,7 +71,6 @@ been created using the macro [%silc_ind_create](@ref sas_silc_ind_create).
 
 %local _mac;
 %let _mac=&sysmacroname;
-%let _=%macro_put(&_mac);
 
 %if &ofn= %then %let ofn = &table ;
 
@@ -102,7 +102,7 @@ been created using the macro [%silc_ind_create](@ref sas_silc_ind_create).
 				  txt = !!! Parameter values needs to be set !!!) %then
 				  %goto exit;
 %if %error_handle(ErrorInput,
-				  %var_check(dsn = &idsn, var = &values, lib = &ilib) = 1, mac = &_mac,
+				  %var_check(dsn = &idsn, var = &values, lib = &ilib) EQ 1, mac = &_mac,
 				  txt = !!! Variable &values is missing in the input data !!!) %then 
 				  %goto exit ;
 
@@ -112,21 +112,22 @@ been created using the macro [%silc_ind_create](@ref sas_silc_ind_create).
 				  txt = !!! Parameter count needs to be set !!!) %then
 				  %goto exit;
 %if %error_handle(ErrorInput,
-				  %var_check(dsn = &idsn, var = &count, lib = &ilib) = 1, mac = &_mac,
+				  %var_check(dsn = &idsn, var = &count, lib = &ilib) EQ 1, mac = &_mac,
 				  txt = !!! Variable &count is missing in the input data !!!) %then 
 				  %goto exit ;
 
 /* check the existence of flags */
 %if %macro_isblank(flags) = 0 %then %do ;
 	%if %error_handle(ErrorInput,
-					  %var_check(dsn = &idsn, var = &flags, lib = &ilib) = 1, mac = &_mac,
+					  %var_check(dsn = &idsn, var = &flags, lib = &ilib) EQ 1, mac = &_mac,
 					  txt = !!! Variable &flags is missing in the input data !!!) %then 
 					  %goto exit ;
+%end ;
 
 /* check the value taken by type */
 %let type_possible = DFT FLAT ;
 %if %error_handle(ErrorInputParameter,
-				  %list_find(&type_possible, type) EQ , mac = &_mac,
+				  %list_find(&type_possible, &type) EQ , mac = &_mac,
 				  txt = !!! Wrong type for the output data !!!) %then
 				  %goto exit ;
 
@@ -137,33 +138,35 @@ been created using the macro [%silc_ind_create](@ref sas_silc_ind_create).
 %end ;
 
 /* checking the existence of the output folder */
+%if %macro_isblank(odir) %then %let odir = %sysfunc(pathname(work)) ;
 %if %error_handle(ErrorInputParameter,
-				  %dir_check(&odir) = 1, mac = &_mac,
+				  %dir_check(&odir) EQ 1, mac = &_mac,
 				  txt = !!! The output directory does not exist !!!) %then
 				  %goto exit ;
 
 /* checking the existence of the output file */
 %if &type = DFT %then %let ext = dft ;
-%else ext = txt ;
-%if %file_check(&odir./&ofn, ext = &ext) = 0 %then %do ;
-	%if &replace = FALSE %then do ;
-		%put !!! The output file already exists and won't be replaced !!!;
+%else %let ext = txt ;
+%if %file_check(&odir./&ofn..&ext) EQ 0 %then %do ;
+	%if &replace = FALSE %then %do ;
+		%put %nrstr(!!! The output file already exists; it will not be replaced !!!) ;
 		%goto exit ;
 	%end ;
 	%else %do ;
 		%put WARNING: The output file already exists and it will be crashed. ;
 	%end ;
+%end ;
 
 data _temp_ ;
-set &ilib..&idns ;
+set &ilib..&idsn ;
 keep &dimensions &values &flags &count ;
 run ;
 
 data _temp_ ;
 set _temp_ ;
 %if %macro_isblank(rounding) = 1 %then 
-	values = round(&values, &digits);
-%else values = round(&values/10**&rouding, 0)*10**rounding ;
+	values = put(round(&values, 10**(-%eval(&digits))), 20.);
+%else values = put(round(&values/10**&rouding, 0)*10**rounding, 20.) ;
 ;
 if missing(&flags) = 0 then values = trim(values)!!"~"!!left(&flags) ;
 if &count < &threshold_n then values = ":~n" ;
@@ -173,32 +176,19 @@ run ;
 
 %if &type = FLAT %then %do ;
 
-data header ;
-file "&odir./&ofn..txt" LRECL=32000 ;
-attrib txtTXT length = $2000. ;
-txtTXT = "FLAT_FILE=STANDARD" ;
-output ;
-txtTXT = "ID_KEYS=&domain._&table" ;
-output ;
-txtTXT = "FIELDS=%list_quote(&dimensions, mark = %str())" ;
-output ;
-txtTXT = "UPDATE_MODE=&mode" ;
-output ;
-put txtTXT ;
-run ;
-
-data tail ;
-attrib txtTXT length = $2000. ;
-txtTXT = "END_OF_FLAT_FILE" ;
-output ;
-run ;
-
 data _temp_ ;
-infile "&odir./&ofn..txt" LRECL=32000 ;
-input txtTXT $ ;
-set _temp_ tail ;
-file "&odir./&ofn..txt" LRECL=32000 ;
-put txtTXT &dimensions values ;
+set _temp_ end=eof ;
+file "&odir./&ofn..txt" LRECL=32000 TERMSTR=crlf ;
+if _n_ = 1 then do ;
+put "FLAT_FILE=STANDARD" ;
+put "ID_KEYS=&domain._&table" ;
+put "FIELDS=%list_quote(&dimensions, mark = _EMPTY_)" ;
+put "UPDATE_MODE=&mode" ;
+end ;
+put &dimensions values ;
+if eof then do ;
+put "END_OF_FLAT_FILE" ;
+end ;
 run ;
 
 %end ;
@@ -208,4 +198,35 @@ run ;
 
 %end ;
 
+%exit:
+
 %mend ;
+
+%let outputdir =  ; /* put here a path to run the examples */
+
+%macro _example_ffile_export ;
+
+options nomprint nosource nonotes ;
+%_dstest37 ;
+data _dstest37 ;
+set _dstest37 ;
+vl = ranuni(0)*50 ;
+count = ranuni(0)*75 + 25 ;
+flag = "e" ;
+run ;
+
+%put ********** TEST 1 ;
+%ffile_export(idsn = _dstest37, dimensions = geo time eq_inc20 rb050a, values = vl, domain = test, table = sc_01, type = FLAT, count = count,
+odir = &outputdir, digits = 0, flags = flag, mode = RECORDS) ;
+%put ********** TEST 2 ;
+%ffile_export(idsn = _dstest37, dimensions = geo time eq_inc20 rb050a, values = vl, domain = test, table = sc_01, type = FLAT, count = count,
+odir = &outputdir, digits = 0, flags = flag, mode = RECORDS) ;
+%put ********** TEST 3 ;
+%ffile_export(idsn = _dstest37, dimensions = geo time eq_inc20 rb050a, values = vl, domain = test, table = sc_01, type = FLAT, count = count,
+odir = &outputdir, digits = 0, flags = flag, mode = RECORDS, replace = TRUE) ;
+
+options source notes ;
+
+%mend ;
+
+%_example_ffile_export ;
