@@ -16,11 +16,11 @@ Library of macro/function utilities for *statistical data handling and processin
     <tr> <td align="left"><i>contributors</i></td> 
     <td align="left">
     see the list <a href="https://eurostat.github.io/PING/d3/df9/mainpage_about.html">here</a> &nbsp; 
-<a href="https://github.com/gjacopo"><img src="https://github.com/gjacopo.png?size=40"></a>
-<a href="https://github.com/marinapippi"><img src="https://github.com/marinapippi.png?size=40"></a>
-<a href="https://github.com/pierre-lamarche"><img src="https://github.com/pierre-lamarche.png?size=40"></a>
-<a href="https://github.com/mmatyi"><img src="https://github.com/mmatyi.png?size=40"></a>
-<a href="https://github.com/Nica87"><img src="https://github.com/Nica87.png?size=40"></a>
+<a href="https://github.com/gjacopo"><img src="https://github.com/gjacopo.png" width="40"></a>
+<a href="https://github.com/marinapippi"><img src="https://github.com/marinapippi.png" width="40"></a>
+<a href="https://github.com/pierre-lamarche"><img src="https://github.com/pierre-lamarche.png" width="40"></a>
+<a href="https://github.com/mmatyi"><img src="https://github.com/mmatyi.png" width="40"></a>
+<a href="https://github.com/Nica87"><img src="https://github.com/Nica87.png" width="40"></a>
     </td> </tr> 
     <tr> <td align="left"><i>license</i></td> <td align="left"><a href="https://joinup.ec.europa.eu/sites/default/files/eupl1.1.-licence-en_0.pdfEUPL">EUPL</a></td> </tr> 
 </table>
