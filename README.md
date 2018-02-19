@@ -14,7 +14,7 @@ Library of macro/function utilities for *statistical data handling and processin
     <tr> <td align="left"><i>version</i></td> <td align="left">0.9</td> </tr> 
     <tr> <td align="left"><i>since</i></td> <td align="left">2016</td> </tr> 
     <tr> <td align="left"><i>contributors</i></td> 
-    <td align="left" valign="middle">
+    <td align="left" valign="top">
 <a href="https://github.com/gjacopo"><img src="https://github.com/gjacopo.png" width="40"></a>
 <a href="https://github.com/marinapippi"><img src="https://github.com/marinapippi.png" width="40"></a>
 <a href="https://github.com/pierre-lamarche"><img src="https://github.com/pierre-lamarche.png" width="40"></a>
