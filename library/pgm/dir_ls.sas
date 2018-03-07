@@ -64,7 +64,7 @@ on other platforms.
 		search;
 
 	%if %error_handle(ErrorDatasetCreation, 
-			&sysscp = WIN, mac=&_mac,		
+			&sysscp EQ WIN, mac=&_mac,		
 			txt=%nrstr(!!! This macro does not run on Windows system - Use %file_ls instead !!!)) %then 
 		%goto exit;
 
