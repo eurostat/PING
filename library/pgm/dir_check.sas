@@ -22,7 +22,7 @@ Check the existence of a directory.
 Just try on your "root" path, so that:
 
 ~~~sas
-	%let ans=&dir_check(&G_PING_ROOTPATH);
+	%let ans=%dir_check(&G_PING_ROOTPATH);
 ~~~
 will return `ans=0`.
 
