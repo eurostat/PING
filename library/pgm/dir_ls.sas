@@ -63,7 +63,7 @@ on other platforms.
 		k
 		search;
 
-	%if %error_handle(ErrorDatasetCreation, 
+	%if %error_handle(ErrorOperatingSystem, 
 			&sysscp EQ WIN, mac=&_mac,		
 			txt=%nrstr(!!! This macro does not run on Windows system - Use %file_ls instead !!!)) %then 
 		%goto exit;
