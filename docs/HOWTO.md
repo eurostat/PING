@@ -17,7 +17,7 @@ You need to configure your git:
 Add the remote PING repository on Github:
 	
 	cd /z/PING/
-	git remote add origin https://github.com/gjacopo/PING.git
+	git remote add origin https://github.com/eurostat/PING.git
 
 ### Configuration of the documentation repository
 
