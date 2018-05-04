@@ -31,8 +31,9 @@ root folder PING/):
 Create a specific git environment for the documentation:	
 
 	cd docs/html
-	git clone https://github.com/gjacopo/PING.git .
+	git clone https://github.com/eurostat/PING.git .
 	git fetch origin
+	
 Assuming a gh-pages branch has been created: 
 	
 	git branch gh-pages origin/gh-pages
