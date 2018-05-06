@@ -99,7 +99,7 @@ will return `list=1-3, 5, 10<-HIGH`.
 which returns `labels=`1-5="Y1_5" 6-10="Y6_10" 11-15="Y11_15" 16-20="Y16_20" 21-25="Y21_25" 26-30="Y26_30" 31-35="Y31_35" 36-40="Y36_40".
 
 ### References
-Smiley, C.A. (1999): ["A fast format macro – How to quickly create a format by specifying the endpoints"](http://www2.sas.com/proceedings/sugi24/Coders/p096-24.pdf).
+Smiley, C.A. (1999): ["A fast format macro: How to quickly create a format by specifying the endpoints"](http://www2.sas.com/proceedings/sugi24/Coders/p096-24.pdf).
 
 ### See also
 [%list_append](@ref sas_list_append), [PROC FORMAT](http://support.sas.com/documentation/cdl/en/proc/61895/HTML/default/viewer.htm#a002473464.htm).
