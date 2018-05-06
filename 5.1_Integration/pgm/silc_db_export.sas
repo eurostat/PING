@@ -69,7 +69,7 @@ In our current environment (see `G_PING_ROOTPATH` definition), the following out
 ### See also
 [%silc_ds_extract](@ref sas_silc_ds_extract), [%silc_db_locate](@ref sas_silc_db_locate),
 [%ds_export](@ref sas_ds_export), [%meta_transmissionxyear](@ref meta_transmissionxyear).
-**/ 
+*/ 
 
 /* credits: gjacopo */
 
