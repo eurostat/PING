@@ -23,7 +23,7 @@ Library of macro/function utilities for *statistical data handling and processin
 &nbsp;
 (see the list <a href="https://eurostat.github.io/PING/d3/df9/mainpage_about.html">here</a>)    
 </td> </tr> 
-    <tr> <td align="left"><i>license</i></td> <td align="left"><a href="https://joinup.ec.europa.eu/sites/default/files/eupl1.1.-licence-en_0.pdfEUPL">EUPL</a> <i>(cite the source code or the reference above!)</i></td> </tr> 
+    <tr> <td align="left"><i>license</i></td> <td align="left"><a href="https://joinup.ec.europa.eu/sites/default/files/custom-page/attachment/eupl1.1.-licence-en_0.pdf">EUPL</a> <i>(cite the source code or the reference above!)</i></td> </tr> 
 </table>
 
 **Usage**
