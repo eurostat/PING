@@ -39,7 +39,7 @@ Run macro `%%_example_list_unique` for more examples.
 [%list_append](@ref sas_list_append), [%list_find](@ref sas_list_find), [%list_count](@ref sas_list_count).
 */ /** \cond */
 
-/* credits: gjacopo */
+/* credits: gjacopo, grillma */
 
 %macro list_unique(list 	/* List of blank separated items 					(REQ) */
 				, casense=	/* Boolean flag set for case sensitive comparison 	(OPT) */
@@ -55,15 +55,15 @@ Run macro `%%_example_list_unique` for more examples.
 
 	%local _i 	/* increment counter */	
 		_item 	/* scanned element from the input list */
-		_luni; 	/* output result */
-			
+		_luni;  	/* output result */
+	
 	/* set default output to empty */
 	%let _luni=;
 
 	/* CASENSE: set default/update parameter */
 	%if %macro_isblank(casense)  %then 	%let casense=NO; 
 	%else								%let casense=%upcase(&casense);
-
+    
 	%if %error_handle(ErrorInputParameter, 
 			%par_check(&casense, type=CHAR, set=YES NO) NE 0, mac=&_mac,	
 			txt=!!! Parameter CASENSE is boolean flag with values in (yes/no) !!!) %then
@@ -75,17 +75,22 @@ Run macro `%%_example_list_unique` for more examples.
 	/************************************************************************************/
 	/**                                 actual computation                             **/
 	/************************************************************************************/
-
 	%if "&casense"="NO" %then 
 		%let list=%upcase(&list);
-
+ 
 	/* loop */
+		
 	%do _i=1 %to %list_length(&list, sep=&sep);
 		%let _item = %scan(&list, &_i, &sep);
 		%if %macro_isblank(_luni) %then 
 			%let _luni=&_item;
-		%else %if %sysfunc(find(&_luni, &_item))<=0 %then 
-			%let _luni=&_luni.&sep.&_item;
+		/* %else %if %sysfunc(find(&_luni, &_item))<=0 %then */
+		%else %do; 
+		    %let ind=%list_find(&_luni, &_item, casense=&casense);
+		    %if  %macro_isblank(ind) %then 
+			 	 %let _luni=&_luni.&sep.&_item;
+			/* %else: do nothing */
+		%end;
 	%end;
 
 	%exit:
@@ -112,11 +117,12 @@ Run macro `%%_example_list_unique` for more examples.
 	%put;
 	%put (i) Return the list of unique (case unsensitive: casense=yes) elements in list=&list ...;
 	%let olist=A B b c C D E e F;
+	%put %list_unique(&list, casense=yes) marina;
 	%if %list_unique(&list, casense=yes) EQ %quote(&olist) %then 
 		%put OK: TEST PASSED - Unique representation of list: &olist;
 	%else											
 		%put ERROR: TEST FAILED - Wrong list of unique elements returned;
-
+    
 	%put;
 	%put (ii) Ibid, considering the case sensitiveness (default: casense=no) ...;
 	%let olist=A B C D E F;
@@ -124,6 +130,15 @@ Run macro `%%_example_list_unique` for more examples.
 		%put OK: TEST PASSED - Unique case sensitive representation of list: &olist;
 	%else														
 		%put ERROR: TEST FAILED - Wrong list of unique elements returned;
+	%put;
+	
+	%let list=A_F A B E D;
+	%put (iii) Ibid, considering item included in onother one;
+	%let olist=A_F A B E D;
+	%if %list_unique(&list) EQ %quote(&olist) %then 
+		%put OK: TEST PASSED - All items are unique even when substrings are considered: &olist;
+	%else														
+		%put ERROR: TEST FAILED - Item A which is a substring of A_F is considered equal to it;
 
 	%put;
 
@@ -136,3 +151,4 @@ options NOSOURCE MRECALL MLOGIC MPRINT NOTES;
 */
 
 /** \endcond */
+	
