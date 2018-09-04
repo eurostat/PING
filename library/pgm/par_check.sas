@@ -263,7 +263,7 @@ Wilson, S.A. (2011): ["The validator: A macro to validate parameters"](http://su
 				%end;
 			%end;
 			%else %if "&_type"="NUMERIC" %then %do;
-				%do _s=1 %to %list_length(set);
+				%do _s=1 %to %list_length(&set);
 					/* note the use of %quote( ) below: this is to ensure that decimal numbers are scanned correctly */
 					%if %sysevalf(&_par = %scan(&set, &_s, %quote( ))) %then %do; 
 						%let _ans=&_ans.&SEP.0; /* value found => accepted */
