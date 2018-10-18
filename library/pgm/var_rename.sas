@@ -120,8 +120,7 @@ the input dataset `idsn` are renamed.
 
 	/*VAR: perform some basic compatibility checking input parameters */
 	%let var_idsn=;
-	%ds_contents(&idsn, _varlst_=var_idsn);
-
+	%ds_contents(&idsn, _varlst_=var_idsn,lib=&ilib); 
 	%if %error_handle(ErrorInputParameter, 
 			%list_compare(&var, &var_idsn, sep=%quote( )) NE -1 and %macro_isblank(var) EQ 0, mac=&_mac,		
 			txt=!!!  Not all variables exist in &idsn !!!) %then
