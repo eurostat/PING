@@ -68,6 +68,8 @@ library/macros/*
 5.7_Aggregates/pgm/__tmp/*
 5.7_Aggregates/pgm/__old/
 5.7_Aggregates/pgm/__old/*
+5.7_Aggregates/pgm/aggregate_*.sas
+5.7_Aggregates/pgm/*_aggregate.sas
 
 # 6.3_Analysis folder
 # ok
