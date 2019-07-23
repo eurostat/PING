@@ -486,7 +486,7 @@ global variables:
 %macro _setup_var_(debug=no);
 
 	%let debug=%upcase(&debug);
-	%if "&debug"="YES" %then  		%let G_PING_DEBUG=0;
+	%if "&debug"="NO" %then  		%let G_PING_DEBUG=0;
 	%else %if "&debug"="YES" %then 		%let G_PING_DEBUG=1;
 	/* %else: should be numeric */
 
