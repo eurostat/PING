@@ -174,6 +174,4 @@ Note that our preference for the settings goes to the last two methods. In parti
 
 **<a name="References"></a>References**
 
-* Grazzini J. and Lamarche P. (2017): 
-  [**Production of social statistics... goes social!**](https://www.conference-service.com/NTTS2017/documents/agenda/data/abstracts/abstract_124.html), 
-  in _Proc.  New Techniques and Technologies for Statistics_.
+* Grazzini J. and Lamarche P. (2017): [**Production of social statistics... goes social!**](https://www.conference-service.com/NTTS2017/documents/agenda/data/abstracts/abstract_124.html), in Proc. _New Techniques and Technologies for Statistics_, doi:[10.5281/zenodo.3240501](https://dx.doi.org/10.5281/zenodo.3240501).
