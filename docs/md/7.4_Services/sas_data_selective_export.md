@@ -28,5 +28,7 @@ Perform selective export of a dataset to any format accepted by `PROC EXPORT`.
 			+ the location of the library passed through `ilib` (_i.e._, `%sysfunc(pathname(&ilib))`) 
 			otherwise.
 
+<img src="img/data_selective_export.png" border="1" width="60%" alt="interface of the data selective export service">
+
 ### See also
 [%ds_export](@ref sas_ds_export), [%ds_select](@ref sas_ds_select).
