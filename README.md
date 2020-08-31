@@ -5,26 +5,7 @@ PING
 Library of macro/function utilities for *statistical data handling and processing in production environments*.
 ---
 
-**About**
-
 `PING` Is Not GSAST! 
-
-<table align="center">
-    <tr> <td align="left"><i>documentation</i></td> <td align="left">available at: https://eurostat.github.io/PING/</td> </tr> 
-    <tr> <td align="left"><i>version</i></td> <td align="left">0.9</td> </tr> 
-    <tr> <td align="left"><i>status</i></td> <td align="left">since 2016 &ndash; ongoing</td> </tr> 
-    <tr> <td align="left"><i>contributors</i></td> 
-    <td align="left" valign="middle">
-<a href="https://github.com/gjacopo"><img src="https://github.com/gjacopo.png" width="40"></a>
-<a href="https://github.com/marinapippi"><img src="https://github.com/marinapippi.png" width="40"></a>
-<a href="https://github.com/pierre-lamarche"><img src="https://github.com/pierre-lamarche.png" width="40"></a>
-<a href="https://github.com/mmatyi"><img src="https://github.com/mmatyi.png" width="40"></a>
-<a href="https://github.com/Nica87"><img src="https://github.com/Nica87.png" width="40"></a>
-&nbsp;
-(see the list <a href="https://eurostat.github.io/PING/d3/df9/mainpage_about.html">here</a>)    
-</td> </tr> 
-    <tr> <td align="left"><i>license</i></td> <td align="left"><a href="https://joinup.ec.europa.eu/sites/default/files/custom-page/attachment/eupl1.1.-licence-en_0.pdf">EUPL</a> <i>(cite the source code or the reference above!)</i></td> </tr> 
-</table>
 
 **Usage**
 
@@ -165,6 +146,25 @@ Note that our preference for the settings goes to the last two methods. In parti
 ###### Running PING R functions
 
 `R` functions are not defined into a package. They need to be loaded manually.
+
+**About**
+
+<table align="center">
+    <tr> <td align="left"><i>documentation</i></td> <td align="left">available at: https://eurostat.github.io/PING/</td> </tr> 
+    <tr> <td align="left"><i>version</i></td> <td align="left">0.9</td> </tr> 
+    <tr> <td align="left"><i>status</i></td> <td align="left">since 2016 &ndash; ongoing</td> </tr> 
+    <tr> <td align="left"><i>contributors</i></td> 
+    <td align="left" valign="middle">
+<a href="https://github.com/gjacopo"><img src="https://github.com/gjacopo.png" width="40"></a>
+<a href="https://github.com/marinapippi"><img src="https://github.com/marinapippi.png" width="40"></a>
+<a href="https://github.com/pierre-lamarche"><img src="https://github.com/pierre-lamarche.png" width="40"></a>
+<a href="https://github.com/mmatyi"><img src="https://github.com/mmatyi.png" width="40"></a>
+<a href="https://github.com/Nica87"><img src="https://github.com/Nica87.png" width="40"></a>
+&nbsp;
+(see the list <a href="https://eurostat.github.io/PING/d3/df9/mainpage_about.html">here</a>)    
+</td> </tr> 
+    <tr> <td align="left"><i>license</i></td> <td align="left"><a href="https://joinup.ec.europa.eu/sites/default/files/custom-page/attachment/eupl1.1.-licence-en_0.pdf">EUPL</a> <i>(cite the source code or the reference above!)</i></td> </tr> 
+</table>
 
 **<a name="Resources"></a>Other useful resources**
 
